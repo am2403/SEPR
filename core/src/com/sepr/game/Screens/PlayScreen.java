@@ -15,19 +15,20 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
 import com.sepr.game.Scenes.HUD;
+import com.sepr.game.Sprites.Fleet;
 import com.sepr.game.Sprites.Ship;
 import com.sepr.game.Tools.BoxPhysics;
 
 public class PlayScreen implements Screen {
 
     private Main game;
-    Texture texture;
     public static OrthographicCamera gamecam;
     private Viewport gamePort;
     private HUD hud;
 
-    //Ship
+    //Ship and fleet
     private Ship ship;
+    private Fleet fleet;
 
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -55,6 +56,7 @@ public class PlayScreen implements Screen {
         new BoxPhysics(world, map);
 
         ship = new Ship(world);
+        fleet = new Fleet(world);
 
     }
 
@@ -90,6 +92,7 @@ public class PlayScreen implements Screen {
 
         world.step(1/60f, 6, 2);
         ship.update(dt);
+        fleet.update(dt);
 
         gamecam.position.x = ship.b2body.getPosition().x;
         gamecam.position.y = ship.b2body.getPosition().y;
@@ -118,6 +121,7 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         ship.draw(game.batch);
+        fleet.draw(game.batch);
         game.batch.end();
 
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
