@@ -65,22 +65,21 @@ public class PlayScreen implements Screen {
 
     }
 
-    private int maxSpeed = 5;
-    private float shipAcceleration = 1.5f;
+
 
     public void handleInput(float dt){
 
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
-            if(Gdx.input.isKeyPressed(Input.Keys.W) && ship.b2body.getLinearVelocity().y <= maxSpeed)
-                ship.b2body.applyForce(new Vector2(0, shipAcceleration), ship.b2body.getWorldCenter(), true);
-            if(Gdx.input.isKeyPressed(Input.Keys.S) && ship.b2body.getLinearVelocity().y <= maxSpeed)
-                ship.b2body.applyForce(new Vector2(0, -shipAcceleration), ship.b2body.getWorldCenter(), true);
-            if(Gdx.input.isKeyPressed(Input.Keys.A) && ship.b2body.getLinearVelocity().x <= maxSpeed)
-                ship.b2body.applyForce(new Vector2(-shipAcceleration, 0), ship.b2body.getWorldCenter(), true);
-            if(Gdx.input.isKeyPressed(Input.Keys.D) && ship.b2body.getLinearVelocity().x <= maxSpeed)
-                ship.b2body.applyForce(new Vector2(shipAcceleration,0), ship.b2body.getWorldCenter(), true);
+            if(Gdx.input.isKeyPressed(Input.Keys.W))
+                ship.moveUp();
+            if(Gdx.input.isKeyPressed(Input.Keys.S))
+                ship.moveDown();
+            if(Gdx.input.isKeyPressed(Input.Keys.A))
+                ship.moveLeft();
+            if(Gdx.input.isKeyPressed(Input.Keys.D))
+                ship.moveRight();
         } else {
-            ship.b2body.setLinearVelocity(0,0); //Need to make it gradually slow down
+            ship.stopShip();
         }
 
 
@@ -91,13 +90,14 @@ public class PlayScreen implements Screen {
         handleInput(dt);
 
         world.step(1/60f, 6, 2);
-        ship.update(dt);
-        fleet.update(dt);
 
-        gamecam.position.x = ship.b2body.getPosition().x;
-        gamecam.position.y = ship.b2body.getPosition().y;
+
+        gamecam.position.x = ship.body.getPosition().x;
+        gamecam.position.y = ship.body.getPosition().y;
 
         gamecam.update();
+        ship.update(dt);
+        fleet.update(dt);
         hud.update(dt);
         renderer.setView(gamecam);
 
