@@ -1,7 +1,10 @@
+/*
+This class is needed for object collision
+Will be used more later
+ */
+
 package com.sepr.game.Sprites;
 
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.math.Rectangle;
@@ -12,7 +15,6 @@ public abstract class InteractiveTileObject {
 
     protected World world;
     protected TiledMap map;
-    protected TiledMapTile tile;
     protected Rectangle bounds;
     protected Body body;
 

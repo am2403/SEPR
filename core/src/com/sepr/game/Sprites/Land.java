@@ -1,3 +1,7 @@
+/*
+Incomplete class
+ */
+
 package com.sepr.game.Sprites;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;

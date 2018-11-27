@@ -1,3 +1,7 @@
+/*
+Handles everything to do with the fleet
+ */
+
 package com.sepr.game.Sprites;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -15,7 +19,7 @@ public class Fleet extends Sprite {
     public Fleet(World world){
         this.world = world;
         defineFleet();
-        fleet = new Texture("ship.png");
+        fleet = new Texture("fleet.png");
         setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
         setRegion(fleet);
     }
@@ -24,6 +28,8 @@ public class Fleet extends Sprite {
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         fleetMovement(dt);
     }
+
+    //Creates a Box2D Object and attaches a shape to it
 
     public void defineFleet(){
         BodyDef bdef = new BodyDef();
@@ -34,11 +40,12 @@ public class Fleet extends Sprite {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
 
-        shape.setRadius(50 / Main.PPM);
+        shape.setRadius(80 / Main.PPM);
         fdef.shape = shape;
         body.createFixture(fdef);
     }
 
+    // Gives the fleet a linear impulse to the left... still needs a lot of work for proper fleet movement
     public void fleetMovement(float dt){
         body.applyLinearImpulse(new Vector2(-0.001f, 0f), body.getWorldCenter(), true);
     }

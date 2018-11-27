@@ -1,3 +1,7 @@
+/*
+Main class that sets the virtual width/height of our game
+PPM = Pixels Per Metre... a scaling function that is needed to make object motions update realistically
+*/
 package com.sepr.game;
 
 import com.badlogic.gdx.Game;
@@ -5,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sepr.game.Screens.PlayScreen;
+
 
 public class Main extends Game {
 	public static final int V_WIDTH = 1000;

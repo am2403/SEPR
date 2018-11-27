@@ -1,3 +1,7 @@
+/*
+Heads Up Display... Fixes information at the bottom of the screen, e.g. score
+ */
+
 package com.sepr.game.Scenes;
 
 import com.badlogic.gdx.graphics.Color;
@@ -16,11 +20,12 @@ import com.sepr.game.Screens.PlayScreen;
 import com.sepr.game.Sprites.Ship;
 
 
+
 public class HUD implements Disposable {
 
     public Stage stage;
     private Viewport viewport; //New viewport to ensure that hud remains fixed
-    private int worldTimer, score, influenceCount;
+    private int score, influenceCount;
     private float xLocation, yLocation;
 
 
@@ -57,6 +62,7 @@ public class HUD implements Disposable {
 
     }
 
+    //updates the x and y coordinates and edits the labels
     public void update(float dt){
         xLocation = Math.round(PlayScreen.gamecam.position.x);
         yLocation = Math.round(PlayScreen.gamecam.position.y);
