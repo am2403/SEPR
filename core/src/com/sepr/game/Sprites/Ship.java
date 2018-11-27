@@ -84,5 +84,5 @@ public class Ship extends Sprite {
         body.setLinearVelocity(0,0); //Need to make it gradually slow down
     }
 
-//T1
+
 }
