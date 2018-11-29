@@ -10,18 +10,22 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Main;
+import com.sepr.game.Screens.PlayScreen;
 
 public abstract class InteractiveTileObject {
 
-    protected World world;
-    protected TiledMap map;
+    protected PlayScreen screen;
     protected Rectangle bounds;
     protected Body body;
+    protected World world;
+    protected TiledMap map;
+    protected Fixture fixture;
 
-    public InteractiveTileObject(World world, TiledMap map, Rectangle bounds){
-        this.world = world;
-        this.map = map;
+    public InteractiveTileObject(PlayScreen screen, Rectangle bounds){
+        this.screen = screen;
         this.bounds = bounds;
+        this.world = screen.getWorld();
+        this.map = screen.getMap();
 
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -34,7 +38,7 @@ public abstract class InteractiveTileObject {
 
         shape.setAsBox((bounds.getWidth() / 2) / Main.PPM, (bounds.getHeight() / 2) / Main.PPM);
         fdef.shape = shape;
-        body.createFixture(fdef);
+        fixture = body.createFixture(fdef);
 
     }
 }

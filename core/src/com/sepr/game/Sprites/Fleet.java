@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Main;
+import com.sepr.game.Screens.PlayScreen;
 
 public class Fleet extends Sprite {
 
@@ -16,8 +17,8 @@ public class Fleet extends Sprite {
     private Body body;
     private Texture fleet;
 
-    public Fleet(World world){
-        this.world = world;
+    public Fleet(PlayScreen screen){
+        this.world = screen.getWorld();
         defineFleet();
         fleet = new Texture("fleet.png");
         setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
@@ -48,5 +49,8 @@ public class Fleet extends Sprite {
     // Gives the fleet a linear impulse to the left... still needs a lot of work for proper fleet movement
     public void fleetMovement(float dt){
         body.applyLinearImpulse(new Vector2(-0.001f, 0f), body.getWorldCenter(), true);
+
+
+
     }
 }

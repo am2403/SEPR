@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sepr.game.Screens.PlayScreen;
 
-
 public class Main extends Game {
 	public static final int V_WIDTH = 1000;
 	public static final int V_HEIGHT = 900;

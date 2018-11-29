@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.sepr.game.Main;
+import com.sepr.game.Screens.PlayScreen;
 
 public class Ship extends Sprite {
 
@@ -26,8 +27,8 @@ public class Ship extends Sprite {
     private RevoluteJoint joint;
     private float maxSpeed = 4f, shipAcceleration = 2f;
 
-    public Ship(World world) {
-        this.world = world;
+    public Ship(PlayScreen screen) {
+        this.world = screen.getWorld();
         defineShip();
         ship = new Texture("mainShip.png");
         setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);

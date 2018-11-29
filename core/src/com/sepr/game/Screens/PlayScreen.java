@@ -58,10 +58,10 @@ public class PlayScreen implements Screen {
         world  = new World(new Vector2(0, 0), true); // Can apply gravity / wind speed forces
         b2dr = new Box2DDebugRenderer();
 
-        new BoxPhysics(world, map);
+        new BoxPhysics(this);
 
-        ship = new Ship(world);
-        fleet = new Fleet(world);
+        ship = new Ship(this);
+        fleet = new Fleet(this);
 
         //Listens for Box2D Object collisions
         world.setContactListener(new WorldContactListener());
@@ -145,6 +145,14 @@ public class PlayScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         gamePort.update(width, height);
+    }
+
+    public TiledMap getMap(){
+        return map;
+    }
+
+    public World getWorld(){
+        return world;
     }
 
     @Override
