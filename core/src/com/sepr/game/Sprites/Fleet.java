@@ -1,5 +1,5 @@
 /*
-Handles everything to do with the fleet
+Handles everything to with the fleets
  */
 
 package com.sepr.game.Sprites;
