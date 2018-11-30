@@ -4,11 +4,8 @@ Handles everything to do with the ship
 
 package com.sepr.game.Sprites;
 
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
@@ -19,7 +16,7 @@ import com.sepr.game.Screens.PlayScreen;
 public class Ship extends Sprite {
 
     public World world;
-    public Body body, cannon;
+    public Body shipBody, cannon;
     private Texture ship;
     private BodyDef bdef;
     private FixtureDef fdef;
@@ -37,7 +34,7 @@ public class Ship extends Sprite {
 
 
     public void update(float dt) {
-        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+        setPosition(shipBody.getPosition().x - getWidth() / 2, shipBody.getPosition().y - getHeight() / 2);
 
 
     }
@@ -47,7 +44,7 @@ public class Ship extends Sprite {
         bdef = new BodyDef();
         bdef.position.set(2000 / Main.PPM, 1600 / Main.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
-        body = world.createBody(bdef);
+        shipBody = world.createBody(bdef);
 
         fdef = new FixtureDef();
         fdef.restitution = 0.1f; // Don't really bounce off ships so it's a low values
@@ -57,7 +54,7 @@ public class Ship extends Sprite {
 
         //Attatches the circle shape to the fixture and creates the body
         fdef.shape = shape;
-        body.createFixture(fdef);
+        shipBody.createFixture(fdef);
 
 
         //Cannon
@@ -68,7 +65,7 @@ public class Ship extends Sprite {
 
         //Joint
         RevoluteJointDef jointDef = new RevoluteJointDef();
-        jointDef.bodyA = body;
+        jointDef.bodyA = shipBody;
         jointDef.bodyB = cannon;
         jointDef.localAnchorB.y = -0.9f / 1;
         jointDef.enableLimit = true;
@@ -80,27 +77,27 @@ public class Ship extends Sprite {
     }
 
     public void moveUp() {
-        if (body.getLinearVelocity().y <= maxSpeed)
-            body.applyForce(new Vector2(0, shipAcceleration), body.getWorldCenter(), true);
+        if (shipBody.getLinearVelocity().y <= maxSpeed)
+            shipBody.applyForce(new Vector2(0, shipAcceleration), shipBody.getWorldCenter(), true);
     }
 
     public void moveDown() {
-        if (body.getLinearVelocity().y <= maxSpeed)
-            body.applyForce(new Vector2(0, -shipAcceleration), body.getWorldCenter(), true);
+        if (shipBody.getLinearVelocity().y <= maxSpeed)
+            shipBody.applyForce(new Vector2(0, -shipAcceleration), shipBody.getWorldCenter(), true);
     }
 
     public void moveLeft() {
-        if (body.getLinearVelocity().x <= maxSpeed)
-            body.applyForce(new Vector2(-shipAcceleration, 0), body.getWorldCenter(), true);
+        if (shipBody.getLinearVelocity().x <= maxSpeed)
+            shipBody.applyForce(new Vector2(-shipAcceleration, 0), shipBody.getWorldCenter(), true);
     }
 
     public void moveRight() {
-        if (body.getLinearVelocity().x <= maxSpeed)
-            body.applyForce(new Vector2(shipAcceleration, 0), body.getWorldCenter(), true);
+        if (shipBody.getLinearVelocity().x <= maxSpeed)
+            shipBody.applyForce(new Vector2(shipAcceleration, 0), shipBody.getWorldCenter(), true);
     }
 
     public void stopShip() {
-        body.setLinearDamping(0.2f); //Slows down gradually
+        shipBody.setLinearDamping(0.2f); //Slows down gradually
     }
 
 

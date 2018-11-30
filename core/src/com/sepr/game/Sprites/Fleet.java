@@ -1,7 +1,3 @@
-/*
-Handles everything to with the fleets
- */
-
 package com.sepr.game.Sprites;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -16,6 +12,7 @@ public class Fleet extends Sprite {
     public World world;
     private Body body;
     private Texture fleet;
+    private int spawnX = 20, spawnY = 12; //x and y location that the fleet spawns at
 
     public Fleet(PlayScreen screen){
         this.world = screen.getWorld();
@@ -34,7 +31,7 @@ public class Fleet extends Sprite {
 
     public void defineFleet(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(2000 / Main.PPM, 1200 / Main.PPM);
+        bdef.position.set(spawnX * 100 / Main.PPM, spawnY * 100 / Main.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bdef);
 
@@ -47,10 +44,17 @@ public class Fleet extends Sprite {
     }
 
     // Gives the fleet a linear impulse to the left... still needs a lot of work for proper fleet movement
-    public void fleetMovement(float dt){
-        body.applyLinearImpulse(new Vector2(-0.001f, 0f), body.getWorldCenter(), true);
+    public void fleetMovement(float dt) {
+
+        //body.applyLinearImpulse(new Vector2(-0.001f, 0f), body.getWorldCenter(), true);
+        body.applyAngularImpulse(100f, true);
+    }
 
 
 
+
+    public void dispose(){
+        world.dispose();
+        fleet.dispose();
     }
 }

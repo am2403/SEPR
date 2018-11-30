@@ -105,8 +105,8 @@ public class PlayScreen implements Screen {
         world.step(1/60f, 6, 2);
 
         //Updates the camera coordinates so that it remains fixed on the ship
-        gamecam.position.x = ship.body.getPosition().x;
-        gamecam.position.y = ship.body.getPosition().y;
+        gamecam.position.x = ship.shipBody.getPosition().x;
+        gamecam.position.y = ship.shipBody.getPosition().y;
 
         gamecam.update();
         ship.update(dt);
@@ -177,6 +177,7 @@ public class PlayScreen implements Screen {
         ship.dispose();
         b2dr.dispose();
         hud.dispose();
+        fleet.dispose();
 
     }
 }
