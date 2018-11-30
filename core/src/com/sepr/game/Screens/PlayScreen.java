@@ -86,10 +86,6 @@ public class PlayScreen implements Screen {
                 ship.moveLeft();
             if(Gdx.input.isKeyPressed(Input.Keys.D))
                 ship.moveRight();
-            if(Gdx.input.isKeyPressed(Input.Keys.R))
-                ship.cannonRight();
-            if(Gdx.input.isKeyPressed(Input.Keys.F))
-                ship.cannonLeft();
         } else {
             ship.stopShip();
         }

@@ -6,6 +6,7 @@ package com.sepr.game.Sprites;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
@@ -13,14 +14,16 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.PlayScreen;
 
+import java.awt.geom.RectangularShape;
+
 public class Ship extends Sprite {
 
     public World world;
-    public Body shipBody, cannon;
+    public Body shipBody, cannonBody;
     private Texture ship;
     private BodyDef bdef;
     private FixtureDef fdef;
-    private PolygonShape shape;
+    private PolygonShape shipShape, cannonShape;
     private RevoluteJoint joint;
     private float maxSpeed = 4f, shipAcceleration = 2f;
 
@@ -41,37 +44,54 @@ public class Ship extends Sprite {
 
     // Creates a Box2D object for the ship and the ship's cannon, then attaches the cannon to the ship with a ResoluteJoint
     public void defineShip() {
-        bdef = new BodyDef();
-        bdef.position.set(2000 / Main.PPM, 1600 / Main.PPM);
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        shipBody = world.createBody(bdef);
 
+        //Generic variables, can be applied to ship and cannon/
+        bdef = new BodyDef();
         fdef = new FixtureDef();
+
+        //Ship creation
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        bdef.position.set(2000 / Main.PPM, 1600 / Main.PPM);
+
+        shipShape = new PolygonShape();
+        shipShape.setAsBox(0.8f, 0.7f);
+        fdef.shape = shipShape;
+
+        //Ship properties
         fdef.restitution = 0.1f; // Don't really bounce off ships so it's a low values
         fdef.friction = 0.5f;
-        shape = new PolygonShape();
-        shape.setAsBox(0.8f, 0.7f);
 
-        //Attatches the circle shape to the fixture and creates the body
-        fdef.shape = shape;
+        shipBody = world.createBody(bdef);
         shipBody.createFixture(fdef);
 
-
         //Cannon
-        shape.setAsBox(0.05f, 0.9f);
-        cannon = world.createBody(bdef);
-        cannon.createFixture(fdef);
-        cannon.setAngularDamping(3f);
+        cannonShape = new PolygonShape();
+        cannonShape.setAsBox(0.06f, 0.4f);
 
-        //Joint
-        RevoluteJointDef jointDef = new RevoluteJointDef();
-        jointDef.bodyA = shipBody;
-        jointDef.bodyB = cannon;
-        jointDef.localAnchorB.y = -0.9f / 1;
-        jointDef.enableLimit = true;
-        jointDef.maxMotorTorque = 100;
+        fdef.shape = cannonShape;
 
-        joint = (RevoluteJoint) world.createJoint(jointDef);
+        cannonBody = world.createBody(bdef);
+        cannonBody.createFixture(fdef);
+
+        //Joint -- need to make it rotate!
+
+        RevoluteJointDef rDef= new RevoluteJointDef();
+        rDef.enableMotor = true;
+        rDef.motorSpeed = 2f;
+        rDef.enableLimit = false;
+        rDef.maxMotorTorque = 10f;
+
+        rDef.bodyA = shipBody;
+        rDef.bodyB = cannonBody;
+        rDef.collideConnected = false;
+        rDef.localAnchorA.set(0, 2f);
+
+
+        world.createJoint(rDef);
+
+
+
+
 
 
     }
@@ -100,19 +120,6 @@ public class Ship extends Sprite {
         shipBody.setLinearDamping(0.2f); //Slows down gradually
     }
 
-
-    public void cannonRight() {
-        joint.enableLimit(false);
-        joint.enableMotor(true);
-        joint.setMotorSpeed(-5000f);
-        joint.setMaxMotorTorque(500f);
-    }
-
-    public void cannonLeft() {
-        joint.enableLimit(false);
-        joint.enableMotor(true);
-        joint.setMotorSpeed(50000f);
-    }
 
     public void dispose(){
         ship.dispose();
