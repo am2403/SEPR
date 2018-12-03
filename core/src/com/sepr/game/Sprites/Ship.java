@@ -4,8 +4,11 @@ Handles everything to do with the ship
 
 package com.sepr.game.Sprites;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -24,7 +27,8 @@ public class Ship extends Sprite {
     private BodyDef bdef;
     private FixtureDef fdef;
     private PolygonShape shipShape, cannonShape;
-    private RevoluteJoint joint;
+    private RevoluteJointDef rDef;
+    private RevoluteJoint rJoint;
     private float maxSpeed = 4f, shipAcceleration = 2f;
 
     public Ship(PlayScreen screen) {
@@ -51,7 +55,7 @@ public class Ship extends Sprite {
 
         //Ship creation
         bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(2000 / Main.PPM, 1600 / Main.PPM);
+        bdef.position.set(6200 / Main.PPM, 7100 / Main.PPM);
 
         shipShape = new PolygonShape();
         shipShape.setAsBox(0.8f, 0.7f);
@@ -75,24 +79,19 @@ public class Ship extends Sprite {
 
         //Joint -- need to make it rotate!
 
-        RevoluteJointDef rDef= new RevoluteJointDef();
-        rDef.enableMotor = true;
-        rDef.motorSpeed = 2f;
-        rDef.enableLimit = false;
-        rDef.maxMotorTorque = 10f;
+        rDef= new RevoluteJointDef();
 
         rDef.bodyA = shipBody;
         rDef.bodyB = cannonBody;
         rDef.collideConnected = false;
         rDef.localAnchorA.set(0, 2f);
 
+        rDef.enableLimit = true;
+        rDef.upperAngle = 10 * MathUtils.degreesToRadians;
+        rDef.lowerAngle = -10 * MathUtils.degreesToRadians;
+        rDef.maxMotorTorque = 100;
 
-        world.createJoint(rDef);
-
-
-
-
-
+        rJoint = (RevoluteJoint) world.createJoint(rDef);
 
     }
 
@@ -119,6 +118,8 @@ public class Ship extends Sprite {
     public void stopShip() {
         shipBody.setLinearDamping(0.2f); //Slows down gradually
     }
+
+
 
 
     public void dispose(){

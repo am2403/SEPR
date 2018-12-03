@@ -12,7 +12,7 @@ public class Fleet extends Sprite {
     public World world;
     private Body body;
     private Texture fleet;
-    private int spawnX = 20, spawnY = 12; //x and y location that the fleet spawns at
+    private int spawnX = 67, spawnY = 71; //x and y location that the fleet spawns at
 
     public Fleet(PlayScreen screen){
         this.world = screen.getWorld();

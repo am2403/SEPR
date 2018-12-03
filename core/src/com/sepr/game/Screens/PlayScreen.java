@@ -51,9 +51,9 @@ public class PlayScreen implements Screen {
         hud = new HUD(game.batch);
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("Map/worldmap2.tmx");
+        map = mapLoader.load("Map/map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
-        gamecam.position.set(gamePort.getWorldWidth()/2, gamePort.getWorldHeight()/2, 0);
+        gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
         world  = new World(new Vector2(0, 0), true); // Can apply gravity / wind speed forces
         b2dr = new Box2DDebugRenderer();
