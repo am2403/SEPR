@@ -12,13 +12,13 @@ import com.sepr.game.Sprites.Dock;
 public class BoxPhysics {
 
     public BoxPhysics(PlayScreen screen){
-        //World world = screen.getWorld();
+        World world = screen.getWorld();
         TiledMap map = screen.getMap();
 
         //Create body and fixture variables
         BodyDef bdef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
         Body body;
 
         //Set Docks as collidable
@@ -27,7 +27,6 @@ public class BoxPhysics {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             new Dock(screen, rect);
         }
-
 
 
 

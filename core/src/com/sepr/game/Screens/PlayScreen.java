@@ -135,6 +135,12 @@ public class PlayScreen implements Screen {
         //Renders the fixed HUD
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+
+        if(Gdx.input.isKeyPressed(Input.Keys.L)){
+            game.setScreen(new Department1(game));
+            dispose();
+        }
+
     }
 
     @Override

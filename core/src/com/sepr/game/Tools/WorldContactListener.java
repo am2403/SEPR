@@ -1,27 +1,29 @@
 package com.sepr.game.Tools;
 
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.*;
+import com.sepr.game.Sprites.InteractiveTileObject;
 
 public class WorldContactListener implements ContactListener {
-
-    public WorldContactListener(){
-
-    }
 
 
     @Override
     public void beginContact(Contact contact) {
-        Gdx.app.log("Begin Contact: ", "");
+        Fixture fixA = contact.getFixtureA();
+        Fixture fixB = contact.getFixtureB();
+
+        if(fixA.getUserData() == "ship" || fixB.getUserData() == "ship"){
+            Fixture ship = fixA.getUserData() == "ship" ? fixA : fixB;
+            Fixture object = ship == fixA ? fixB : fixA;
+
+            if(object.getUserData() instanceof InteractiveTileObject){
+                ((InteractiveTileObject) object.getUserData()).shipContact();
+            }
+        }
     }
 
     @Override
     public void endContact(Contact contact) {
-        Gdx.app.log("End Contact: ", "");
+
     }
 
     @Override

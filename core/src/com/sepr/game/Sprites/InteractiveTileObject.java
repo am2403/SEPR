@@ -6,7 +6,6 @@ Will be used more later
 package com.sepr.game.Sprites;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Main;
@@ -39,6 +38,14 @@ public abstract class InteractiveTileObject {
         shape.setAsBox((bounds.getWidth() / 2) / Main.PPM, (bounds.getHeight() / 2) / Main.PPM);
         fdef.shape = shape;
         fixture = body.createFixture(fdef);
-
     }
+
+    public abstract void shipContact();
+    public void setCategoryFilter(short filterBit){
+        Filter filter = new Filter();
+        filter.categoryBits = filterBit;
+        fixture.setFilterData(filter);
+    }
+
+
 }

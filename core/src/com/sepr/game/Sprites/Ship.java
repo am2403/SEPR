@@ -12,7 +12,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.PlayScreen;
-
 import static com.badlogic.gdx.math.MathUtils.cos;
 import static com.badlogic.gdx.math.MathUtils.sin;
 
@@ -28,7 +27,6 @@ public class Ship extends Sprite {
     private CircleShape shipShape;
     private float maxSpeed = 4f;
     private float forceX, forceY;
-
     private float magnitude = 2f;
 
     public Ship(PlayScreen screen) {
@@ -65,6 +63,9 @@ public class Ship extends Sprite {
 
         shipShape = new CircleShape();
         shipShape.setRadius(0.7f);
+        fdef.filter.categoryBits = Main.SHIP_BIT;
+        fdef.filter.maskBits = Main.DEFAULT_BIT | Main.DOCK_BIT;
+
         fdef.shape = shipShape;
 
         //Ship properties
@@ -72,13 +73,9 @@ public class Ship extends Sprite {
         fdef.friction = 0.5f;
 
         shipBody = world.createBody(bdef);
-        shipBody.createFixture(fdef);
+        shipBody.createFixture(fdef).setUserData("ship");
 
         shipBody.setAngularDamping(30f);
-
-
-
-
 
 
     }
@@ -102,8 +99,6 @@ public class Ship extends Sprite {
     public void stopShip() {
         shipBody.setLinearDamping(0.6f); //Slows down gradually
     }
-
-
 
 
 
