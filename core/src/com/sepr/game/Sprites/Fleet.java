@@ -2,6 +2,7 @@ package com.sepr.game.Sprites;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Main;
@@ -11,20 +12,25 @@ public class Fleet extends Sprite {
 
     public World world;
     private Body body;
-    private Texture fleet;
+    private Texture fleetTexture;
+    private Sprite fleet;
     private int spawnX = 67, spawnY = 71; //x and y location that the fleet spawns at
 
     public Fleet(PlayScreen screen){
         this.world = screen.getWorld();
         defineFleet();
-        fleet = new Texture("fleet.png");
+        fleetTexture = new Texture("fleet.png");
+        fleet = new Sprite(fleetTexture);
+        fleet.setPosition(body.getPosition().x, body.getPosition().y);
         setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
         setRegion(fleet);
     }
 
     public void update(float dt){
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+        setRotation(body.getAngle() * MathUtils.radiansToDegrees); //Here in case the body every rotates
         fleetMovement(dt);
+
     }
 
     //Creates a Box2D Object and attaches a shape to it
@@ -34,19 +40,25 @@ public class Fleet extends Sprite {
         bdef.position.set(spawnX * 100 / Main.PPM, spawnY * 100 / Main.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bdef);
-
         FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
 
-        shape.setRadius(80 / Main.PPM);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(1f, 1f);
         fdef.shape = shape;
         body.createFixture(fdef);
+
+
+
+
     }
 
     // Gives the fleet a linear impulse to the left... still needs a lot of work for proper fleet movement
     public void fleetMovement(float dt) {
 
+        //body.setAngularVelocity(0.5f);
+
         body.applyLinearImpulse(new Vector2(-0.001f, 0f), body.getWorldCenter(), true);
+       // fleet.setPosition(body.getPosition().x, body.getPosition().y);
 
     }
 
@@ -55,6 +67,6 @@ public class Fleet extends Sprite {
 
     public void dispose(){
         world.dispose();
-        fleet.dispose();
+        fleetTexture.dispose();
     }
 }

@@ -4,37 +4,32 @@ Handles everything to do with the ship
 
 package com.sepr.game.Sprites;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.PlayScreen;
 
-import java.awt.geom.RectangularShape;
 
 public class Ship extends Sprite {
 
     public World world;
-    public Body shipBody, cannonBody;
-    private Texture ship;
+    public Body shipBody;
+    private Texture shipTexture;
+    private Sprite ship;
     private BodyDef bdef;
     private FixtureDef fdef;
-    private PolygonShape shipShape, cannonShape;
-    private RevoluteJointDef rDef;
-    private RevoluteJoint rJoint;
+    private CircleShape shipShape;
     private float maxSpeed = 4f, shipAcceleration = 2f;
 
     public Ship(PlayScreen screen) {
         this.world = screen.getWorld();
         defineShip();
-        ship = new Texture("mainShip.png");
+        shipTexture = new Texture("mainShip.png");
+        ship = new Sprite(shipTexture);
         setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
         setRegion(ship);
     }
@@ -42,6 +37,9 @@ public class Ship extends Sprite {
 
     public void update(float dt) {
         setPosition(shipBody.getPosition().x - getWidth() / 2, shipBody.getPosition().y - getHeight() / 2);
+        setRotation(shipBody.getAngle() * MathUtils.radiansToDegrees);
+        setOriginCenter();
+        System.out.println(shipBody.getAngle() * MathUtils.radiansToDegrees);
 
 
     }
@@ -57,8 +55,8 @@ public class Ship extends Sprite {
         bdef.type = BodyDef.BodyType.DynamicBody;
         bdef.position.set(6200 / Main.PPM, 7100 / Main.PPM);
 
-        shipShape = new PolygonShape();
-        shipShape.setAsBox(0.8f, 0.7f);
+        shipShape = new CircleShape();
+        shipShape.setRadius(0.7f);
         fdef.shape = shipShape;
 
         //Ship properties
@@ -68,46 +66,36 @@ public class Ship extends Sprite {
         shipBody = world.createBody(bdef);
         shipBody.createFixture(fdef);
 
-        //Cannon
-        cannonShape = new PolygonShape();
-        cannonShape.setAsBox(0.06f, 0.4f);
+        shipBody.setAngularDamping(30f);
 
-        fdef.shape = cannonShape;
 
-        cannonBody = world.createBody(bdef);
-        cannonBody.createFixture(fdef);
 
-        //Joint -- need to make it rotate!
 
-        rDef= new RevoluteJointDef();
 
-        rDef.bodyA = shipBody;
-        rDef.bodyB = cannonBody;
-        rDef.collideConnected = false;
-        rDef.localAnchorA.set(0, 2f);
-
-        rDef.enableLimit = true;
-        rDef.upperAngle = 10 * MathUtils.degreesToRadians;
-        rDef.lowerAngle = -10 * MathUtils.degreesToRadians;
-        rDef.maxMotorTorque = 100;
-
-        rJoint = (RevoluteJoint) world.createJoint(rDef);
 
     }
 
     public void moveUp() {
         if (shipBody.getLinearVelocity().y <= maxSpeed)
             shipBody.applyForce(new Vector2(0, shipAcceleration), shipBody.getWorldCenter(), true);
+
+            shipBody.setAngularVelocity(0.5f);
+
     }
 
     public void moveDown() {
         if (shipBody.getLinearVelocity().y <= maxSpeed)
             shipBody.applyForce(new Vector2(0, -shipAcceleration), shipBody.getWorldCenter(), true);
+
+        shipBody.setAngularVelocity(-0.5f);
+
+
     }
 
     public void moveLeft() {
         if (shipBody.getLinearVelocity().x <= maxSpeed)
             shipBody.applyForce(new Vector2(-shipAcceleration, 0), shipBody.getWorldCenter(), true);
+
     }
 
     public void moveRight() {
@@ -123,7 +111,7 @@ public class Ship extends Sprite {
 
 
     public void dispose(){
-        ship.dispose();
+        shipTexture.dispose();
     }
 
 }

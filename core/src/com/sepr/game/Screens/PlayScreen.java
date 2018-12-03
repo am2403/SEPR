@@ -131,6 +131,7 @@ public class PlayScreen implements Screen {
         game.batch.begin();
         ship.draw(game.batch);
         fleet.draw(game.batch);
+
         game.batch.end();
 
         //Renders the fixed HUD
