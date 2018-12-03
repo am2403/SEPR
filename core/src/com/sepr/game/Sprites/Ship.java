@@ -13,6 +13,9 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.PlayScreen;
 
+import static com.badlogic.gdx.math.MathUtils.cos;
+import static com.badlogic.gdx.math.MathUtils.sin;
+
 
 public class Ship extends Sprite {
 
@@ -23,7 +26,10 @@ public class Ship extends Sprite {
     private BodyDef bdef;
     private FixtureDef fdef;
     private CircleShape shipShape;
-    private float maxSpeed = 4f, shipAcceleration = 2f;
+    private float maxSpeed = 4f;
+    private float forceX, forceY;
+
+    private float magnitude = 2f;
 
     public Ship(PlayScreen screen) {
         this.world = screen.getWorld();
@@ -32,6 +38,8 @@ public class Ship extends Sprite {
         ship = new Sprite(shipTexture);
         setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
         setRegion(ship);
+
+
     }
 
 
@@ -39,8 +47,8 @@ public class Ship extends Sprite {
         setPosition(shipBody.getPosition().x - getWidth() / 2, shipBody.getPosition().y - getHeight() / 2);
         setRotation(shipBody.getAngle() * MathUtils.radiansToDegrees);
         setOriginCenter();
-        System.out.println(shipBody.getAngle() * MathUtils.radiansToDegrees);
-
+        forceX = cos(shipBody.getAngle());
+        forceY =  sin(shipBody.getAngle());
 
     }
 
@@ -75,37 +83,26 @@ public class Ship extends Sprite {
 
     }
 
+
+
     public void moveUp() {
-        if (shipBody.getLinearVelocity().y <= maxSpeed)
-            shipBody.applyForce(new Vector2(0, shipAcceleration), shipBody.getWorldCenter(), true);
-
-            shipBody.setAngularVelocity(0.5f);
-
+        if (shipBody.getLinearVelocity().y <= maxSpeed && shipBody.getLinearVelocity().x < maxSpeed)
+            shipBody.applyForce(new Vector2(forceX * magnitude, forceY * magnitude), shipBody.getWorldCenter(), true);
     }
 
-    public void moveDown() {
-        if (shipBody.getLinearVelocity().y <= maxSpeed)
-            shipBody.applyForce(new Vector2(0, -shipAcceleration), shipBody.getWorldCenter(), true);
 
-        shipBody.setAngularVelocity(-0.5f);
-
-
+    public void rotateClockwise(){
+        shipBody.setAngularVelocity(-2f);
     }
 
-    public void moveLeft() {
-        if (shipBody.getLinearVelocity().x <= maxSpeed)
-            shipBody.applyForce(new Vector2(-shipAcceleration, 0), shipBody.getWorldCenter(), true);
-
-    }
-
-    public void moveRight() {
-        if (shipBody.getLinearVelocity().x <= maxSpeed)
-            shipBody.applyForce(new Vector2(shipAcceleration, 0), shipBody.getWorldCenter(), true);
+    public void rotateCounterClockwise(){
+        shipBody.setAngularVelocity(2f);
     }
 
     public void stopShip() {
-        shipBody.setLinearDamping(0.2f); //Slows down gradually
+        shipBody.setLinearDamping(0.6f); //Slows down gradually
     }
+
 
 
 

@@ -55,10 +55,7 @@ public class Fleet extends Sprite {
     // Gives the fleet a linear impulse to the left... still needs a lot of work for proper fleet movement
     public void fleetMovement(float dt) {
 
-        //body.setAngularVelocity(0.5f);
-
         body.applyLinearImpulse(new Vector2(-0.001f, 0f), body.getWorldCenter(), true);
-       // fleet.setPosition(body.getPosition().x, body.getPosition().y);
 
     }
 
