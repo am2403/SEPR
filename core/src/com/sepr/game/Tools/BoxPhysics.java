@@ -6,12 +6,13 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Screens.PlayScreen;
-import com.sepr.game.Sprites.Land;
+import com.sepr.game.Sprites.Dock;
+
 
 public class BoxPhysics {
 
     public BoxPhysics(PlayScreen screen){
-        World world = screen.getWorld();
+        //World world = screen.getWorld();
         TiledMap map = screen.getMap();
 
         //Create body and fixture variables
@@ -20,12 +21,15 @@ public class BoxPhysics {
         FixtureDef fdef = new FixtureDef();
         Body body;
 
-        //Create ground body
+        //Set Docks as collidable
 
-        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object : map.getLayers().get(9).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            new Land(screen, rect);
+            new Dock(screen, rect);
         }
+
+
+
 
 
     }
