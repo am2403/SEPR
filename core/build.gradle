@@ -4,7 +4,28 @@ sourceCompatibility = 1.6
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.test.java.srcDirs = ["/src/test/java"]
 
+repositories{mavenCentral()}
+
+dependencies {
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    testRuntimeOnly ('org.junit.jupiter:junit-jupiter-engine:5.1.0')
+    testCompile (
+            "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion",
+            "com.badlogicgames.gdx:gdx:$gdxVersion",
+            "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop",
+            "com.badlogicgames.gdx:gdx-box2d:$gdxVersion",
+            "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+    )
+}
+
+test{
+    useJUnitPlatform()
+}
 
 eclipse.project {
     name = appName + "-core"
