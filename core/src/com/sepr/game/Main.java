@@ -10,9 +10,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sepr.game.Screens.PlayScreen;
 
 public class Main extends Game {
-	public static final int V_WIDTH = 1000;
+
+    //Sets the virtual game size and Box2D scale (Pixels Per Metre)
+
+    public static final int V_WIDTH = 1000;
 	public static final int V_HEIGHT = 900;
 	public static final float PPM = 100;
+
+
+	//Used to identify collision. Powers of 2 used to simplify shifting operations
 
 	public static final short DEFAULT_BIT = 1;
 	public static final short SHIP_BIT = 2;

@@ -4,7 +4,6 @@ Handles everything to do with the ship
 
 package com.sepr.game.Sprites;
 
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;

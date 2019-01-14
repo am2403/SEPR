@@ -1,10 +1,8 @@
 /*
-This class is needed for object collision
-Will be used more later
+This class is used for detecting different types of tiles.
  */
 
 package com.sepr.game.Sprites;
-
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
@@ -41,6 +39,8 @@ public abstract class InteractiveTileObject {
     }
 
     public abstract void shipContact();
+
+    // Sets a value to the object being detected
     public void setCategoryFilter(short filterBit){
         Filter filter = new Filter();
         filter.categoryBits = filterBit;

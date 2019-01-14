@@ -44,12 +44,15 @@ public class PlayScreen implements Screen {
     private Box2DDebugRenderer b2dr;
 
     public PlayScreen(Main game){
+
         this.game = game;
 
+        //Create a camera and fix the viewport
         gamecam = new OrthographicCamera();
         gamePort = new StretchViewport(Main.V_WIDTH / Main.PPM ,Main.V_HEIGHT / Main.PPM, gamecam); //Maintains aspect ratio as window is resized
         hud = new HUD(game.batch);
 
+        //load the Tiled map
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("Map/map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
