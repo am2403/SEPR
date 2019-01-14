@@ -29,6 +29,16 @@ public class Ship extends Sprite {
     private float forceX, forceY;
     private float magnitude = 2f;
 
+
+
+    public Ship(){
+        defineShip();
+        shipTexture = new Texture("mainShip.png");
+        ship = new Sprite(shipTexture);
+        setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
+        setRegion(ship);
+    }
+
     public Ship(PlayScreen screen) {
         this.world = screen.getWorld();
         defineShip();
@@ -36,7 +46,6 @@ public class Ship extends Sprite {
         ship = new Sprite(shipTexture);
         setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
         setRegion(ship);
-
 
     }
 
