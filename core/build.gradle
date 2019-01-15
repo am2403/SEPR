@@ -11,11 +11,12 @@ repositories{mavenCentral()}
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    runtimeOnly ('org.junit.jupiter:junit-jupiter-engine:5.1.0')
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
     testRuntimeOnly ('org.junit.jupiter:junit-jupiter-engine:5.1.0')
     testCompile (
-            "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion",
             "com.badlogicgames.gdx:gdx:$gdxVersion",
             "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop",
             "com.badlogicgames.gdx:gdx-box2d:$gdxVersion",
