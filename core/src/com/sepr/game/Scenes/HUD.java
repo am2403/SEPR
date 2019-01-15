@@ -7,7 +7,6 @@ package com.sepr.game.Scenes;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.DistanceFieldFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -17,16 +16,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.PlayScreen;
-import com.sepr.game.Sprites.Ship;
-
-
 
 public class HUD implements Disposable {
 
     public Stage stage;
     private Viewport viewport; //New viewport to ensure that hud remains fixed
     private int score, influenceCount;
-    private float xLocation, yLocation;
+    private float xLocation, yLocation; //coordinates of the ship
 
 
     private Label countdownLabel, scoreLabel, influenceLabel, worldLabel, xLabel, yLabel;
