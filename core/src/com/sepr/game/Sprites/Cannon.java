@@ -25,7 +25,7 @@ public class Cannon extends Sprite {
     public Cannon(PlayScreen screen) {
         this.world = screen.getWorld();
         defineCannon();
-        cannonTexture = new Texture("cannon.png");
+        cannonTexture = new Texture("ship.png");
         cannon = new Sprite(cannonTexture);
         setBounds(0, 0, 40 / Main.PPM, 40 / Main.PPM);
         setRegion(cannon);

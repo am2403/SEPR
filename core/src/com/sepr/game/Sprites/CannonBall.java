@@ -37,7 +37,7 @@ public class CannonBall extends Sprite {
         this.angle = cannonAngle;
 
         defineCannonBall();
-        cannonBallTexture = new Texture("cannonBall.png");
+        cannonBallTexture = new Texture("ship.png");
         cannonBall = new Sprite(cannonBallTexture);
         setBounds(x, y, 10 / Main.PPM, 10 / Main.PPM);
         setRegion(cannonBall);
