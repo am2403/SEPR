@@ -14,14 +14,20 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
 import com.sepr.game.Scenes.HUD;
+import com.sepr.game.Sprites.Cannon;
+import com.sepr.game.Sprites.CannonBall;
 import com.sepr.game.Sprites.Fleet;
 import com.sepr.game.Sprites.Ship;
 import com.sepr.game.Tools.BoxPhysics;
 import com.sepr.game.Tools.WorldContactListener;
+
+import java.util.ArrayList;
 
 
 public class PlayScreen implements Screen {
@@ -34,6 +40,7 @@ public class PlayScreen implements Screen {
     //Ship and fleet
     private Ship ship;
     private Fleet fleet;
+    private Cannon cannon;
 
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -42,6 +49,10 @@ public class PlayScreen implements Screen {
     //Box2D variables
     private World world;
     private Box2DDebugRenderer b2dr;
+
+    RevoluteJoint joint;
+
+    ArrayList<CannonBall> cannonBalls;
 
     public PlayScreen(Main game){
 
@@ -65,9 +76,18 @@ public class PlayScreen implements Screen {
 
         ship = new Ship(this);
         fleet = new Fleet(this);
+        cannon = new Cannon(this);
 
         //Listens for Box2D Object collisions
         world.setContactListener(new WorldContactListener());
+
+        //define joint as between two bodies
+        RevoluteJointDef rjd = new RevoluteJointDef();
+
+        rjd.initialize(ship.shipBody, cannon.cannonBody, ship.shipBody.getWorldCenter());
+        joint = (RevoluteJoint) world.createJoint(rjd);
+
+        cannonBalls = new ArrayList<CannonBall>();
 
     }
 
@@ -83,12 +103,18 @@ public class PlayScreen implements Screen {
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
             if(Gdx.input.isKeyPressed(Input.Keys.W))
                 ship.moveUp();
-            if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            if(Gdx.input.isKeyPressed(Input.Keys.D))
                 ship.rotateClockwise();
-            if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            if(Gdx.input.isKeyPressed(Input.Keys.A))
                 ship.rotateCounterClockwise();
-        } else {
-            ship.stopShip();
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+                cannon.rotateClockwise();
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+                cannon.rotateCounterClockwise();
+            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+                cannonBalls.add(new CannonBall(this, cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
+            }
+            else ship.stopShip();
         }
 
 
@@ -104,6 +130,17 @@ public class PlayScreen implements Screen {
         //Updates the camera coordinates so that it remains fixed on the ship
         gamecam.position.x = ship.shipBody.getPosition().x;
         gamecam.position.y = ship.shipBody.getPosition().y;
+
+        //Update bullets
+        ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
+        for (CannonBall cannonBall : cannonBalls) {
+            cannonBall.update(dt);
+            if (cannonBall.x > Gdx.graphics.getWidth()) {
+                cannonBallsToRemove.add(cannonBall);
+            }
+        }
+
+            cannonBalls.removeAll(cannonBallsToRemove);
 
         gamecam.update();
         ship.update(dt);
@@ -130,8 +167,14 @@ public class PlayScreen implements Screen {
         //Render sprites
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
+
         ship.draw(game.batch);
         fleet.draw(game.batch);
+        cannon.draw(game.batch);
+
+        for (CannonBall cannonBall: cannonBalls){
+            cannonBall.draw(game.batch);
+        }
 
         game.batch.end();
 
