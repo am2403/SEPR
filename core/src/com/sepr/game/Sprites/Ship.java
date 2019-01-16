@@ -81,6 +81,8 @@ public class Ship extends Sprite {
         shipBody.createFixture(fdef);
 
         shipBody.setAngularDamping(30f); //the resistance to the ships rotating force
+
+        shipBody.setUserData(this);
     }
 
     public void moveUp() {

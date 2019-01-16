@@ -61,6 +61,8 @@ public class PlayScreen implements Screen {
 
     float shootTimer;
 
+
+
     public PlayScreen(Main game){
 
         this.game = game;
@@ -86,7 +88,8 @@ public class PlayScreen implements Screen {
         cannon = new Cannon(this);
 
         //Listens for Box2D Object collisions
-        world.setContactListener(new WorldContactListener());
+        world.setContactListener(new WorldContactListener(this));
+
 
         //define joint as between two bodies
         RevoluteJointDef rjd = new RevoluteJointDef();
@@ -147,15 +150,18 @@ public class PlayScreen implements Screen {
         gamecam.position.y = ship.shipBody.getPosition().y;
 
         //Update bullets
+        //if the cannonBall goes past the world width it gets removed from the game
         ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
         for (CannonBall cannonBall : cannonBalls) {
             cannonBall.update(dt);
-            if (cannonBall.x > Gdx.graphics.getWidth()) {
+            System.out.println(cannonBalls + ", " + cannonBall.cannonBallBody.getWorldCenter().x + ", " + Gdx.graphics.getWidth());
+            if (cannonBall.cannonBallBody.getWorldCenter().x > Gdx.graphics.getWidth()) {
                 cannonBallsToRemove.add(cannonBall);
             }
         }
+        cannonBalls.removeAll(cannonBallsToRemove);
+        System.out.println(cannonBalls);
 
-            cannonBalls.removeAll(cannonBallsToRemove);
 
         gamecam.update();
         ship.update(dt);

@@ -29,6 +29,8 @@ public class Cannon extends Sprite {
         cannon = new Sprite(cannonTexture);
         setBounds(0, 0, 40 / Main.PPM, 40 / Main.PPM);
         setRegion(cannon);
+
+        cannonBody.setUserData(this);
     }
 
     public void update(float dt) {

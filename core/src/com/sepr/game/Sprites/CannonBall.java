@@ -44,6 +44,8 @@ public class CannonBall extends Sprite {
 
         //applies the force of the cannonball in the direction the cannon is facing
         force = new Vector2(cos(angle), sin(angle));
+
+        cannonBallBody.setUserData(this);
     }
 
     // Creates a Box2D object for the ship and the ship's cannon, then attaches the cannon to the ship with a ResoluteJoint
@@ -61,6 +63,7 @@ public class CannonBall extends Sprite {
         cannonBallShape.setRadius(0.05f);
         fdef.shape = cannonBallShape;
 
+        fdef.restitution = 0.5f;
 
         cannonBallBody = world.createBody(bdef);
         cannonBallBody.createFixture(fdef);
@@ -70,7 +73,6 @@ public class CannonBall extends Sprite {
     public void shoot() {
         Vector2 pos = cannonBallBody.getWorldCenter();
         cannonBallBody.applyLinearImpulse(force, pos, true);
-        System.out.println(cos(angle) + " , " +  sin(angle));
     }
 
     public void update(float dt){

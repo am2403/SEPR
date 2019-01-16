@@ -36,6 +36,8 @@ public abstract class InteractiveTileObject {
         shape.setAsBox((bounds.getWidth() / 2) / Main.PPM, (bounds.getHeight() / 2) / Main.PPM);
         fdef.shape = shape;
         fixture = body.createFixture(fdef);
+
+        body.setUserData(this);
     }
 
     public abstract void shipContact();
