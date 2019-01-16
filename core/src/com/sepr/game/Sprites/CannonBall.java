@@ -37,7 +37,7 @@ public class CannonBall extends Sprite {
         this.angle = cannonAngle;
 
         defineCannonBall();
-        cannonBallTexture = new Texture("ship.png");
+        cannonBallTexture = new Texture("cannonBall.png");
         cannonBall = new Sprite(cannonBallTexture);
         setBounds(x, y, 10 / Main.PPM, 10 / Main.PPM);
         setRegion(cannonBall);
@@ -59,20 +59,25 @@ public class CannonBall extends Sprite {
 
         cannonBallShape = new CircleShape();
         cannonBallShape.setRadius(0.05f);
+        fdef.shape = cannonBallShape;
 
 
         cannonBallBody = world.createBody(bdef);
+        cannonBallBody.createFixture(fdef);
+
     }
 
     public void shoot() {
         Vector2 pos = cannonBallBody.getWorldCenter();
         cannonBallBody.applyLinearImpulse(force, pos, true);
+        System.out.println(cos(angle) + " , " +  sin(angle));
     }
 
     public void update(float dt){
         //sets the debug renderer line and the sprite into the same position
         setPosition((cannonBallBody.getPosition().x - getWidth() / 2) , (cannonBallBody.getPosition().y- getHeight() / 2 )); //sets position of the sprites to the middle of the outline
         shoot();
+
 
         //CODE TO REMOVE BULLET FROM THE LIST - avoiding wasted memory
 /*        if (this.cannonBallBody.getPosition().y > Gdx.graphics.getHeight() ||this.cannonBallBody.getPosition().y > Gdx.graphics.getHeight()
