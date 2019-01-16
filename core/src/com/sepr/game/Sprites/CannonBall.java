@@ -67,7 +67,6 @@ public class CannonBall extends Sprite {
 
         cannonBallBody = world.createBody(bdef);
         cannonBallBody.createFixture(fdef);
-
     }
 
     public void shoot() {

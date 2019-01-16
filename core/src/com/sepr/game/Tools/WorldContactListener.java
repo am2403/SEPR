@@ -10,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Screens.PlayScreen;
 import com.sepr.game.Sprites.*;
 
+import java.util.ArrayList;
+
 public class WorldContactListener implements ContactListener {
     public PlayScreen playScreen;
 
@@ -28,12 +30,19 @@ public class WorldContactListener implements ContactListener {
         Object o1 = b1.getUserData();
         Object o2 = b2.getUserData();
 
+        //when the cannonBall hits the wall/dock the cannonBall will no longer have a force applied to it
         if(o2.getClass() == CannonBall.class && o1.getClass() == Dock.class){
             b1.applyForce(new Vector2(0,0), b1.getWorldCenter(), true);
         }
 
         if (o2.getClass() == CannonBall.class && o1.getClass() == Fleet.class){
-
+            ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
+            for (CannonBall cannonBall: playScreen.cannonBalls){
+                if(cannonBall == o2){
+                    cannonBallsToRemove.add(cannonBall);
+                }
+            }
+            playScreen.cannonBalls.removeAll(cannonBallsToRemove);
         }
 
     }
@@ -50,6 +59,19 @@ public class WorldContactListener implements ContactListener {
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
+/*        Fixture f1 = contact.getFixtureA();
+        Fixture f2 = contact.getFixtureB();
 
+        Body b1 = f1.getBody();
+        Body b2 = f2.getBody();
+
+        Object o1 = b1.getUserData();
+        Object o2 = b2.getUserData();
+
+        Body body = null;
+        if (o2.getClass() == CannonBall.class && o1.getClass() == Fleet.class){
+            body = contact.getFixtureB().getBody();
+        }*/
     }
+
 }

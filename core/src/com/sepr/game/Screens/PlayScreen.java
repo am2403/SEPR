@@ -55,7 +55,7 @@ public class PlayScreen implements Screen {
 
     RevoluteJoint joint;
 
-    ArrayList<CannonBall> cannonBalls;
+    public ArrayList<CannonBall> cannonBalls;
 
     public static final float SHOOT_WAIT_TIME = 0.3f;
 
@@ -154,13 +154,11 @@ public class PlayScreen implements Screen {
         ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
         for (CannonBall cannonBall : cannonBalls) {
             cannonBall.update(dt);
-            System.out.println(cannonBalls + ", " + cannonBall.cannonBallBody.getWorldCenter().x + ", " + Gdx.graphics.getWidth());
-            if (cannonBall.cannonBallBody.getWorldCenter().x > Gdx.graphics.getWidth()) {
+            if (cannonBall.cannonBallBody.getWorldCenter().x > Gdx.graphics.getWidth() || cannonBall.cannonBallBody.getWorldCenter().x < 0) {
                 cannonBallsToRemove.add(cannonBall);
             }
         }
         cannonBalls.removeAll(cannonBallsToRemove);
-        System.out.println(cannonBalls);
 
 
         gamecam.update();
@@ -170,6 +168,17 @@ public class PlayScreen implements Screen {
         hud.update(dt);
         renderer.setView(gamecam);
 
+    }
+
+    public void removeCannonBall(float dt){
+        ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
+        for (CannonBall cannonBall : cannonBalls) {
+            cannonBall.update(dt);
+            if (cannonBall.cannonBallBody.getWorldCenter().x > Gdx.graphics.getWidth() || cannonBall.cannonBallBody.getWorldCenter().x < 0) {
+                cannonBallsToRemove.add(cannonBall);
+            }
+        }
+        cannonBalls.removeAll(cannonBallsToRemove);
     }
 
     @Override
