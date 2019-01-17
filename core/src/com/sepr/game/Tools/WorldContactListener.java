@@ -7,6 +7,8 @@ package com.sepr.game.Tools;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.sepr.game.Main;
+import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
 import com.sepr.game.Sprites.*;
 
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 
 public class WorldContactListener implements ContactListener {
     public PlayScreen playScreen;
+    public Main game = new Main();
 
     public WorldContactListener(PlayScreen playScreen){
         this.playScreen = playScreen;
@@ -38,7 +41,7 @@ public class WorldContactListener implements ContactListener {
 
         if (o2.getClass() == CannonBall.class && o1.getClass() == Fleet.class){
             System.out.println("Cannonball hit fleet");
-
+            //game.setScreen(new CombatScreen(game));
 
             ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
             for (CannonBall cannonBall: playScreen.cannonBalls){
@@ -63,6 +66,8 @@ public class WorldContactListener implements ContactListener {
         Object o1 = b1.getUserData();
         Object o2 = b2.getUserData();
 
+
+
         if (o2.getClass() == CannonBall.class && o1.getClass() == Fleet.class){
 
             //Used for testing... decreases fleet health
@@ -70,6 +75,8 @@ public class WorldContactListener implements ContactListener {
             Fleet.fleetHealth -= 10;
             //Fleet.fleetHealth -= 10;
             System.out.println(Fleet.fleetHealth);
+
+
 
 
             //remove cannonball

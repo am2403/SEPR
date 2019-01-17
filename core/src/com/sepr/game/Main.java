@@ -7,7 +7,6 @@ package com.sepr.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sepr.game.Screens.Department1;
 import com.sepr.game.Screens.PlayScreen;
 
 public class Main extends Game {

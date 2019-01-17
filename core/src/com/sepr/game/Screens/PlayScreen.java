@@ -123,6 +123,12 @@ public class PlayScreen implements Screen {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
                 cannon.rotateCounterClockwise();
             else ship.stopShip();
+
+            if (Gdx.input.isKeyPressed(Input.Keys.C)){
+                game.setScreen(new CombatScreen(game));
+            }
+
+
         }
 
 
@@ -141,6 +147,8 @@ public class PlayScreen implements Screen {
 
 
     }
+
+
 
     //This is called once every 60 seconds (world.step..)
     public void update(float dt){
@@ -163,11 +171,6 @@ public class PlayScreen implements Screen {
         }
         cannonBalls.removeAll(cannonBallsToRemove);
 
-
-        //Changes screen
-        if(Gdx.input.isKeyJustPressed(Input.Keys.L)){
-            game.setScreen(new Department1(game));
-        }
 
 
         gamecam.update();

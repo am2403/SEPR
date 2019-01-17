@@ -11,7 +11,7 @@ import com.sepr.game.Screens.PlayScreen;
 public class Fleet extends Sprite {
 
     public World world;
-    private Body body;
+    public Body body;
     private Texture fleetTexture;
     private Sprite fleet;
     private int spawnX = 67, spawnY = 71; //x and y location that the fleet spawns at
@@ -61,7 +61,7 @@ public class Fleet extends Sprite {
         FixtureDef fdef = new FixtureDef();
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(1f, 1f);
+        shape.setAsBox(0.5f, 0.5f);
         fdef.shape = shape;
         fdef.restitution = 0.01f;
 

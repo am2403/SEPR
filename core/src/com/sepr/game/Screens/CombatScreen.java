@@ -14,28 +14,19 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
 
-public class Department1 implements Screen {
+public class CombatScreen implements Screen {
 
     private Viewport viewport;
     private Stage stage;
 
     private Game game;
 
-    public Department1(Game game){
+    public CombatScreen(Game game){
         this.game = game;
         viewport = new FitViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) game).batch);
 
-        Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
 
-        Table table = new Table();
-        table.center();
-        table.setFillParent(true);
-
-        Label transitionLabel = new Label("Transition", font);
-        table.add(transitionLabel).expandX();
-
-        stage.addActor(table);
     }
 
 
@@ -46,7 +37,7 @@ public class Department1 implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
     }
