@@ -29,6 +29,9 @@ import com.sepr.game.Tools.WorldContactListener;
 
 import java.util.ArrayList;
 
+import static com.badlogic.gdx.math.MathUtils.cos;
+import static com.badlogic.gdx.math.MathUtils.sin;
+
 
 public class PlayScreen implements Screen {
 
@@ -52,7 +55,13 @@ public class PlayScreen implements Screen {
 
     RevoluteJoint joint;
 
-    ArrayList<CannonBall> cannonBalls;
+    public ArrayList<CannonBall> cannonBalls;
+
+    public static final float SHOOT_WAIT_TIME = 0.3f;
+
+    float shootTimer;
+
+
 
     public PlayScreen(Main game){
 
@@ -79,7 +88,8 @@ public class PlayScreen implements Screen {
         cannon = new Cannon(this);
 
         //Listens for Box2D Object collisions
-        world.setContactListener(new WorldContactListener());
+        world.setContactListener(new WorldContactListener(this));
+
 
         //define joint as between two bodies
         RevoluteJointDef rjd = new RevoluteJointDef();
@@ -89,6 +99,7 @@ public class PlayScreen implements Screen {
 
         cannonBalls = new ArrayList<CannonBall>();
 
+        shootTimer = 0;
     }
 
     @Override
@@ -111,10 +122,17 @@ public class PlayScreen implements Screen {
                 cannon.rotateClockwise();
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
                 cannon.rotateCounterClockwise();
-            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-                cannonBalls.add(new CannonBall(this, cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
-            }
             else ship.stopShip();
+        }
+
+        shootTimer += Gdx.graphics.getDeltaTime();
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && shootTimer >= SHOOT_WAIT_TIME){
+            shootTimer = 0; //resets the shoot timer
+            cannonBalls.add(new CannonBall(this, cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
+
+            //since a force is applied to the ship when we shoot our bullet, we apply an equal force in the
+            //opposite direction, stopping the ship from continiously moving backwards (acting a bit like recoil)
+            ship.shipBody.applyLinearImpulse(new Vector2(cos(cannon.cannonBody.getAngle()), sin(cannon.cannonBody.getAngle())), ship.shipBody.getWorldCenter(), true);
         }
 
 
@@ -132,22 +150,35 @@ public class PlayScreen implements Screen {
         gamecam.position.y = ship.shipBody.getPosition().y;
 
         //Update bullets
+        //if the cannonBall goes past the world width it gets removed from the game
         ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
         for (CannonBall cannonBall : cannonBalls) {
             cannonBall.update(dt);
-            if (cannonBall.x > Gdx.graphics.getWidth()) {
+            if (cannonBall.cannonBallBody.getWorldCenter().x > Gdx.graphics.getWidth() || cannonBall.cannonBallBody.getWorldCenter().x < 0) {
                 cannonBallsToRemove.add(cannonBall);
             }
         }
+        cannonBalls.removeAll(cannonBallsToRemove);
 
-            cannonBalls.removeAll(cannonBallsToRemove);
 
         gamecam.update();
         ship.update(dt);
+        cannon.update(dt);
         fleet.update(dt);
         hud.update(dt);
         renderer.setView(gamecam);
 
+    }
+
+    public void removeCannonBall(float dt){
+        ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
+        for (CannonBall cannonBall : cannonBalls) {
+            cannonBall.update(dt);
+            if (cannonBall.cannonBallBody.getWorldCenter().x > Gdx.graphics.getWidth() || cannonBall.cannonBallBody.getWorldCenter().x < 0) {
+                cannonBallsToRemove.add(cannonBall);
+            }
+        }
+        cannonBalls.removeAll(cannonBallsToRemove);
     }
 
     @Override

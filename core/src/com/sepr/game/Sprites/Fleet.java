@@ -24,6 +24,8 @@ public class Fleet extends Sprite {
         fleet.setPosition(body.getPosition().x, body.getPosition().y);
         setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
         setRegion(fleet);
+
+        body.setUserData(this);
     }
 
     public void update(float dt){

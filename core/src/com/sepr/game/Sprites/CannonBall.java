@@ -37,13 +37,15 @@ public class CannonBall extends Sprite {
         this.angle = cannonAngle;
 
         defineCannonBall();
-        cannonBallTexture = new Texture("ship.png");
+        cannonBallTexture = new Texture("cannonBall.png");
         cannonBall = new Sprite(cannonBallTexture);
         setBounds(x, y, 10 / Main.PPM, 10 / Main.PPM);
         setRegion(cannonBall);
 
         //applies the force of the cannonball in the direction the cannon is facing
         force = new Vector2(cos(angle), sin(angle));
+
+        cannonBallBody.setUserData(this);
     }
 
     // Creates a Box2D object for the ship and the ship's cannon, then attaches the cannon to the ship with a ResoluteJoint
@@ -59,9 +61,12 @@ public class CannonBall extends Sprite {
 
         cannonBallShape = new CircleShape();
         cannonBallShape.setRadius(0.05f);
+        fdef.shape = cannonBallShape;
 
+        fdef.restitution = 0.5f;
 
         cannonBallBody = world.createBody(bdef);
+        cannonBallBody.createFixture(fdef);
     }
 
     public void shoot() {
@@ -73,6 +78,7 @@ public class CannonBall extends Sprite {
         //sets the debug renderer line and the sprite into the same position
         setPosition((cannonBallBody.getPosition().x - getWidth() / 2) , (cannonBallBody.getPosition().y- getHeight() / 2 )); //sets position of the sprites to the middle of the outline
         shoot();
+
 
         //CODE TO REMOVE BULLET FROM THE LIST - avoiding wasted memory
 /*        if (this.cannonBallBody.getPosition().y > Gdx.graphics.getHeight() ||this.cannonBallBody.getPosition().y > Gdx.graphics.getHeight()
