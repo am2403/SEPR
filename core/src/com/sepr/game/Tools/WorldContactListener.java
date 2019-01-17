@@ -64,15 +64,22 @@ public class WorldContactListener implements ContactListener {
         Object o2 = b2.getUserData();
 
         if (o2.getClass() == CannonBall.class && o1.getClass() == Fleet.class){
-            System.out.println("Cannonball hit fleet");
 
+            //Used for testing... decreases fleet health
+            System.out.println("Cannonball hit fleet");
+            Fleet.fleetHealth -= 10;
+            System.out.println(Fleet.fleetHealth);
+
+
+            //remove cannonball
             ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
             for (CannonBall cannonBall: playScreen.cannonBalls){
                 if(cannonBall == o2){
                     cannonBallsToRemove.add(cannonBall);
+                    playScreen.cannonBalls.removeAll(cannonBallsToRemove);
                 }
             }
-            playScreen.cannonBalls.removeAll(cannonBallsToRemove);
+
         }
 
     }
