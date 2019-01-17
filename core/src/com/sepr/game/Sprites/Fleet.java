@@ -15,6 +15,15 @@ public class Fleet extends Sprite {
     private Texture fleetTexture;
     private Sprite fleet;
     private int spawnX = 67, spawnY = 71; //x and y location that the fleet spawns at
+
+    public static int getFleetHealth() {
+        return fleetHealth;
+    }
+
+    public static void setFleetHealth(int fleetHealth) {
+        Fleet.fleetHealth = fleetHealth;
+    }
+
     public static int fleetHealth = 100;
 
 
@@ -38,6 +47,7 @@ public class Fleet extends Sprite {
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         setRotation(body.getAngle() * MathUtils.radiansToDegrees); //Here in case the body every rotates
         fleetMovement(dt);
+
 
     }
 

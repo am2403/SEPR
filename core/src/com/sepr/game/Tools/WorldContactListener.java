@@ -68,6 +68,7 @@ public class WorldContactListener implements ContactListener {
             //Used for testing... decreases fleet health
             System.out.println("Cannonball hit fleet");
             Fleet.fleetHealth -= 10;
+            //Fleet.fleetHealth -= 10;
             System.out.println(Fleet.fleetHealth);
 
 

@@ -7,6 +7,7 @@ package com.sepr.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.sepr.game.Screens.Department1;
 import com.sepr.game.Screens.PlayScreen;
 
 public class Main extends Game {
@@ -29,7 +30,9 @@ public class Main extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		setScreen(new PlayScreen(this));
+
 	}
+
 
 	@Override
 	public void render () {

@@ -16,20 +16,21 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.PlayScreen;
+import com.sepr.game.Sprites.Fleet;
 
 public class HUD implements Disposable {
 
     public Stage stage;
     private Viewport viewport; //New viewport to ensure that hud remains fixed
-    private int score, influenceCount;
+    private int score, fleetHealth;
     private float xLocation, yLocation; //coordinates of the ship
 
 
-    private Label countdownLabel, scoreLabel, influenceLabel, worldLabel, xLabel, yLabel;
+    private Label countdownLabel, scoreLabel, fleetHealthLabel, worldLabel, xLabel, yLabel;
 
 
     public HUD(SpriteBatch sb){
-        influenceCount = 0;
+        fleetHealth = Fleet.fleetHealth; //needs a getFleetHealth for the code marks.. not this kind of access
         score = 0;
 
         viewport = new FitViewport(Main.V_WIDTH, Main.V_WIDTH, new OrthographicCamera());
@@ -40,7 +41,7 @@ public class HUD implements Disposable {
         table.setFillParent(true);
 
         scoreLabel = new Label(String.format("Score: " + "%03d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        influenceLabel = new Label(String.format("Influence: " + "%03d", influenceCount), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        fleetHealthLabel = new Label(String.format("Fleet health: " + "%03d", fleetHealth), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         worldLabel = new Label("WORLD VIEW", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         xLabel = new Label(String.format("X: " + "%01f", xLocation), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         yLabel = new Label(String.format("Y: " + "%01f", yLocation), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -49,7 +50,7 @@ public class HUD implements Disposable {
         table.add(xLabel).expandX().padBottom(2);
         table.add(yLabel).expandX().padBottom(2);
         table.add(scoreLabel).expandX().padBottom(2);
-        table.add(influenceLabel).expandX().padBottom(2);
+        table.add(fleetHealthLabel).expandX().padBottom(2);
         table.add(worldLabel).expandX().padBottom(2);
 
 

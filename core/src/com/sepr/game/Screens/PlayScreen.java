@@ -125,6 +125,9 @@ public class PlayScreen implements Screen {
             else ship.stopShip();
         }
 
+
+
+
         shootTimer += Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && shootTimer >= SHOOT_WAIT_TIME){
             shootTimer = 0; //resets the shoot timer
@@ -159,6 +162,12 @@ public class PlayScreen implements Screen {
             }
         }
         cannonBalls.removeAll(cannonBallsToRemove);
+
+
+        //Changes screen
+        if(Gdx.input.isKeyJustPressed(Input.Keys.L)){
+            game.setScreen(new Department1(game));
+        }
 
 
         gamecam.update();
@@ -202,11 +211,6 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
 
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.L)){
-            game.setScreen(new Department1(game));
-            dispose();
-        }
 
     }
 
