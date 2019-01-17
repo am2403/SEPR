@@ -21,6 +21,7 @@ public class WorldContactListener implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
+
         Fixture f1 = contact.getFixtureA();
         Fixture f2 = contact.getFixtureB();
 
@@ -36,6 +37,9 @@ public class WorldContactListener implements ContactListener {
         }
 
         if (o2.getClass() == CannonBall.class && o1.getClass() == Fleet.class){
+            System.out.println("Cannonball hit fleet");
+
+
             ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
             for (CannonBall cannonBall: playScreen.cannonBalls){
                 if(cannonBall == o2){
@@ -49,6 +53,27 @@ public class WorldContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
+
+        Fixture f1 = contact.getFixtureA();
+        Fixture f2 = contact.getFixtureB();
+
+        Body b1 = f1.getBody();
+        Body b2 = f2.getBody();
+
+        Object o1 = b1.getUserData();
+        Object o2 = b2.getUserData();
+
+        if (o2.getClass() == CannonBall.class && o1.getClass() == Fleet.class){
+            System.out.println("Cannonball hit fleet");
+
+            ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
+            for (CannonBall cannonBall: playScreen.cannonBalls){
+                if(cannonBall == o2){
+                    cannonBallsToRemove.add(cannonBall);
+                }
+            }
+            playScreen.cannonBalls.removeAll(cannonBallsToRemove);
+        }
 
     }
 

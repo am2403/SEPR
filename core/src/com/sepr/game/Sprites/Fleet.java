@@ -47,7 +47,10 @@ public class Fleet extends Sprite {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(1f, 1f);
         fdef.shape = shape;
+        fdef.restitution = 0.01f;
+
         body.createFixture(fdef);
+        body.setLinearDamping(50f);
 
 
 

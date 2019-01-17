@@ -63,7 +63,7 @@ public class CannonBall extends Sprite {
         cannonBallShape.setRadius(0.05f);
         fdef.shape = cannonBallShape;
 
-        fdef.restitution = 0.5f;
+        fdef.restitution = 0.1f;
 
         cannonBallBody = world.createBody(bdef);
         cannonBallBody.createFixture(fdef);

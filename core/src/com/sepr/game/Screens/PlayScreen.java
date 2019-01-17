@@ -170,17 +170,6 @@ public class PlayScreen implements Screen {
 
     }
 
-    public void removeCannonBall(float dt){
-        ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
-        for (CannonBall cannonBall : cannonBalls) {
-            cannonBall.update(dt);
-            if (cannonBall.cannonBallBody.getWorldCenter().x > Gdx.graphics.getWidth() || cannonBall.cannonBallBody.getWorldCenter().x < 0) {
-                cannonBallsToRemove.add(cannonBall);
-            }
-        }
-        cannonBalls.removeAll(cannonBallsToRemove);
-    }
-
     @Override
     public void render(float delta) {
         update(delta);
