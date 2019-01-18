@@ -8,13 +8,25 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.PlayScreen;
 
+import java.util.Random;
+
 public class Fleet extends Sprite {
 
     public World world;
     public Body body;
     private Texture fleetTexture;
     private Sprite fleet;
-    private int spawnX = 67, spawnY = 71; //x and y location that the fleet spawns at
+    private int spawnX = 65, spawnY = 71; //x and y location that the fleet spawns at
+
+    Random rand;
+
+    int topLimit;
+    int bottomLimit;
+    int rightLimit;
+    int leftLimit;
+
+    float xLimit;
+    float yLimit;
 
     public static int getFleetHealth() {
         return fleetHealth;
@@ -28,9 +40,6 @@ public class Fleet extends Sprite {
 
 
 
-
-
-
     public Fleet(PlayScreen screen){
         this.world = screen.getWorld();
         defineFleet();
@@ -41,6 +50,18 @@ public class Fleet extends Sprite {
         setRegion(fleet);
 
         body.setUserData(this);
+
+
+        //these variables are limits to how far the fleet can travel
+        topLimit = spawnY + 4;
+        bottomLimit = spawnY - 4;
+        rightLimit = spawnX + 1;
+        leftLimit = spawnX - 3;
+
+        rand = new Random();
+
+        xLimit = -2+ rand.nextInt(5);
+        yLimit = -2+ rand.nextInt(5);
     }
 
     public void update(float dt){
@@ -67,19 +88,38 @@ public class Fleet extends Sprite {
 
         body.createFixture(fdef);
         body.setLinearDamping(50f);
-
-
-
-
     }
 
-    // Gives the fleet a linear impulse to the left... still needs a lot of work for proper fleet movement
+
     public void fleetMovement(float dt) {
+        //int number = random.nextInt(max + 1 -min) + min;
 
-        body.applyLinearImpulse(new Vector2(-0.001f, 0f), body.getWorldCenter(), true);
+        if(body.getPosition().x > rightLimit || body.getPosition().x < leftLimit) xLimit = -2+ rand.nextInt(5);
+        if(body.getPosition().y  > topLimit|| body.getPosition().y < bottomLimit) yLimit = -2+ rand.nextInt(5);
+
+        //body.applyLinearImpulse(new Vector2(-1f, -1f), body.getWorldCenter(), true);
+        System.out.println(body.getPosition());
+
+/*          if(body.getPosition().x == xLimit){
+            xLimit = -100+ rand.nextInt(200);
+        }
+
+        if(body.getPosition().y == yLimit){
+            yLimit = -100+ rand.nextInt(200);
+        }*/
+
+
+        if(xLimit > 0 && yLimit > 0){
+            body.applyLinearImpulse(new Vector2(1f, 1f), body.getWorldCenter(), true);
+        }else if (xLimit > 0 && yLimit < 0){
+            body.applyLinearImpulse(new Vector2(1f, -1f), body.getWorldCenter(), true);
+        }else if (xLimit < 0 && yLimit > 0){
+            body.applyLinearImpulse(new Vector2(-1f, 1f), body.getWorldCenter(), true);
+        }else if(xLimit < 0 && yLimit < 0){
+            body.applyLinearImpulse(new Vector2(-1f, -1f), body.getWorldCenter(), true);
+        }
 
     }
-
 
 
 
@@ -87,4 +127,5 @@ public class Fleet extends Sprite {
         world.dispose();
         fleetTexture.dispose();
     }
+
 }
