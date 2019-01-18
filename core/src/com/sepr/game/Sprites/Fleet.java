@@ -20,13 +20,6 @@ public class Fleet extends Sprite {
 
     Random rand;
 
-    int topLimit;
-    int bottomLimit;
-    int rightLimit;
-    int leftLimit;
-
-    float xLimit;
-    float yLimit;
 
     public static int getFleetHealth() {
         return fleetHealth;
@@ -38,7 +31,8 @@ public class Fleet extends Sprite {
 
     public static int fleetHealth = 100;
 
-
+    int[] xPoints, yPoints;
+    int boatTargetXPoint, boatTargetYPoint;
 
     public Fleet(PlayScreen screen){
         this.world = screen.getWorld();
@@ -51,17 +45,14 @@ public class Fleet extends Sprite {
 
         body.setUserData(this);
 
-
-        //these variables are limits to how far the fleet can travel
-        topLimit = spawnY + 4;
-        bottomLimit = spawnY - 4;
-        rightLimit = spawnX + 1;
-        leftLimit = spawnX - 5;
-
         rand = new Random();
 
-        xLimit = -2+ rand.nextInt(5);
-        yLimit = -2+ rand.nextInt(5);
+        xPoints = new int[]{57, 60, 63, 67};
+        yPoints = new int[]{67, 70, 72, 75};
+
+        //set initial destination point
+        boatTargetXPoint = xPoints[rand.nextInt(xPoints.length - 1) + 0];
+        boatTargetYPoint = yPoints[rand.nextInt(xPoints.length - 1) + 0];
     }
 
     public void update(float dt){
@@ -92,33 +83,25 @@ public class Fleet extends Sprite {
 
 
     public void fleetMovement(float dt) {
-        //int number = random.nextInt(max + 1 -min) + min;
-
-        if(body.getPosition().x > rightLimit || body.getPosition().x < leftLimit) xLimit = -2+ rand.nextInt(5);
-        if(body.getPosition().y  > topLimit|| body.getPosition().y < bottomLimit) yLimit = -2+ rand.nextInt(5);
-
-        //body.applyLinearImpulse(new Vector2(-1f, -1f), body.getWorldCenter(), true);
-        System.out.println(body.getPosition());
-
-/*          if(body.getPosition().x == xLimit){
-            xLimit = -100+ rand.nextInt(200);
+        System.out.println(boatTargetXPoint + " " + body.getPosition().x + "     "  + boatTargetYPoint + " " + body.getPosition().y);
+        if(body.getPosition().x < boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
+            body.applyLinearImpulse(new Vector2(0.5f, -0.5f), body.getWorldCenter(), true);
+        }
+        if(body.getPosition().x > boatTargetXPoint && body.getPosition().y < boatTargetYPoint){
+            body.applyLinearImpulse(new Vector2(-0.5f, 0.5f), body.getWorldCenter(), true);
+        }
+        if(body.getPosition().x < boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
+            body.applyLinearImpulse(new Vector2(0.5f, -0.5f), body.getWorldCenter(), true);
+        }
+        if(body.getPosition().x > boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
+            body.applyLinearImpulse(new Vector2(-0.5f, -0.5f), body.getWorldCenter(), true);
         }
 
-        if(body.getPosition().y == yLimit){
-            yLimit = -100+ rand.nextInt(200);
-        }*/
-
-
-        if(xLimit > 0 && yLimit > 0){
-            body.applyLinearImpulse(new Vector2(1f, 1f), body.getWorldCenter(), true);
-        }else if (xLimit > 0 && yLimit < 0){
-            body.applyLinearImpulse(new Vector2(1f, -1f), body.getWorldCenter(), true);
-        }else if (xLimit < 0 && yLimit > 0){
-            body.applyLinearImpulse(new Vector2(-1f, 1f), body.getWorldCenter(), true);
-        }else if(xLimit < 0 && yLimit < 0){
-            body.applyLinearImpulse(new Vector2(-1f, -1f), body.getWorldCenter(), true);
+        if(Math.round(body.getPosition().x) == boatTargetXPoint && Math.round(body.getPosition().y) == boatTargetYPoint){
+            System.out.println("change destination");
+            boatTargetXPoint = xPoints[rand.nextInt(xPoints.length - 1) + 0];
+            boatTargetYPoint = yPoints[rand.nextInt(xPoints.length - 1) + 0];
         }
-
     }
 
 
