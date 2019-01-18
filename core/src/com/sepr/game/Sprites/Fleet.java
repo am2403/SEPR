@@ -56,7 +56,7 @@ public class Fleet extends Sprite {
         topLimit = spawnY + 4;
         bottomLimit = spawnY - 4;
         rightLimit = spawnX + 1;
-        leftLimit = spawnX - 3;
+        leftLimit = spawnX - 5;
 
         rand = new Random();
 
