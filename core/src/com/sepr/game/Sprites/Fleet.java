@@ -90,8 +90,8 @@ public class Fleet extends Sprite {
         if(body.getPosition().x > boatTargetXPoint && body.getPosition().y < boatTargetYPoint){
             body.applyLinearImpulse(new Vector2(-0.5f, 0.5f), body.getWorldCenter(), true);
         }
-        if(body.getPosition().x < boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
-            body.applyLinearImpulse(new Vector2(0.5f, -0.5f), body.getWorldCenter(), true);
+        if(body.getPosition().x < boatTargetXPoint && body.getPosition().y < boatTargetYPoint){
+            body.applyLinearImpulse(new Vector2(0.5f, 0.5f), body.getWorldCenter(), true);
         }
         if(body.getPosition().x > boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
             body.applyLinearImpulse(new Vector2(-0.5f, -0.5f), body.getWorldCenter(), true);
@@ -99,9 +99,13 @@ public class Fleet extends Sprite {
 
         if(Math.round(body.getPosition().x) == boatTargetXPoint && Math.round(body.getPosition().y) == boatTargetYPoint){
             System.out.println("change destination");
-            boatTargetXPoint = xPoints[rand.nextInt(xPoints.length - 1) + 0];
-            boatTargetYPoint = yPoints[rand.nextInt(xPoints.length - 1) + 0];
+            changeFleetDirection();
         }
+    }
+
+    public void changeFleetDirection(){
+        boatTargetXPoint = xPoints[rand.nextInt(xPoints.length - 1) + 0];
+        boatTargetYPoint = yPoints[rand.nextInt(xPoints.length - 1) + 0];
     }
 
 

@@ -2,6 +2,7 @@ package com.sepr.game.Sprites;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.PlayScreen;
+
+import java.util.ArrayList;
 
 import static com.badlogic.gdx.math.MathUtils.cos;
 import static com.badlogic.gdx.math.MathUtils.sin;
@@ -27,7 +30,8 @@ public class CannonBall extends Sprite {
 
     Vector2 force;
 
-    public boolean remove = false;
+
+
 
     public CannonBall(PlayScreen screen, float x, float y, float cannonAngle) {
         this.world = screen.getWorld();
@@ -72,24 +76,27 @@ public class CannonBall extends Sprite {
     public void shoot() {
         Vector2 pos = cannonBallBody.getWorldCenter();
         cannonBallBody.applyLinearImpulse(force, pos, true);
+
+/*        shootTimer += Gdx.graphics.getDeltaTime();
+
+        if(shootTimer >= SHOOT_WAIT_TIME){
+            shootTimer = 0; //resets the shoot timer
+
+            cannonBalls.add(new CannonBall(this, ship.cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
+
+            //since a force is applied to the ship when we shoot our bullet, we apply an equal force in the
+            //opposite direction, stopping the ship from continiously moving backwards (acting a bit like recoil)
+            ship.shipBody.applyLinearImpulse(new Vector2(cos(cannon.cannonBody.getAngle()), sin(cannon.cannonBody.getAngle())), ship.shipBody.getWorldCenter(), true);
+        }*/
     }
 
     public void update(float dt){
         //sets the debug renderer line and the sprite into the same position
         setPosition((cannonBallBody.getPosition().x - getWidth() / 2) , (cannonBallBody.getPosition().y- getHeight() / 2 )); //sets position of the sprites to the middle of the outline
         shoot();
-
-
-        //CODE TO REMOVE BULLET FROM THE LIST - avoiding wasted memory
-/*        if (this.cannonBallBody.getPosition().y > Gdx.graphics.getHeight() ||this.cannonBallBody.getPosition().y > Gdx.graphics.getHeight()
-        || this.cannonBallBody.getPosition().x > Gdx.graphics.getWidth() || this.cannonBallBody.getPosition().x < 0){
-            remove = true;
-
-        }else{
-            System.out.println(1);
-
-        }*/
     }
+
+
 
 
 

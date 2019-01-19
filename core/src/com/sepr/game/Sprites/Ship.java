@@ -4,9 +4,12 @@ Handles everything to do with the ship
 
 package com.sepr.game.Sprites;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -15,6 +18,8 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.PlayScreen;
+
+import java.util.ArrayList;
 
 import static com.badlogic.gdx.math.MathUtils.cos;
 import static com.badlogic.gdx.math.MathUtils.sin;
@@ -32,14 +37,36 @@ public class Ship extends Sprite {
 
     private float magnitude = 2f;
 
+    private PlayScreen playScreen;
+
+    public Cannon cannon;
+
+    RevoluteJoint joint;
+
+    public static final float SHOOT_WAIT_TIME = 0.15f;
+    float shootTimer;
+
+    public ArrayList<CannonBall> cannonBalls;
+
 
     public Ship(PlayScreen screen) {
         this.world = screen.getWorld();
+        this.playScreen = screen;
         defineShip();
         shipTexture = new Texture("mainShip.png");
         ship = new Sprite(shipTexture);
         setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
         setRegion(ship);
+        cannon = new Cannon(screen);
+
+        RevoluteJointDef rjd = new RevoluteJointDef();
+
+        rjd.initialize(shipBody, cannon.cannonBody, shipBody.getWorldCenter());
+        joint = (RevoluteJoint) world.createJoint(rjd);
+
+        shootTimer = 0;
+
+        cannonBalls = new ArrayList<CannonBall>();
     }
 
     public Ship() {
@@ -52,11 +79,25 @@ public class Ship extends Sprite {
 
 
     public void update(float dt) {
+        cannon.update(dt);
+
         setPosition(shipBody.getPosition().x - getWidth() / 2, shipBody.getPosition().y- getHeight() / 2); //puts the ship body onto the middle of the screen
         setRotation(shipBody.getAngle() * MathUtils.radiansToDegrees); //converts the angles to radians and rotates the ship body WILL NEED TO INPUT THE DELTA SPEED ON ROTATION
         setOriginCenter();
         forceX = cos(shipBody.getAngle()); //upon rotation this will be our new x coordinate for our ship body
         forceY = sin(shipBody.getAngle()); //upon rotation this will be our new y coordinate for our ship body
+
+
+        //Update bullets
+        //if the cannonBall goes past the world width it gets removed from the game
+        ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
+        for (CannonBall cannonBall : cannonBalls) {
+            cannonBall.update(dt);
+            if (cannonBall.cannonBallBody.getWorldCenter().x > Gdx.graphics.getWidth() || cannonBall.cannonBallBody.getWorldCenter().x < 0) {
+                cannonBallsToRemove.add(cannonBall);
+            }
+        }
+        cannonBalls.removeAll(cannonBallsToRemove);
     }
 
     // Creates a Box2D object for the ship and the ship's cannon, then attaches the cannon to the ship with a ResoluteJoint
@@ -104,6 +145,20 @@ public class Ship extends Sprite {
         shipBody.setLinearDamping(0.6f); //Slows down the ship gradually
     }
 
+
+    public void shoot(){
+        shootTimer += Gdx.graphics.getDeltaTime();
+
+        if(shootTimer >= SHOOT_WAIT_TIME){
+            shootTimer = 0; //resets the shoot timer
+
+            cannonBalls.add(new CannonBall(playScreen, cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
+
+            //since a force is applied to the ship when we shoot our bullet, we apply an equal force in the
+            //opposite direction, stopping the ship from continiously moving backwards (acting a bit like recoil)
+            shipBody.applyLinearImpulse(new Vector2(cos(cannon.cannonBody.getAngle()), sin(cannon.cannonBody.getAngle())), shipBody.getWorldCenter(), true);
+        }
+    }
 
 
 

@@ -41,9 +41,8 @@ public class PlayScreen implements Screen {
     private HUD hud;
 
     //Ship and fleet
-    private Ship ship;
+    public Ship ship;
     private Fleet fleet;
-    private Cannon cannon;
 
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -52,19 +51,9 @@ public class PlayScreen implements Screen {
     //Box2D variables
     private World world;
     private Box2DDebugRenderer b2dr;
-
-    RevoluteJoint joint;
-
-    public ArrayList<CannonBall> cannonBalls;
-
-    public static final float SHOOT_WAIT_TIME = 0.3f;
-
-    float shootTimer;
-
-
+    
 
     public PlayScreen(Main game){
-
         this.game = game;
 
         //Create a camera and fix the viewport
@@ -85,21 +74,12 @@ public class PlayScreen implements Screen {
 
         ship = new Ship(this);
         fleet = new Fleet(this);
-        cannon = new Cannon(this);
+
 
         //Listens for Box2D Object collisions
         world.setContactListener(new WorldContactListener(this));
 
 
-        //define joint as between two bodies
-        RevoluteJointDef rjd = new RevoluteJointDef();
-
-        rjd.initialize(ship.shipBody, cannon.cannonBody, ship.shipBody.getWorldCenter());
-        joint = (RevoluteJoint) world.createJoint(rjd);
-
-        cannonBalls = new ArrayList<CannonBall>();
-
-        shootTimer = 0;
     }
 
     @Override
@@ -110,7 +90,6 @@ public class PlayScreen implements Screen {
 
 
     public void handleInput(float dt){
-
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
             if(Gdx.input.isKeyPressed(Input.Keys.W))
                 ship.moveUp();
@@ -119,33 +98,19 @@ public class PlayScreen implements Screen {
             if(Gdx.input.isKeyPressed(Input.Keys.A))
                 ship.rotateCounterClockwise();
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-                cannon.rotateClockwise();
+                ship.cannon.rotateClockwise();
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-                cannon.rotateCounterClockwise();
+                ship.cannon.rotateCounterClockwise();
             else ship.stopShip();
 
             if (Gdx.input.isKeyPressed(Input.Keys.C)){
                 game.setScreen(new CombatScreen(game));
             }
-
+            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+                ship.shoot();
+            }
 
         }
-
-
-
-
-        shootTimer += Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && shootTimer >= SHOOT_WAIT_TIME){
-            shootTimer = 0; //resets the shoot timer
-            cannonBalls.add(new CannonBall(this, cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
-
-            //since a force is applied to the ship when we shoot our bullet, we apply an equal force in the
-            //opposite direction, stopping the ship from continiously moving backwards (acting a bit like recoil)
-            ship.shipBody.applyLinearImpulse(new Vector2(cos(cannon.cannonBody.getAngle()), sin(cannon.cannonBody.getAngle())), ship.shipBody.getWorldCenter(), true);
-        }
-
-
-
     }
 
 
@@ -160,26 +125,12 @@ public class PlayScreen implements Screen {
         gamecam.position.x = ship.shipBody.getPosition().x;
         gamecam.position.y = ship.shipBody.getPosition().y;
 
-        //Update bullets
-        //if the cannonBall goes past the world width it gets removed from the game
-        ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
-        for (CannonBall cannonBall : cannonBalls) {
-            cannonBall.update(dt);
-            if (cannonBall.cannonBallBody.getWorldCenter().x > Gdx.graphics.getWidth() || cannonBall.cannonBallBody.getWorldCenter().x < 0) {
-                cannonBallsToRemove.add(cannonBall);
-            }
-        }
-        cannonBalls.removeAll(cannonBallsToRemove);
-
-
-
         gamecam.update();
         ship.update(dt);
-        cannon.update(dt);
+
         fleet.update(dt);
         hud.update(dt);
         renderer.setView(gamecam);
-
     }
 
     @Override
@@ -201,12 +152,12 @@ public class PlayScreen implements Screen {
         game.batch.begin();
 
         ship.draw(game.batch);
-        fleet.draw(game.batch);
-        cannon.draw(game.batch);
-
-        for (CannonBall cannonBall: cannonBalls){
+        ship.cannon.draw(game.batch);
+        //draws the cannon balls
+        for (CannonBall cannonBall: ship.cannonBalls){
             cannonBall.draw(game.batch);
         }
+        fleet.draw(game.batch);
 
         game.batch.end();
 

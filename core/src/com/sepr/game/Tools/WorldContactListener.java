@@ -44,12 +44,12 @@ public class WorldContactListener implements ContactListener {
             //game.setScreen(new CombatScreen(game));
 
             ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
-            for (CannonBall cannonBall: playScreen.cannonBalls){
+            for (CannonBall cannonBall: playScreen.ship.cannonBalls){
                 if(cannonBall == o2){
                     cannonBallsToRemove.add(cannonBall);
                 }
             }
-            playScreen.cannonBalls.removeAll(cannonBallsToRemove);
+            playScreen.ship.cannonBalls.removeAll(cannonBallsToRemove);
         }
 
     }
@@ -81,10 +81,10 @@ public class WorldContactListener implements ContactListener {
 
             //remove cannonball
             ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
-            for (CannonBall cannonBall: playScreen.cannonBalls){
+            for (CannonBall cannonBall: playScreen.ship.cannonBalls){
                 if(cannonBall == o2){
                     cannonBallsToRemove.add(cannonBall);
-                    playScreen.cannonBalls.removeAll(cannonBallsToRemove);
+                    playScreen.ship.cannonBalls.removeAll(cannonBallsToRemove);
                 }
             }
 
