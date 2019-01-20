@@ -35,7 +35,10 @@ public class WorldContactListener implements ContactListener {
         Object o2 = b2.getUserData();
 
         //when the cannonBall hits the wall/dock the cannonBall will no longer have a force applied to it
-        if(o2.getClass() == CannonBall.class && o1.getClass() == Dock.class){
+
+
+        if(o2.getClass() == CannonBall.class && (o1.getClass() == Dock.class || o1.getClass() == Land.class || o1.getClass() == Ship.class ||
+                o1.getClass() == Fleet.class)){
             b1.applyForce(new Vector2(0,0), b1.getWorldCenter(), true);
         }
 

@@ -17,7 +17,7 @@ public class Land extends InteractiveTileObject {
         fixture.setUserData(this);
 
         //Collision detection
-        setCategoryFilter(Main.DOCK_BIT);
+        setCategoryFilter(Main.LAND_BIT);
     }
 
     @Override
