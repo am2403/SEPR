@@ -131,7 +131,7 @@ public class PlayScreen implements Screen {
         gamecam.update();
         ship.update(dt);
 
-        fleet.update(dt);
+        //fleet.update(dt, this, viewport);
         hud.update(dt);
         renderer.setView(gamecam);
     }
