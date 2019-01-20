@@ -9,13 +9,18 @@ import com.sepr.game.Main;
 import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
 
+import java.util.Random;
+
 public class Fleet extends Sprite {
 
     public World world;
     public Body body;
     private Texture fleetTexture;
     private Sprite fleet;
-    private int spawnX = 67, spawnY = 71; //x and y location that the fleet spawns at
+    private int spawnX = 65, spawnY = 71; //x and y location that the fleet spawns at
+
+    Random rand;
+
 
     public static int getFleetHealth() {
         return fleetHealth;
@@ -27,10 +32,8 @@ public class Fleet extends Sprite {
 
     public static int fleetHealth = 100;
 
-
-
-
-
+    int[] xPoints, yPoints;
+    int boatTargetXPoint, boatTargetYPoint;
 
     public Fleet(PlayScreen screen){
         this.world = screen.getWorld();
@@ -42,6 +45,15 @@ public class Fleet extends Sprite {
         setRegion(fleet);
 
         body.setUserData(this);
+
+        rand = new Random();
+
+        xPoints = new int[]{57, 60, 63, 67};
+        yPoints = new int[]{67, 70, 72, 75};
+
+        //set initial destination point
+        boatTargetXPoint = xPoints[rand.nextInt(xPoints.length - 1) + 0];
+        boatTargetYPoint = yPoints[rand.nextInt(xPoints.length - 1) + 0];
     }
 
     public Fleet(CombatScreen screen){
@@ -80,19 +92,34 @@ public class Fleet extends Sprite {
 
         body.createFixture(fdef);
         body.setLinearDamping(50f);
-
-
-
-
     }
 
-    // Gives the fleet a linear impulse to the left... still needs a lot of work for proper fleet movement
+
     public void fleetMovement(float dt) {
+        System.out.println(boatTargetXPoint + " " + body.getPosition().x + "     "  + boatTargetYPoint + " " + body.getPosition().y);
+        if(body.getPosition().x < boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
+            body.applyLinearImpulse(new Vector2(0.5f, -0.5f), body.getWorldCenter(), true);
+        }
+        if(body.getPosition().x > boatTargetXPoint && body.getPosition().y < boatTargetYPoint){
+            body.applyLinearImpulse(new Vector2(-0.5f, 0.5f), body.getWorldCenter(), true);
+        }
+        if(body.getPosition().x < boatTargetXPoint && body.getPosition().y < boatTargetYPoint){
+            body.applyLinearImpulse(new Vector2(0.5f, 0.5f), body.getWorldCenter(), true);
+        }
+        if(body.getPosition().x > boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
+            body.applyLinearImpulse(new Vector2(-0.5f, -0.5f), body.getWorldCenter(), true);
+        }
 
-        body.applyLinearImpulse(new Vector2(-0.001f, 0f), body.getWorldCenter(), true);
-
+        if(Math.round(body.getPosition().x) == boatTargetXPoint && Math.round(body.getPosition().y) == boatTargetYPoint){
+            System.out.println("change destination");
+            changeFleetDirection();
+        }
     }
 
+    public void changeFleetDirection(){
+        boatTargetXPoint = xPoints[rand.nextInt(xPoints.length - 1) + 0];
+        boatTargetYPoint = yPoints[rand.nextInt(xPoints.length - 1) + 0];
+    }
 
 
 
@@ -100,4 +127,5 @@ public class Fleet extends Sprite {
         world.dispose();
         fleetTexture.dispose();
     }
+
 }
