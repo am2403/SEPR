@@ -18,25 +18,17 @@ public class Fleet extends Sprite {
     public Body body;
     private Texture fleetTexture;
     private Sprite fleet;
-    private int spawnX = 65, spawnY = 71; //x and y location that the fleet spawns at
+    private int spawnX = 70, spawnY = 81; //x and y location that the fleet spawns at
 
     float state = 1.0f;
-
-    Random rand;
-
 
     public static int getFleetHealth() {
         return fleetHealth;
     }
-
     public static void setFleetHealth(int fleetHealth) {
         Fleet.fleetHealth = fleetHealth;
     }
-
     public static int fleetHealth = 100;
-
-    int[] xPoints, yPoints;
-    int boatTargetXPoint, boatTargetYPoint;
 
     public Fleet(PlayScreen screen){
         this.world = screen.getWorld();
@@ -44,19 +36,9 @@ public class Fleet extends Sprite {
         fleetTexture = new Texture("fleet.png");
         fleet = new Sprite(fleetTexture);
         fleet.setPosition(body.getPosition().x, body.getPosition().y);
-        setBounds(0, 0, 130 / Main.PPM, 55 / Main.PPM);
+        setBounds(0, 0, 195 / Main.PPM, 83 / Main.PPM);
         setRegion(fleet);
-
         body.setUserData(this);
-
-        rand = new Random();
-
-        xPoints = new int[]{57, 60, 63, 67};
-        yPoints = new int[]{67, 70, 72, 75};
-
-        //set initial destination point
-        boatTargetXPoint = xPoints[rand.nextInt(xPoints.length - 1) + 0];
-        boatTargetYPoint = yPoints[rand.nextInt(xPoints.length - 1) + 0];
     }
 
     public Fleet(CombatScreen screen){
@@ -75,8 +57,11 @@ public class Fleet extends Sprite {
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         setRotation(body.getAngle() * MathUtils.radiansToDegrees); //Here in case the body every rotates
         fleetMovement(dt, screen, viewport);
+    }
 
-
+    public void update(float dt, PlayScreen screen, Viewport viewport){
+        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+        setRotation(body.getAngle() * MathUtils.radiansToDegrees); //Here in case the body every rotates
     }
 
     //Creates a Box2D Object and attaches a shape to it
@@ -99,30 +84,8 @@ public class Fleet extends Sprite {
         body.setLinearDamping(50f);
     }
 
-
     public void fleetMovement(float dt, CombatScreen screen, Viewport viewport) {
-        //System.out.println(boatTargetXPoint + " " + body.getPosition().x + "     "  + boatTargetYPoint + " " + body.getPosition().y);
-//        if(body.getPosition().x < boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
-//            body.applyLinearImpulse(new Vector2(0.5f, -0.5f), body.getWorldCenter(), true);
-//        }
-//        if(body.getPosition().x > boatTargetXPoint && body.getPosition().y < boatTargetYPoint){
-//            body.applyLinearImpulse(new Vector2(-0.5f, 0.5f), body.getWorldCenter(), true);
-//        }
-//        if(body.getPosition().x < boatTargetXPoint && body.getPosition().y < boatTargetYPoint){
-//            body.applyLinearImpulse(new Vector2(0.5f, 0.5f), body.getWorldCenter(), true);
-//        }
-//        if(body.getPosition().x > boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
-//            body.applyLinearImpulse(new Vector2(-0.5f, -0.5f), body.getWorldCenter(), true);
-//        }
-//
-//        if(Math.round(body.getPosition().x) == boatTargetXPoint && Math.round(body.getPosition().y) == boatTargetYPoint){
-//            System.out.println("change destination");
-//            changeFleetDirection();
-
-
-
         body.applyLinearImpulse(0f, state, body.getPosition().x, body.getPosition().y, true);
-
 
         if (body.getPosition().y > screen.gamecam.position.y + (screen.gamecam.viewportHeight / 3)) {
             // then fleet is below top line
@@ -133,20 +96,7 @@ public class Fleet extends Sprite {
             // then fleet is below top line
             state = 1.0f;
         }
-
-
-
-        //else body.applyLinearImpulse(0f, -1.0f, body.getPosition().x, body.getPosition().y, true);
-
-
     }
-
-    public void changeFleetDirection(){
-        boatTargetXPoint = xPoints[rand.nextInt(xPoints.length - 1) + 0];
-        boatTargetYPoint = yPoints[rand.nextInt(xPoints.length - 1) + 0];
-    }
-
-
 
     public void dispose(){
         world.dispose();
