@@ -106,7 +106,8 @@ public class CombatScreen extends ScreenAdapter {
         ship_combat.update(dt);
         fleet_combat.update(dt);
 
-        checkBoundary();
+        checkShipBoundary();
+        checkFleetBoundary();
 
         renderer.setView(gamecam);
     }
@@ -186,9 +187,43 @@ public class CombatScreen extends ScreenAdapter {
         return viewport;
     }
 
-    public void checkBoundary() {
-        if (ship_combat.shipBody.getPosition().x > gamecam.position.x || ship_combat.shipBody.getPosition().x < 0) {
-            System.out.println("friggidty frack my dude!!!!!! you out!!!!!!!!!");
+    public void checkShipBoundary() {
+        System.out.println("yeeto"+gamecam.position);
+        // this checks the right boundary for the ship
+        if (ship_combat.shipBody.getPosition().x > (gamecam.position.x + (gamecam.viewportWidth / 2) - (ship_combat.getWidth()/2))) {
+            ship_combat.shipBody.setTransform((gamecam.position.x + (gamecam.viewportWidth / 2)) - (ship_combat.getWidth()/2), ship_combat.shipBody.getPosition().y, ship_combat.shipBody.getAngle());
+        }
+        // checks the left boundary for the ship
+        if (ship_combat.shipBody.getPosition().x < (gamecam.position.x - (gamecam.viewportWidth / 2) + (ship_combat.getWidth()/2))) {
+            ship_combat.shipBody.setTransform((gamecam.position.x - (gamecam.viewportWidth / 2)) + (ship_combat.getWidth()/2), ship_combat.shipBody.getPosition().y, ship_combat.shipBody.getAngle());
+        }
+
+        if (ship_combat.shipBody.getPosition().y > (gamecam.position.y + (gamecam.viewportHeight / 2) - (ship_combat.getHeight()/2))) {
+            ship_combat.shipBody.setTransform( ship_combat.shipBody.getPosition().x,(gamecam.position.y + (gamecam.viewportHeight / 2)) - (ship_combat.getHeight()/2), ship_combat.shipBody.getAngle());
+        }
+
+        if (ship_combat.shipBody.getPosition().y < (gamecam.position.y - (gamecam.viewportHeight / 2) + (ship_combat.getHeight()/2))) {
+            ship_combat.shipBody.setTransform( ship_combat.shipBody.getPosition().x,(gamecam.position.y - (gamecam.viewportHeight / 2)) + (ship_combat.getHeight()/2), ship_combat.shipBody.getAngle());
+        }
+    }
+
+    public void checkFleetBoundary() {
+        System.out.println("yeeto"+gamecam.position);
+        // this checks the right boundary for the ship
+        if (fleet_combat.body.getPosition().x > (gamecam.position.x + (gamecam.viewportWidth / 2) - (fleet_combat.getWidth()/2))) {
+            fleet_combat.body.setTransform((gamecam.position.x + (gamecam.viewportWidth / 2)) - (fleet_combat.getWidth()/2), fleet_combat.body.getPosition().y, fleet_combat.body.getAngle());
+        }
+        // checks the left boundary for the ship
+        if (fleet_combat.body.getPosition().x < (gamecam.position.x - (gamecam.viewportWidth / 2) + (fleet_combat.getWidth()/2))) {
+            fleet_combat.body.setTransform((gamecam.position.x - (gamecam.viewportWidth / 2)) + (fleet_combat.getWidth()/2), fleet_combat.body.getPosition().y, fleet_combat.body.getAngle());
+        }
+
+        if (fleet_combat.body.getPosition().y > (gamecam.position.y + (gamecam.viewportHeight / 2) - (fleet_combat.getHeight()/2))) {
+            fleet_combat.body.setTransform(fleet_combat.body.getPosition().x,(gamecam.position.y + (gamecam.viewportHeight / 2)) - (fleet_combat.getHeight()/2), fleet_combat.body.getAngle());
+        }
+
+        if (fleet_combat.body.getPosition().y < (gamecam.position.y - (gamecam.viewportHeight / 2) + (ship_combat.getHeight()/2))) {
+            fleet_combat.body.setTransform( fleet_combat.body.getPosition().x,(gamecam.position.y - (gamecam.viewportHeight / 2)) + (fleet_combat.getHeight()/2), fleet_combat.body.getAngle());
         }
     }
 
