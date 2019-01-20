@@ -7,6 +7,7 @@ package com.sepr.game.Tools;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
@@ -18,8 +19,14 @@ public class WorldContactListener implements ContactListener {
     public PlayScreen playScreen;
     public Main game = new Main();
 
+    private Array<Body> bodiesToRemove;
+
+
+
+
     public WorldContactListener(PlayScreen playScreen){
         this.playScreen = playScreen;
+        bodiesToRemove = new Array<Body>();
     }
 
     @Override
@@ -42,6 +49,8 @@ public class WorldContactListener implements ContactListener {
         if (o2.getClass() == CannonBall.class && o1.getClass() == Fleet.class){
             System.out.println("Cannonball hit fleet");
             //game.setScreen(new CombatScreen(game));
+
+            bodiesToRemove.add(f2.getBody());
 
             ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
             for (CannonBall cannonBall: playScreen.ship.cannonBalls){
@@ -69,6 +78,10 @@ public class WorldContactListener implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
+    }
+
+    public Array<Body> getBodiesToRemove(){
+        return bodiesToRemove;
     }
 
 }
