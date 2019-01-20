@@ -78,8 +78,6 @@ public class PlayScreen implements Screen {
         ship = new Ship(this);
         fleet = new Fleet(this);
 
-        //Listens for Box2D Object collisions
-        world.setContactListener(new WorldContactListener(this));
 
     }
 
