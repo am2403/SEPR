@@ -57,7 +57,7 @@ public class Ship extends Sprite {
         defineShip();
         shipTexture = new Texture("mainShip.png");
         ship = new Sprite(shipTexture);
-        setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
+        setBounds(0, 0, 250 / Main.PPM, 88 / Main.PPM);
         setRegion(ship);
         cannon = new Cannon(screen);
 
@@ -77,7 +77,7 @@ public class Ship extends Sprite {
         defineShip();
         shipTexture = new Texture("mainShip.png");
         ship = new Sprite(shipTexture);
-        setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
+        setBounds(0, 0, 250 / Main.PPM, 88 / Main.PPM);
         setRegion(ship);
         cannon = new Cannon(screen);
 
@@ -137,7 +137,7 @@ public class Ship extends Sprite {
         bdef.position.set(6200 / Main.PPM, 7100 / Main.PPM);
 
         shipShape = new PolygonShape();
-        shipShape.setAsBox(0.5f, 0.5f);
+        shipShape.setAsBox(1.2f, 0.44f);
         fdef.shape = shipShape;
 
         //Ship properties

@@ -44,7 +44,7 @@ public class Fleet extends Sprite {
         fleetTexture = new Texture("fleet.png");
         fleet = new Sprite(fleetTexture);
         fleet.setPosition(body.getPosition().x, body.getPosition().y);
-        setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
+        setBounds(0, 0, 130 / Main.PPM, 55 / Main.PPM);
         setRegion(fleet);
 
         body.setUserData(this);
@@ -65,7 +65,7 @@ public class Fleet extends Sprite {
         fleetTexture = new Texture("fleet.png");
         fleet = new Sprite(fleetTexture);
         fleet.setPosition(body.getPosition().x, body.getPosition().y);
-        setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
+        setBounds(0, 0, 195 / Main.PPM, 83 / Main.PPM);
         setRegion(fleet);
 
         body.setUserData(this);
@@ -89,7 +89,7 @@ public class Fleet extends Sprite {
         FixtureDef fdef = new FixtureDef();
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(0.5f, 0.5f);
+        shape.setAsBox(0.975f, 0.41f);
         fdef.shape = shape;
         fdef.restitution = 0.01f;
 

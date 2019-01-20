@@ -52,8 +52,8 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
 
-    public static final int V_WIDTH = 1700;
-    public static final int V_HEIGHT = 1700;
+    public static final int V_WIDTH = 3200;
+    public static final int V_HEIGHT = 1800;
     
 
     public PlayScreen(Main game){
