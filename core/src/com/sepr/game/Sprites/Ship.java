@@ -16,9 +16,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.badlogic.gdx.utils.Array;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
+import com.sepr.game.Tools.WorldContactListener;
 
 import java.util.ArrayList;
 
@@ -50,6 +52,8 @@ public class Ship extends Sprite {
 
     public ArrayList<CannonBall> cannonBalls;
 
+    WorldContactListener cl;
+
 
     public Ship(PlayScreen screen) {
         this.world = screen.getWorld();
@@ -69,6 +73,10 @@ public class Ship extends Sprite {
         shootTimer = 0;
 
         cannonBalls = new ArrayList<CannonBall>();
+
+        //Listens for Box2D Object collisions
+        cl = new WorldContactListener(screen);
+        world.setContactListener(cl);
     }
 
     public Ship(CombatScreen screen) {
@@ -124,6 +132,14 @@ public class Ship extends Sprite {
             }
         }
         cannonBalls.removeAll(cannonBallsToRemove);
+
+
+        Array<Body> bodies = cl.getBodiesToRemove();
+        for(int i = 0; i < bodies.size; i++){
+            Body b = bodies.get(i);
+            world.destroyBody(b);
+        }
+        bodies.clear();
     }
 
     // Creates a Box2D object for the ship and the ship's cannon, then attaches the cannon to the ship with a ResoluteJoint
