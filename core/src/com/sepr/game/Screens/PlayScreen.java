@@ -104,10 +104,6 @@ public class PlayScreen implements Screen {
                 ship.rotateCounterClockwise();
                 ship.cannon.rotateCounterClockwise();
             }
-            //if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            //    ship.cannon.rotateClockwise();
-            //if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            //    ship.cannon.rotateCounterClockwise();
             else ship.stopShip();
 
             if (Gdx.input.isKeyPressed(Input.Keys.C)){

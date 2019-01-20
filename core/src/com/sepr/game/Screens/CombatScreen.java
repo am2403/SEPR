@@ -64,9 +64,9 @@ public class CombatScreen extends ScreenAdapter {
         stage = new Stage(viewport, game.batch);
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("Combat Map/combat_screen.tmx");
+        map = mapLoader.load("Combat Map/combat.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
-        gamecam.position.set(V_WIDTH/2f, V_HEIGHT/2f, 0);
+
 
 
 
@@ -75,9 +75,9 @@ public class CombatScreen extends ScreenAdapter {
         ship_combat = new Ship(this);
         fleet_combat = new Fleet(this);
 
+        gamecam.position.set(ship_combat.shipBody.getWorldCenter().x, ship_combat.shipBody.getWorldCenter().y, 0);
 
-
-        ship_combat.shipBody.setTransform(V_WIDTH /2f, V_HEIGHT/2f, 0);
+        //ship_combat.shipBody.setTransform(viewport.getWorldWidth()/2f, viewport.getWorldHeight()/2f, 0);
 
 //        // centres the camera in middle of map
 //        TiledMapTileLayer layer0 = (TiledMapTileLayer) map.getLayers().get(0);
@@ -104,12 +104,13 @@ public class CombatScreen extends ScreenAdapter {
     public void update(float dt) {
         handleInput(dt);
 
+        world.step(1/60f, 6, 2);
+
         gamecam.update();
 
         // sprite updates below
         ship_combat.update(dt);
         fleet_combat.update(dt);
-
 
         renderer.setView(gamecam);
     }
@@ -160,11 +161,22 @@ public class CombatScreen extends ScreenAdapter {
     }
 
     public void handleInput(float dt) {
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            System.out.println(Gdx.input.getX());
-            System.out.println(Gdx.input.getY());
+        if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                System.out.println("my name jeff");
+                ship_combat.moveUp();
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                ship_combat.rotateClockwise();
+                ship_combat.cannon.rotateClockwise();
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                ship_combat.rotateCounterClockwise();
+                ship_combat.cannon.rotateCounterClockwise();
+            }
+            else ship_combat.stopShip();
+            }
         }
-    }
 
     public TiledMap getMap(){
         return map;

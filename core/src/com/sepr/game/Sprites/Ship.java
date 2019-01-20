@@ -150,7 +150,7 @@ public class Ship extends Sprite {
     }
 
     public void moveUp() {
-        //if the ships velocity isn't already at maximum velocity, then apply a force to the ship in the anggle force x and force y by a magnitude
+        //if the ships velocity isn't already at maximum velocity, then apply a force to the ship in the angle force x and force y by a magnitude
         if (shipBody.getLinearVelocity().y <= maxSpeed && shipBody.getLinearVelocity().x < maxSpeed)
             shipBody.applyForce(new Vector2(forceX * magnitude, forceY * magnitude), shipBody.getWorldCenter(), true);
     }
