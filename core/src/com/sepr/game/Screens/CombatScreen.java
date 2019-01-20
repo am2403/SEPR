@@ -47,8 +47,8 @@ public class CombatScreen extends ScreenAdapter {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
 
-    public static final int V_WIDTH = 1000;
-    public static final int V_HEIGHT = 1000;
+    public static final int V_WIDTH = 1600;
+    public static final int V_HEIGHT = 900;
 
     public CombatScreen(Main game){
 
