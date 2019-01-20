@@ -52,35 +52,44 @@ public class CombatScreen extends ScreenAdapter {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
 
-
+    public static final int V_WIDTH = 1000;
+    public static final int V_HEIGHT = 1000;
 
     public CombatScreen(Main game){
 
+        this.game = game;
+
         gamecam = new OrthographicCamera();
-        viewport = new StretchViewport(Main.V_WIDTH / Main.PPM ,Main.V_HEIGHT / Main.PPM, gamecam); //Maintains aspect ratio as window is resized
+        viewport = new StretchViewport(V_WIDTH / Main.PPM ,V_HEIGHT / Main.PPM, gamecam); //Maintains aspect ratio as window is resized
         stage = new Stage(viewport, game.batch);
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("Combat Map/combat_screen.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1);
+        renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
+        gamecam.position.set(V_WIDTH/2f, V_HEIGHT/2f, 0);
+
+
 
         world  = new World(new Vector2(0, 0), true); // Can apply gravity / wind speed force
-
-        batch = new SpriteBatch();
-
         b2dr = new Box2DDebugRenderer();
-
-        // centres the camera in middle of map
-        TiledMapTileLayer layer0 = (TiledMapTileLayer) map.getLayers().get(0);
-        Vector3 center = new Vector3(layer0.getWidth() * layer0.getTileWidth() / 2, layer0.getHeight() * layer0.getTileHeight() / 2, 0);
-        gamecam.position.set(center);
-
         ship_combat = new Ship(this);
         fleet_combat = new Fleet(this);
 
-        ship_combat.shipBody.setTransform(400, 400, 0);
 
-        ship_combat.setScale(200, 100);
+
+        ship_combat.shipBody.setTransform(V_WIDTH /2f, V_HEIGHT/2f, 0);
+
+//        // centres the camera in middle of map
+//        TiledMapTileLayer layer0 = (TiledMapTileLayer) map.getLayers().get(0);
+//        Vector3 center = new Vector3(layer0.getWidth() * layer0.getTileWidth() / 2, layer0.getHeight() * layer0.getTileHeight() / 2, 0);
+//        gamecam.position.set(center);
+
+
+
+
+        //ship_combat.shipBody.setTransform(V_WIDTH/2f, V_HEIGHT/2f, 0);
+
+        //ship_combat.setScale(200, 100);
 
 
 
@@ -101,6 +110,7 @@ public class CombatScreen extends ScreenAdapter {
         ship_combat.update(dt);
         fleet_combat.update(dt);
 
+
         renderer.setView(gamecam);
     }
 
@@ -112,27 +122,25 @@ public class CombatScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         gamecam.update();
-        renderer.setView(gamecam);
+        //renderer.setView(gamecam);
         renderer.render();
 
         b2dr.render(world, gamecam.combined);
 
-        batch.setProjectionMatrix(gamecam.combined);
-        batch.begin();
+        game.batch.setProjectionMatrix(gamecam.combined);
+        game.batch.begin();
 
-        ship_combat.draw(batch);
-        fleet_combat.draw(batch);
+        ship_combat.draw(game.batch);
+        fleet_combat.draw(game.batch);
 
-        batch.end();
+        game.batch.end();
 
 
     }
 
     @Override
     public void resize(int width, int height) {
-        gamecam.viewportWidth = width;
-        gamecam.viewportHeight = height;
-        gamecam.update();
+        viewport.update(width, height);
 
     }
 

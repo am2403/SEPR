@@ -13,8 +13,7 @@ public class Main extends Game {
 
     //Sets the virtual game size and Box2D scale (Pixels Per Metre)
 
-    public static final int V_WIDTH = 1000;
-	public static final int V_HEIGHT = 900;
+
 	public static final float PPM = 100;
 
 

@@ -96,7 +96,7 @@ public class Fleet extends Sprite {
 
 
     public void fleetMovement(float dt) {
-        System.out.println(boatTargetXPoint + " " + body.getPosition().x + "     "  + boatTargetYPoint + " " + body.getPosition().y);
+        //System.out.println(boatTargetXPoint + " " + body.getPosition().x + "     "  + boatTargetYPoint + " " + body.getPosition().y);
         if(body.getPosition().x < boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
             body.applyLinearImpulse(new Vector2(0.5f, -0.5f), body.getWorldCenter(), true);
         }
