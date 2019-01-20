@@ -57,38 +57,7 @@ public class WorldContactListener implements ContactListener {
     @Override
     public void endContact(Contact contact) {
 
-        Fixture f1 = contact.getFixtureA();
-        Fixture f2 = contact.getFixtureB();
 
-        Body b1 = f1.getBody();
-        Body b2 = f2.getBody();
-
-        Object o1 = b1.getUserData();
-        Object o2 = b2.getUserData();
-
-
-
-        if (o2.getClass() == CannonBall.class && o1.getClass() == Fleet.class){
-
-            //Used for testing... decreases fleet health
-            System.out.println("Cannonball hit fleet");
-            Fleet.fleetHealth -= 10;
-            //Fleet.fleetHealth -= 10;
-            System.out.println(Fleet.fleetHealth);
-
-
-
-
-            //remove cannonball
-            ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
-            for (CannonBall cannonBall: playScreen.ship.cannonBalls){
-                if(cannonBall == o2){
-                    cannonBallsToRemove.add(cannonBall);
-                    playScreen.ship.cannonBalls.removeAll(cannonBallsToRemove);
-                }
-            }
-
-        }
 
     }
 
@@ -99,19 +68,7 @@ public class WorldContactListener implements ContactListener {
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
-/*        Fixture f1 = contact.getFixtureA();
-        Fixture f2 = contact.getFixtureB();
 
-        Body b1 = f1.getBody();
-        Body b2 = f2.getBody();
-
-        Object o1 = b1.getUserData();
-        Object o2 = b2.getUserData();
-
-        Body body = null;
-        if (o2.getClass() == CannonBall.class && o1.getClass() == Fleet.class){
-            body = contact.getFixtureB().getBody();
-        }*/
     }
 
 }

@@ -60,7 +60,7 @@ public class Cannon extends Sprite {
         bdef = new BodyDef();
         fdef = new FixtureDef();
 
-        //Ship creation
+        //Cannon creation
         bdef.type = BodyDef.BodyType.DynamicBody;
         bdef.position.set(6250 / Main.PPM, 7100 / Main.PPM);
 
@@ -69,7 +69,7 @@ public class Cannon extends Sprite {
         cannonShape.setRadius(0.25f);
         fdef.shape = cannonShape;
 
-        //Ship properties
+        //Cannon properties
         fdef.restitution = 0.1f; // Don't really bounce off ships so it's a low values
         fdef.friction = 0.5f;
 
