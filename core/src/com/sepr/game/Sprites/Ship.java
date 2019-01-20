@@ -101,10 +101,13 @@ public class Ship extends Sprite {
     }
 
 
+
+
     public void update(float dt) {
         cannon.update(dt);
 
         setPosition(shipBody.getPosition().x - getWidth() / 2, shipBody.getPosition().y- getHeight() / 2); //puts the ship body onto the middle of the screen
+
         setRotation(shipBody.getAngle() * MathUtils.radiansToDegrees); //converts the angles to radians and rotates the ship body WILL NEED TO INPUT THE DELTA SPEED ON ROTATION
         setOriginCenter();
         forceX = cos(shipBody.getAngle()); //upon rotation this will be our new x coordinate for our ship body

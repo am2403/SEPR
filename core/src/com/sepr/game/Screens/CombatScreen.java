@@ -17,23 +17,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
 import com.sepr.game.Sprites.Cannon;
 import com.sepr.game.Sprites.Fleet;
 import com.sepr.game.Sprites.Ship;
-import com.sepr.game.Tools.BoxPhysics;
-import com.badlogic.gdx.math.Vector3;
 
-import javax.swing.*;
 
 public class CombatScreen extends ScreenAdapter {
 
-    private Viewport viewport;
+    Viewport viewport;
     public static OrthographicCamera gamecam;
     private Stage stage;
     private Main game;
@@ -112,6 +106,8 @@ public class CombatScreen extends ScreenAdapter {
         ship_combat.update(dt);
         fleet_combat.update(dt);
 
+        checkBoundary();
+
         renderer.setView(gamecam);
     }
 
@@ -184,6 +180,16 @@ public class CombatScreen extends ScreenAdapter {
 
     public World getWorld(){
         return world;
+    }
+
+    public Viewport getViewport(){
+        return viewport;
+    }
+
+    public void checkBoundary() {
+        if (ship_combat.shipBody.getPosition().x > gamecam.position.x || ship_combat.shipBody.getPosition().x < 0) {
+            System.out.println("friggidty frack my dude!!!!!! you out!!!!!!!!!");
+        }
     }
 
     @Override
