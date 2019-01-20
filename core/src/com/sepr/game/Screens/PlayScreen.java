@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
@@ -54,7 +55,8 @@ public class PlayScreen implements Screen {
 
     public static final int V_WIDTH = 3200;
     public static final int V_HEIGHT = 1800;
-    
+
+
 
     public PlayScreen(Main game){
         this.game = game;
@@ -77,6 +79,9 @@ public class PlayScreen implements Screen {
 
         ship = new Ship(this);
         fleet = new Fleet(this);
+
+
+
 
 
     }
@@ -120,6 +125,8 @@ public class PlayScreen implements Screen {
 
         world.step(1/60f, 6, 2);
 
+
+
         //Updates the camera coordinates so that it remains fixed on the ship
         gamecam.position.x = ship.shipBody.getPosition().x;
         gamecam.position.y = ship.shipBody.getPosition().y;
@@ -127,7 +134,9 @@ public class PlayScreen implements Screen {
         gamecam.update();
         ship.update(dt);
 
-        fleet.update(dt, this, viewport);
+        System.out.println(ship.shipBody.getAngle());
+
+        //fleet.update(dt, this, viewport);
         hud.update(dt);
         renderer.setView(gamecam);
     }
@@ -139,6 +148,8 @@ public class PlayScreen implements Screen {
         //Clear game screen
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
 
         //render game map
         renderer.render();
@@ -205,4 +216,6 @@ public class PlayScreen implements Screen {
         fleet.dispose();
 
     }
+
+
 }
