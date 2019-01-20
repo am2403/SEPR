@@ -18,12 +18,13 @@ import static com.badlogic.gdx.math.MathUtils.sin;
 
 public class CannonBall extends Sprite {
     public World world;
-    public Body cannonBallBody;
+    public static Body cannonBallBody;
     private Texture cannonBallTexture;
     private Sprite cannonBall;
     private BodyDef bdef;
-    private FixtureDef fdef;
+    public FixtureDef fdef;
     private CircleShape cannonBallShape;
+    public static Fixture fixture;
 
     public float x, y, angle;
     private float magnitude = 2f;
@@ -68,26 +69,16 @@ public class CannonBall extends Sprite {
         fdef.shape = cannonBallShape;
 
         fdef.restitution = 0.1f;
+        fdef.friction = 100f;
 
         cannonBallBody = world.createBody(bdef);
-        cannonBallBody.createFixture(fdef);
+        fixture = cannonBallBody.createFixture(fdef);
     }
 
     public void shoot() {
         Vector2 pos = cannonBallBody.getWorldCenter();
         cannonBallBody.applyLinearImpulse(force, pos, true);
 
-/*        shootTimer += Gdx.graphics.getDeltaTime();
-
-        if(shootTimer >= SHOOT_WAIT_TIME){
-            shootTimer = 0; //resets the shoot timer
-
-            cannonBalls.add(new CannonBall(this, ship.cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
-
-            //since a force is applied to the ship when we shoot our bullet, we apply an equal force in the
-            //opposite direction, stopping the ship from continiously moving backwards (acting a bit like recoil)
-            ship.shipBody.applyLinearImpulse(new Vector2(cos(cannon.cannonBody.getAngle()), sin(cannon.cannonBody.getAngle())), ship.shipBody.getWorldCenter(), true);
-        }*/
     }
 
     public void update(float dt){
@@ -95,6 +86,7 @@ public class CannonBall extends Sprite {
         setPosition((cannonBallBody.getPosition().x - getWidth() / 2) , (cannonBallBody.getPosition().y- getHeight() / 2 )); //sets position of the sprites to the middle of the outline
         shoot();
     }
+
 
 
 
