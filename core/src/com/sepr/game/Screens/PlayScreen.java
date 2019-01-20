@@ -78,10 +78,8 @@ public class PlayScreen implements Screen {
         ship = new Ship(this);
         fleet = new Fleet(this);
 
-
         //Listens for Box2D Object collisions
         world.setContactListener(new WorldContactListener(this));
-
 
     }
 
@@ -131,7 +129,7 @@ public class PlayScreen implements Screen {
         gamecam.update();
         ship.update(dt);
 
-        //fleet.update(dt, this, viewport);
+        fleet.update(dt, this, viewport);
         hud.update(dt);
         renderer.setView(gamecam);
     }
