@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
@@ -18,6 +19,8 @@ public class Fleet extends Sprite {
     private Texture fleetTexture;
     private Sprite fleet;
     private int spawnX = 65, spawnY = 71; //x and y location that the fleet spawns at
+
+    float state = 1.0f;
 
     Random rand;
 
@@ -68,10 +71,10 @@ public class Fleet extends Sprite {
         body.setUserData(this);
     }
 
-    public void update(float dt){
+    public void update(float dt, CombatScreen screen, Viewport viewport){
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         setRotation(body.getAngle() * MathUtils.radiansToDegrees); //Here in case the body every rotates
-        fleetMovement(dt);
+        fleetMovement(dt, screen, viewport);
 
 
     }
@@ -90,30 +93,52 @@ public class Fleet extends Sprite {
         fdef.shape = shape;
         fdef.restitution = 0.01f;
 
+        body.applyLinearImpulse(0f, 1.0f, body.getPosition().x, body.getPosition().y, true);
+
         body.createFixture(fdef);
         body.setLinearDamping(50f);
     }
 
 
-    public void fleetMovement(float dt) {
+    public void fleetMovement(float dt, CombatScreen screen, Viewport viewport) {
         //System.out.println(boatTargetXPoint + " " + body.getPosition().x + "     "  + boatTargetYPoint + " " + body.getPosition().y);
-        if(body.getPosition().x < boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
-            body.applyLinearImpulse(new Vector2(0.5f, -0.5f), body.getWorldCenter(), true);
-        }
-        if(body.getPosition().x > boatTargetXPoint && body.getPosition().y < boatTargetYPoint){
-            body.applyLinearImpulse(new Vector2(-0.5f, 0.5f), body.getWorldCenter(), true);
-        }
-        if(body.getPosition().x < boatTargetXPoint && body.getPosition().y < boatTargetYPoint){
-            body.applyLinearImpulse(new Vector2(0.5f, 0.5f), body.getWorldCenter(), true);
-        }
-        if(body.getPosition().x > boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
-            body.applyLinearImpulse(new Vector2(-0.5f, -0.5f), body.getWorldCenter(), true);
+//        if(body.getPosition().x < boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
+//            body.applyLinearImpulse(new Vector2(0.5f, -0.5f), body.getWorldCenter(), true);
+//        }
+//        if(body.getPosition().x > boatTargetXPoint && body.getPosition().y < boatTargetYPoint){
+//            body.applyLinearImpulse(new Vector2(-0.5f, 0.5f), body.getWorldCenter(), true);
+//        }
+//        if(body.getPosition().x < boatTargetXPoint && body.getPosition().y < boatTargetYPoint){
+//            body.applyLinearImpulse(new Vector2(0.5f, 0.5f), body.getWorldCenter(), true);
+//        }
+//        if(body.getPosition().x > boatTargetXPoint && body.getPosition().y > boatTargetYPoint){
+//            body.applyLinearImpulse(new Vector2(-0.5f, -0.5f), body.getWorldCenter(), true);
+//        }
+//
+//        if(Math.round(body.getPosition().x) == boatTargetXPoint && Math.round(body.getPosition().y) == boatTargetYPoint){
+//            System.out.println("change destination");
+//            changeFleetDirection();
+
+
+
+        body.applyLinearImpulse(0f, state, body.getPosition().x, body.getPosition().y, true);
+
+
+        if (body.getPosition().y > screen.gamecam.position.y + (screen.gamecam.viewportHeight / 3)) {
+            // then fleet is below top line
+           state = -1.0f;
         }
 
-        if(Math.round(body.getPosition().x) == boatTargetXPoint && Math.round(body.getPosition().y) == boatTargetYPoint){
-            System.out.println("change destination");
-            changeFleetDirection();
+        if (body.getPosition().y < screen.gamecam.position.y - (screen.gamecam.viewportHeight / 3)) {
+            // then fleet is below top line
+            state = 1.0f;
         }
+
+
+
+        //else body.applyLinearImpulse(0f, -1.0f, body.getPosition().x, body.getPosition().y, true);
+
+
     }
 
     public void changeFleetDirection(){
