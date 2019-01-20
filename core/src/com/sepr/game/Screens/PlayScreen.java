@@ -37,7 +37,7 @@ public class PlayScreen implements Screen {
 
     private Main game;
     public static OrthographicCamera gamecam;
-    private Viewport gamePort;
+    private Viewport viewport;
     private HUD hud;
 
     //Ship and fleet
@@ -52,20 +52,23 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
 
+    public static final int V_WIDTH = 1700;
+    public static final int V_HEIGHT = 1700;
+    
 
     public PlayScreen(Main game){
         this.game = game;
 
         //Create a camera and fix the viewport
         gamecam = new OrthographicCamera();
-        gamePort = new StretchViewport(Main.V_WIDTH / Main.PPM ,Main.V_HEIGHT / Main.PPM, gamecam); //Maintains aspect ratio as window is resized
+        viewport = new StretchViewport(V_WIDTH / Main.PPM ,V_HEIGHT / Main.PPM, gamecam); //Maintains aspect ratio as window is resized
         hud = new HUD(game.batch);
 
         //load the Tiled map
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("Map/map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
-        gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
+        gamecam.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
         world  = new World(new Vector2(0, 0), true); // Can apply gravity / wind speed forces
         b2dr = new Box2DDebugRenderer();
@@ -93,14 +96,14 @@ public class PlayScreen implements Screen {
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
             if(Gdx.input.isKeyPressed(Input.Keys.W))
                 ship.moveUp();
-            if(Gdx.input.isKeyPressed(Input.Keys.D))
+            if(Gdx.input.isKeyPressed(Input.Keys.D)) {
                 ship.rotateClockwise();
-            if(Gdx.input.isKeyPressed(Input.Keys.A))
-                ship.rotateCounterClockwise();
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
                 ship.cannon.rotateClockwise();
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.A)){
+                ship.rotateCounterClockwise();
                 ship.cannon.rotateCounterClockwise();
+            }
             else ship.stopShip();
 
             if (Gdx.input.isKeyPressed(Input.Keys.C)){
@@ -170,7 +173,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        gamePort.update(width, height);
+        viewport.update(width, height);
     }
 
     public TiledMap getMap(){

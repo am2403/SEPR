@@ -26,6 +26,9 @@ public class HUD implements Disposable {
     private float xLocation, yLocation; //coordinates of the ship
 
 
+    public static final int V_WIDTH = 1000;
+    public static final int V_HEIGHT = 900;
+
     private Label countdownLabel, scoreLabel, fleetHealthLabel, worldLabel, xLabel, yLabel;
 
 
@@ -33,7 +36,7 @@ public class HUD implements Disposable {
         fleetHealth = Fleet.fleetHealth; //needs a getFleetHealth for the code marks.. not this kind of access
         score = 0;
 
-        viewport = new FitViewport(Main.V_WIDTH, Main.V_WIDTH, new OrthographicCamera());
+        viewport = new FitViewport(V_WIDTH, V_WIDTH, new OrthographicCamera());
         stage = new Stage(viewport, sb);
 
         Table table = new Table();

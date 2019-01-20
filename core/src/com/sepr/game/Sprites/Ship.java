@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.sepr.game.Main;
+import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
 
 import java.util.ArrayList;
@@ -31,13 +32,14 @@ public class Ship extends Sprite {
     private Sprite ship;
     private BodyDef bdef;
     private FixtureDef fdef;
-    private CircleShape shipShape;
+    private PolygonShape shipShape;
     private float maxSpeed = 4f;
     private float forceX, forceY;
 
     private float magnitude = 2f;
 
     private PlayScreen playScreen;
+    private CombatScreen combatScreen;
 
     public Cannon cannon;
 
@@ -69,6 +71,27 @@ public class Ship extends Sprite {
         cannonBalls = new ArrayList<CannonBall>();
     }
 
+    public Ship(CombatScreen screen) {
+        this.world = screen.getWorld();
+        this.combatScreen = screen;
+        defineShip();
+        shipTexture = new Texture("mainShip.png");
+        ship = new Sprite(shipTexture);
+        setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
+        setRegion(ship);
+        cannon = new Cannon(screen);
+
+        RevoluteJointDef rjd = new RevoluteJointDef();
+
+        rjd.initialize(shipBody, cannon.cannonBody, shipBody.getWorldCenter());
+        joint = (RevoluteJoint) world.createJoint(rjd);
+
+        shootTimer = 0;
+
+        cannonBalls = new ArrayList<CannonBall>();
+    }
+
+
     public Ship() {
         defineShip();
         shipTexture = new Texture("mainShip.png");
@@ -78,10 +101,13 @@ public class Ship extends Sprite {
     }
 
 
+
+
     public void update(float dt) {
         cannon.update(dt);
 
         setPosition(shipBody.getPosition().x - getWidth() / 2, shipBody.getPosition().y- getHeight() / 2); //puts the ship body onto the middle of the screen
+
         setRotation(shipBody.getAngle() * MathUtils.radiansToDegrees); //converts the angles to radians and rotates the ship body WILL NEED TO INPUT THE DELTA SPEED ON ROTATION
         setOriginCenter();
         forceX = cos(shipBody.getAngle()); //upon rotation this will be our new x coordinate for our ship body
@@ -110,8 +136,8 @@ public class Ship extends Sprite {
         bdef.type = BodyDef.BodyType.DynamicBody;
         bdef.position.set(6200 / Main.PPM, 7100 / Main.PPM);
 
-        shipShape = new CircleShape();
-        shipShape.setRadius(0.7f);
+        shipShape = new PolygonShape();
+        shipShape.setAsBox(0.5f, 0.5f);
         fdef.shape = shipShape;
 
         //Ship properties
@@ -127,7 +153,7 @@ public class Ship extends Sprite {
     }
 
     public void moveUp() {
-        //if the ships velocity isn't already at maximum velocity, then apply a force to the ship in the anggle force x and force y by a magnitude
+        //if the ships velocity isn't already at maximum velocity, then apply a force to the ship in the angle force x and force y by a magnitude
         if (shipBody.getLinearVelocity().y <= maxSpeed && shipBody.getLinearVelocity().x < maxSpeed)
             shipBody.applyForce(new Vector2(forceX * magnitude, forceY * magnitude), shipBody.getWorldCenter(), true);
     }
@@ -155,7 +181,7 @@ public class Ship extends Sprite {
             cannonBalls.add(new CannonBall(playScreen, cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
 
             //since a force is applied to the ship when we shoot our bullet, we apply an equal force in the
-            //opposite direction, stopping the ship from continiously moving backwards (acting a bit like recoil)
+            //opposite direction, stopping the ship from continuously moving backwards (acting a bit like recoil)
             shipBody.applyLinearImpulse(new Vector2(cos(cannon.cannonBody.getAngle()), sin(cannon.cannonBody.getAngle())), shipBody.getWorldCenter(), true);
         }
     }
