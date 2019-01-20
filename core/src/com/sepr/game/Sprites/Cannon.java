@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Main;
+import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
 
 import static com.badlogic.gdx.math.MathUtils.cos;
@@ -24,6 +25,17 @@ public class Cannon extends Sprite {
 
 
     public Cannon(PlayScreen screen) {
+        this.world = screen.getWorld();
+        defineCannon();
+        cannonTexture = new Texture("cannon.png");
+        cannon = new Sprite(cannonTexture);
+        setBounds(0, 0, 40 / Main.PPM, 40 / Main.PPM);
+        setRegion(cannon);
+
+        cannonBody.setUserData(this);
+    }
+
+    public Cannon(CombatScreen screen) {
         this.world = screen.getWorld();
         defineCannon();
         cannonTexture = new Texture("cannon.png");
@@ -70,10 +82,11 @@ public class Cannon extends Sprite {
 
     public void rotateClockwise(){
         cannonBody.setAngularVelocity(-2f); //rotation speed
+
     }
 
     public void rotateCounterClockwise(){
-        cannonBody.setAngularVelocity(2f); //rotation speed
+       cannonBody.setAngularVelocity(2f); //rotation speed
     }
 
 }
