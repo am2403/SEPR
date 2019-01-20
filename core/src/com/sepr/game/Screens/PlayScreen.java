@@ -134,6 +134,8 @@ public class PlayScreen implements Screen {
         gamecam.update();
         ship.update(dt);
 
+        System.out.println(ship.shipBody.getAngle());
+
         //fleet.update(dt, this, viewport);
         hud.update(dt);
         renderer.setView(gamecam);
