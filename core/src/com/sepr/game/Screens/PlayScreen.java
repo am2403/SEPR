@@ -51,7 +51,7 @@ public class PlayScreen implements Screen {
     //Box2D variables
     private World world;
     private Box2DDebugRenderer b2dr;
-    
+
 
     public PlayScreen(Main game){
         this.game = game;
