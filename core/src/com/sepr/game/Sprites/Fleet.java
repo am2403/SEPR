@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Main;
+import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
 
 public class Fleet extends Sprite {
@@ -32,6 +33,18 @@ public class Fleet extends Sprite {
 
 
     public Fleet(PlayScreen screen){
+        this.world = screen.getWorld();
+        defineFleet();
+        fleetTexture = new Texture("fleet.png");
+        fleet = new Sprite(fleetTexture);
+        fleet.setPosition(body.getPosition().x, body.getPosition().y);
+        setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
+        setRegion(fleet);
+
+        body.setUserData(this);
+    }
+
+    public Fleet(CombatScreen screen){
         this.world = screen.getWorld();
         defineFleet();
         fleetTexture = new Texture("fleet.png");

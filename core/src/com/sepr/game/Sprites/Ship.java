@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.sepr.game.Main;
+import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
 
 import static com.badlogic.gdx.math.MathUtils.cos;
@@ -26,14 +27,24 @@ public class Ship extends Sprite {
     private Sprite ship;
     private BodyDef bdef;
     private FixtureDef fdef;
-    private CircleShape shipShape;
+    private PolygonShape shipShape;
     private float maxSpeed = 4f;
     private float forceX, forceY;
+
 
     private float magnitude = 2f;
 
 
     public Ship(PlayScreen screen) {
+        this.world = screen.getWorld();
+        defineShip();
+        shipTexture = new Texture("mainShip.png");
+        ship = new Sprite(shipTexture);
+        setBounds(0, 0, 100 / Main.PPM, 100 / Main.PPM);
+        setRegion(ship);
+    }
+
+    public Ship(CombatScreen screen) {
         this.world = screen.getWorld();
         defineShip();
         shipTexture = new Texture("mainShip.png");
@@ -52,11 +63,20 @@ public class Ship extends Sprite {
 
 
     public void update(float dt) {
-        setPosition(shipBody.getPosition().x - getWidth() / 2, shipBody.getPosition().y- getHeight() / 2); //puts the ship body onto the middle of the screen
-        setRotation(shipBody.getAngle() * MathUtils.radiansToDegrees); //converts the angles to radians and rotates the ship body WILL NEED TO INPUT THE DELTA SPEED ON ROTATION
+
+        //puts the ship body onto the middle of the screen
+        setPosition(shipBody.getPosition().x - getWidth() / 2, shipBody.getPosition().y- getHeight() / 2);
+
+        //converts the angles to radians and rotates the ship body WILL NEED TO INPUT THE DELTA SPEED ON ROTATION
+        setRotation(shipBody.getAngle() * MathUtils.radiansToDegrees);
+        //ship.setOrigin(ship.getWidth()/2, ship.getHeight()/2);
         setOriginCenter();
-        forceX = cos(shipBody.getAngle()); //upon rotation this will be our new x coordinate for our ship body
-        forceY = sin(shipBody.getAngle()); //upon rotation this will be our new y coordinate for our ship body
+
+        //upon rotation this will be our new x coordinate for our ship body
+        forceX = cos(shipBody.getAngle());
+
+        //upon rotation this will be our new y coordinate for our ship body
+        forceY = sin(shipBody.getAngle());
     }
 
     // Creates a Box2D object for the ship and the ship's cannon, then attaches the cannon to the ship with a ResoluteJoint
@@ -69,8 +89,10 @@ public class Ship extends Sprite {
         bdef.type = BodyDef.BodyType.DynamicBody;
         bdef.position.set(6200 / Main.PPM, 7100 / Main.PPM);
 
-        shipShape = new CircleShape();
-        shipShape.setRadius(0.7f);
+
+
+        shipShape = new PolygonShape();
+        shipShape.setAsBox(0.5f, 0.5f);
         fdef.shape = shipShape;
 
         //Ship properties
@@ -79,6 +101,7 @@ public class Ship extends Sprite {
 
         shipBody = world.createBody(bdef);
         shipBody.createFixture(fdef);
+        shipBody.setFixedRotation(false);
 
         shipBody.setAngularDamping(30f); //the resistance to the ships rotating force
 
@@ -86,26 +109,25 @@ public class Ship extends Sprite {
     }
 
     public void moveUp() {
-        //if the ships velocity isn't already at maximum velocity, then apply a force to the ship in the anggle force x and force y by a magnitude
+        //if the ships velocity isn't already at maximum velocity, then apply a force to the ship in the angle force x and force y by a magnitude
         if (shipBody.getLinearVelocity().y <= maxSpeed && shipBody.getLinearVelocity().x < maxSpeed)
             shipBody.applyForce(new Vector2(forceX * magnitude, forceY * magnitude), shipBody.getWorldCenter(), true);
     }
 
 
     public void rotateClockwise(){
+        ship.setOriginCenter();
         shipBody.setAngularVelocity(-2f); //rotation speed
     }
 
     public void rotateCounterClockwise(){
+        ship.setOriginCenter();
         shipBody.setAngularVelocity(2f); //rotation speed
     }
 
     public void stopShip() {
         shipBody.setLinearDamping(0.6f); //Slows down the ship gradually
     }
-
-
-
 
     public void dispose(){
         shipTexture.dispose();

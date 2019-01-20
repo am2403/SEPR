@@ -7,6 +7,7 @@ package com.sepr.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -33,7 +34,7 @@ import static com.badlogic.gdx.math.MathUtils.cos;
 import static com.badlogic.gdx.math.MathUtils.sin;
 
 
-public class PlayScreen implements Screen {
+public class PlayScreen extends ScreenAdapter {
 
     private Main game;
     public static OrthographicCamera gamecam;
@@ -75,7 +76,7 @@ public class PlayScreen implements Screen {
         //load the Tiled map
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("Map/map.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
+        renderer = new OrthogonalTiledMapRenderer(map, 1/ Main.PPM);
         gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
         world  = new World(new Vector2(0, 0), true); // Can apply gravity / wind speed forces
@@ -114,14 +115,14 @@ public class PlayScreen implements Screen {
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)){
             if(Gdx.input.isKeyPressed(Input.Keys.W))
                 ship.moveUp();
-            if(Gdx.input.isKeyPressed(Input.Keys.D))
+            if(Gdx.input.isKeyPressed(Input.Keys.D)) {
                 ship.rotateClockwise();
-            if(Gdx.input.isKeyPressed(Input.Keys.A))
-                ship.rotateCounterClockwise();
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
                 cannon.rotateClockwise();
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.A)){
+                ship.rotateCounterClockwise();
                 cannon.rotateCounterClockwise();
+            }
             else ship.stopShip();
 
             if (Gdx.input.isKeyPressed(Input.Keys.C)){

@@ -8,6 +8,7 @@ import com.sepr.game.Main;
 import com.sepr.game.Screens.PlayScreen;
 
 import static com.badlogic.gdx.math.MathUtils.cos;
+import static com.badlogic.gdx.math.MathUtils.degreesToRadians;
 import static com.badlogic.gdx.math.MathUtils.sin;
 
 public class Cannon extends Sprite {
@@ -51,6 +52,7 @@ public class Cannon extends Sprite {
         bdef.type = BodyDef.BodyType.DynamicBody;
         bdef.position.set(6250 / Main.PPM, 7100 / Main.PPM);
 
+
         cannonShape = new CircleShape();
         cannonShape.setRadius(0.25f);
         fdef.shape = cannonShape;
@@ -63,6 +65,7 @@ public class Cannon extends Sprite {
         cannonBody.createFixture(fdef);
 
         cannonBody.setAngularDamping(30f); //the resistance to the ships rotating force
+
     }
 
     public void rotateClockwise(){
