@@ -99,10 +99,6 @@ public class Ship extends Sprite {
         shootTimer = 0;
 
         cannonBalls = new ArrayList<CannonBall>();
-
-        //Listens for Box2D Object collisions
-        cl = new WorldContactListener(screen);
-        world.setContactListener(cl);
     }
 
 
@@ -132,7 +128,7 @@ public class Ship extends Sprite {
         //if the cannonBall goes past the world width it gets removed from the game
         ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
         for (CannonBall cannonBall : cannonBalls) {
-            cannonBall.update(dt, shipBody.getAngle());
+            cannonBall.update(dt);
             if (cannonBall.cannonBallBody.getWorldCenter().x > Gdx.graphics.getWidth() || cannonBall.cannonBallBody.getWorldCenter().x < 0) {
                 cannonBallsToRemove.add(cannonBall);
             }
@@ -202,12 +198,12 @@ public class Ship extends Sprite {
         if(shootTimer >= SHOOT_WAIT_TIME){
             shootTimer = 0; //resets the shoot timer
 
-            cannonBalls.add(new CannonBall(combatScreen, cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
+            cannonBalls.add(new CannonBall(playScreen, 69, 77, shipBody.getAngle()));
 
 
             //since a force is applied to the ship when we shoot our bullet, we apply an equal force in the
             //opposite direction, stopping the ship from continuously moving backwards (acting a bit like recoil)
-            //shipBody.applyLinearImpulse(new Vector2(cos(cannon.cannonBody.getAngle()), sin(cannon.cannonBody.getAngle())), shipBody.getWorldCenter(), true);
+            shipBody.applyLinearImpulse(new Vector2(cos(cannon.cannonBody.getAngle()), sin(cannon.cannonBody.getAngle())), shipBody.getWorldCenter(), true);
         }
     }
 

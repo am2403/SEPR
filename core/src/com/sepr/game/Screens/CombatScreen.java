@@ -21,9 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
-import com.sepr.game.Scenes.HUD;
 import com.sepr.game.Sprites.Cannon;
-import com.sepr.game.Sprites.CannonBall;
 import com.sepr.game.Sprites.Fleet;
 import com.sepr.game.Sprites.Ship;
 
@@ -31,15 +29,15 @@ import com.sepr.game.Sprites.Ship;
 public class CombatScreen implements Screen {
 
     Viewport viewport;
-    private HUD hud;
     public static OrthographicCamera gamecam;
     private Stage stage;
     private Main game;
     private SpriteBatch batch;
 
     // ship and fleet
-    public Ship ship_combat;
-    public Fleet fleet_combat;
+    private Ship ship_combat;
+    private Fleet fleet_combat;
+    private Cannon cannon_combat;
 
     //Box2D variables
     private World world;
@@ -68,10 +66,7 @@ public class CombatScreen implements Screen {
         ship_combat = new Ship(this);
         fleet_combat = new Fleet(this);
 
-
         gamecam.position.set(ship_combat.shipBody.getWorldCenter().x, ship_combat.shipBody.getWorldCenter().y, 0);
-
-        hud = new HUD(game.batch);
     }
 
 
@@ -91,12 +86,8 @@ public class CombatScreen implements Screen {
         ship_combat.update(dt);
         fleet_combat.update(dt, this, viewport);
 
-        hud.update(dt, this);
-
         checkShipBoundary();
         checkFleetBoundary();
-
-        checkHealthOfFleet();
 
         renderer.setView(gamecam);
     }
@@ -116,16 +107,11 @@ public class CombatScreen implements Screen {
         batch.begin();
 
         ship_combat.draw(batch);
-        ship_combat.cannon.draw(batch);
-
-        for (CannonBall cannonBall: ship_combat .cannonBalls){
-            cannonBall.draw(batch);
-        }
-
         fleet_combat.draw(batch);
 
         batch.end();
-        hud.stage.draw();
+
+
     }
 
     @Override
@@ -161,12 +147,6 @@ public class CombatScreen implements Screen {
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 ship_combat.rotateCounterClockwise();
                 ship_combat.cannon.rotateCounterClockwise();
-            }
-            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-                //every time we press space we get the ship angle
-                //then we pass the ship angle through shoot
-                //then we work
-                ship_combat.shoot();
             }
             else ship_combat.stopShip();
             }
@@ -219,12 +199,6 @@ public class CombatScreen implements Screen {
 
         if (fleet_combat.body.getPosition().y < (gamecam.position.y - (gamecam.viewportHeight / 2) + (ship_combat.getHeight()/2))) {
             fleet_combat.body.setTransform( fleet_combat.body.getPosition().x,(gamecam.position.y - (gamecam.viewportHeight / 2)) + (fleet_combat.getHeight()/2), fleet_combat.body.getAngle());
-        }
-    }
-
-    private void checkHealthOfFleet() {
-        if (fleet_combat.getFleetHealth() <= 0f) {
-            game.setScreen(new PlayScreen(game));
         }
     }
 

@@ -62,11 +62,11 @@ public class Cannon extends Sprite {
 
         //Cannon creation
         bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(6300 / Main.PPM, 7100 / Main.PPM);
+        bdef.position.set(6250 / Main.PPM, 7100 / Main.PPM);
 
 
         cannonShape = new CircleShape();
-        cannonShape.setRadius(0.15f);
+        cannonShape.setRadius(0.25f);
         fdef.shape = cannonShape;
 
         //Cannon properties
