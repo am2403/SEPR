@@ -75,6 +75,7 @@ public class CombatScreen implements Screen {
         ship_combat = new Ship(this);
         fleet_combat = new Fleet(this);
 
+
         gamecam.position.set(ship_combat.shipBody.getWorldCenter().x, ship_combat.shipBody.getWorldCenter().y, 0);
 
         hud = new HUD(game.batch);
@@ -107,6 +108,7 @@ public class CombatScreen implements Screen {
 
         if(health < 0){
             game.setScreen(new GameOverScreen(game));
+            health = 100;
         }
 
         checkHealthOfFleet();
@@ -247,11 +249,10 @@ public class CombatScreen implements Screen {
     private void checkHealthOfFleet() {
         if (fleet_combat.getFleetHealth() <= 0f) {
 
-            //playScreen.fleet.body.
-            //playScreen.ship.cl.bodiesToRemove.add(playScreen.fleet.body);
+            //yeet the fleet
             playScreen.fleet.body.setTransform(0,0,0);
             playScreen.fleet.setPosition(0, 0);
-            //playScreen.fleet.dispose();
+
 
             game.setScreen(playScreen);
         }

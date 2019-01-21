@@ -58,6 +58,7 @@ public class PlayScreen implements Screen {
 
 
 
+
     public PlayScreen(Main game){
         this.game = game;
 
@@ -79,6 +80,8 @@ public class PlayScreen implements Screen {
 
         ship = new Ship(this);
         fleet = new Fleet(this);
+
+
     }
 
     public PlayScreen(Main game, boolean fleetAlive, float x_coord, float y_coord){
