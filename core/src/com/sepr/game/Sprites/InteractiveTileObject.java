@@ -18,6 +18,8 @@ public abstract class InteractiveTileObject {
     protected TiledMap map;
     protected Fixture fixture;
 
+
+    //A collidable tile inherits from the constructor below
     public InteractiveTileObject(PlayScreen screen, Rectangle bounds){
         this.screen = screen;
         this.bounds = bounds;

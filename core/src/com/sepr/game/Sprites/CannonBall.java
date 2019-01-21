@@ -49,7 +49,7 @@ public class CannonBall extends Sprite {
         setRegion(cannonBall);
 
 
-
+        //sets an identifier in the contact listener to allow for collision detection
         cannonBallBody.setUserData(this);
     }
 
@@ -76,8 +76,10 @@ public class CannonBall extends Sprite {
     }
 
     public void shoot(float angl) {
+        //'pos' is the location where the impulse force will be applied to the cannon ball
         Vector2 pos = cannonBallBody.getWorldCenter();
-        //applies the force of the cannonball in the direction the cannon is facing
+
+        //applies the force of the cannonball in the DIRECTION the cannon is facing
         force = new Vector2(cos(angl), sin(angl));
         cannonBallBody.applyLinearImpulse(force, pos, true);
 

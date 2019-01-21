@@ -23,6 +23,7 @@ import com.sepr.game.Screens.PlayScreen;
 import com.sepr.game.Tools.WorldContactListener;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static com.badlogic.gdx.math.MathUtils.cos;
 import static com.badlogic.gdx.math.MathUtils.sin;
@@ -54,7 +55,10 @@ public class Ship extends Sprite {
 
     public ArrayList<CannonBall> cannonBalls;
 
-    public WorldContactListener cl;
+    WorldContactListener cl;
+
+    private Random rand;
+    private int damageTimer;
 
 
     public Ship(PlayScreen screen) {
@@ -67,11 +71,13 @@ public class Ship extends Sprite {
         setRegion(ship);
         cannon = new Cannon(screen);
 
-        RevoluteJointDef rjd = new RevoluteJointDef();
 
+        //a joint is created between the ship and cannon, joined in 'shipBody.getWorldCenter()'(center of shipBody)
+        RevoluteJointDef rjd = new RevoluteJointDef();
         rjd.initialize(shipBody, cannon.cannonBody, shipBody.getWorldCenter());
         joint = (RevoluteJoint) world.createJoint(rjd);
 
+        //sets the initial bullet timer to 0
         shootTimer = 0;
 
         cannonBalls = new ArrayList<CannonBall>();
@@ -79,6 +85,8 @@ public class Ship extends Sprite {
         //Listens for Box2D Object collisions
         cl = new WorldContactListener(screen);
         world.setContactListener(cl);
+
+        rand = new Random();
     }
 
     public Ship(CombatScreen screen) {
@@ -93,6 +101,7 @@ public class Ship extends Sprite {
 
         RevoluteJointDef rjd = new RevoluteJointDef();
 
+        //a joint is created between the ship and cannon, joined in 'shipBody.getWorldCenter()'(center of shipBody)
         rjd.initialize(shipBody, cannon.cannonBody, shipBody.getWorldCenter());
         joint = (RevoluteJoint) world.createJoint(rjd);
 
@@ -103,6 +112,8 @@ public class Ship extends Sprite {
         //Listens for Box2D Object collisions
         cl = new WorldContactListener(screen);
         world.setContactListener(cl);
+
+        rand = new Random();
     }
 
 
@@ -129,7 +140,7 @@ public class Ship extends Sprite {
 
 
         //Update bullets
-        //if the cannonBall goes past the world width it gets removed from the game
+        //if the cannonBall goes passed the world width it gets removed from the game
         ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
         for (CannonBall cannonBall : cannonBalls) {
             cannonBall.update(dt, shipBody.getAngle());
@@ -140,14 +151,6 @@ public class Ship extends Sprite {
         cannonBalls.removeAll(cannonBallsToRemove);
 
 
-
-        //removes the cannonBall bodies when it collides with fleet
-//        Array<Body> bodies = cl.getBodiesToRemove();
-//        for(int i = 0; i < bodies.size; i++){
-//            Body b = bodies.get(i);
-//            world.destroyBody(b);
-//        }
-//        bodies.clear();
     }
 
     // Creates a Box2D object for the ship and the ship's cannon, then attaches the cannon to the ship with a ResoluteJoint
@@ -204,21 +207,28 @@ public class Ship extends Sprite {
 
             cannonBalls.add(new CannonBall(combatScreen, cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
 
-
-            //since a force is applied to the ship when we shoot our bullet, we apply an equal force in the
-            //opposite direction, stopping the ship from continuously moving backwards (acting a bit like recoil)
-            //shipBody.applyLinearImpulse(new Vector2(cos(cannon.cannonBody.getAngle()), sin(cannon.cannonBody.getAngle())), shipBody.getWorldCenter(), true);
         }
     }
 
 
-    public static int getHealth() {
+    public static int  getHealth() {
         return health;
     }
 
     public static void setHealth(int new_health) {
         health = new_health;
     }
+
+    public void takeDamagePerSecond(){
+        damageTimer++;
+        if(damageTimer == 120){
+            int randomDamage = rand.nextInt(20) + 1;
+            setHealth(getHealth() - randomDamage);
+            damageTimer = 0;
+            System.out.println(getHealth());
+        }
+    }
+
 
     public void dispose(){
         shipTexture.dispose();
