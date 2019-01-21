@@ -133,7 +133,6 @@ public class Ship extends Sprite {
         }
         cannonBalls.removeAll(cannonBallsToRemove);
 
-
         Array<Body> bodies = cl.getBodiesToRemove();
         for(int i = 0; i < bodies.size; i++){
             Body b = bodies.get(i);

@@ -79,11 +79,6 @@ public class PlayScreen implements Screen {
 
         ship = new Ship(this);
         fleet = new Fleet(this);
-
-
-
-
-
     }
 
     @Override
@@ -107,9 +102,7 @@ public class PlayScreen implements Screen {
             }
             else ship.stopShip();
 
-            if (Gdx.input.isKeyPressed(Input.Keys.C)){
-                game.setScreen(new CombatScreen(game));
-            }
+
             if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
                 ship.shoot();
             }
@@ -133,6 +126,12 @@ public class PlayScreen implements Screen {
 
         gamecam.update();
         ship.update(dt);
+
+        if ((fleet.body.getPosition().x-10) <= ship.shipBody.getPosition().x || ship.shipBody.getPosition().x <= (fleet.body.getPosition().x+10)) {
+            if ((fleet.body.getPosition().y-10) <= ship.shipBody.getPosition().y || ship.shipBody.getPosition().y <= (fleet.body.getPosition().y+10)) {
+                enterCombat();
+            }
+        }
 
         System.out.println(ship.shipBody.getAngle());
 
@@ -204,6 +203,10 @@ public class PlayScreen implements Screen {
     @Override
     public void hide() {
 
+    }
+
+    public void enterCombat() {
+        game.setScreen(new CombatScreen(game));
     }
 
     @Override
