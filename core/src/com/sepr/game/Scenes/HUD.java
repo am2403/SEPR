@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
+import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
 import com.sepr.game.Sprites.Fleet;
 import com.sepr.game.Sprites.Ship;
@@ -87,6 +88,13 @@ public class HUD implements Disposable {
     public void update(float dt, PlayScreen playScreen){
         fleetHealth = playScreen.fleet.getFleetHealth();
         shipHealth = playScreen.ship.getHealth();
+        updateFleetHealth(fleetHealth);
+        updateShipHealth(shipHealth);
+    }
+
+    public void update(float dt, CombatScreen combatScreen){
+        fleetHealth = combatScreen.fleet_combat.getFleetHealth();
+        shipHealth = combatScreen.ship_combat.getHealth();
         updateFleetHealth(fleetHealth);
         updateShipHealth(shipHealth);
     }

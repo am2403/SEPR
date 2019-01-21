@@ -103,9 +103,7 @@ public class PlayScreen implements Screen {
             else ship.stopShip();
 
 
-            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-                ship.shoot();
-            }
+
             if(Gdx.input.isKeyPressed(Input.Keys.C)){
                 game.setScreen(new CombatScreen(game));
             }
@@ -165,6 +163,7 @@ public class PlayScreen implements Screen {
         //Renders the fixed HUD
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+
 
 
     }

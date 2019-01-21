@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 public class WorldContactListener implements ContactListener {
     public PlayScreen playScreen;
+    public CombatScreen combatScreen;
     //public Main game = new Main();
 
     private Array<Body> bodiesToRemove;
@@ -26,6 +27,11 @@ public class WorldContactListener implements ContactListener {
 
     public WorldContactListener(PlayScreen playScreen){
         this.playScreen = playScreen;
+        bodiesToRemove = new Array<Body>();
+    }
+
+    public WorldContactListener(CombatScreen combatScreen){
+        this.combatScreen = combatScreen;
         bodiesToRemove = new Array<Body>();
     }
 
@@ -53,13 +59,13 @@ public class WorldContactListener implements ContactListener {
             bodiesToRemove.add(f2.getBody());
             //playScreen.
             ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
-            for (CannonBall cannonBall: playScreen.ship.cannonBalls){
+            for (CannonBall cannonBall: combatScreen.ship_combat.cannonBalls){
                 if(cannonBall == o2){
                     cannonBallsToRemove.add(cannonBall);
                 }
             }
-            playScreen.fleet.setFleetHealth(playScreen.fleet.getFleetHealth()-10);
-            System.out.println("fleet health"+playScreen.fleet.getFleetHealth());
+            this.combatScreen.fleet_combat.setFleetHealth(this.combatScreen.fleet_combat.getFleetHealth()-10);
+            System.out.println("fleet health"+this.combatScreen.fleet_combat.getFleetHealth());
         }
 
         if (o2.getClass() == Ship.class && o1.getClass() == Fleet.class) {
