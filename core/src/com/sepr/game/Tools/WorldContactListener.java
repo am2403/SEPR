@@ -4,11 +4,9 @@ This class listens for BOX2D object collisions
 
 package com.sepr.game.Tools;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.sepr.game.Main;
 import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
 import com.sepr.game.Sprites.*;
@@ -18,12 +16,7 @@ import java.util.ArrayList;
 public class WorldContactListener implements ContactListener {
     public PlayScreen playScreen;
     public CombatScreen combatScreen;
-    //public Main game = new Main();
-
     public Array<Body> bodiesToRemove;
-
-
-
 
     public WorldContactListener(PlayScreen playScreen){
         this.playScreen = playScreen;
@@ -57,7 +50,6 @@ public class WorldContactListener implements ContactListener {
 
         if (o2.getClass() == CannonBall.class && o1.getClass() == Fleet.class){
             System.out.println("Cannonball hit fleet");
-            //game.setScreen(new CombatScreen(game));
 
             bodiesToRemove.add(f2.getBody());
             //playScreen.
@@ -84,9 +76,6 @@ public class WorldContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-
-
-
     }
 
     @Override
@@ -97,10 +86,6 @@ public class WorldContactListener implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
-    }
-
-    public Array<Body> getBodiesToRemove(){
-        return bodiesToRemove;
     }
 
 }

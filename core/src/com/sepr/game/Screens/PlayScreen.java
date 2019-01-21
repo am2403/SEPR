@@ -14,24 +14,15 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
 import com.sepr.game.Scenes.HUD;
-import com.sepr.game.Sprites.Cannon;
 import com.sepr.game.Sprites.CannonBall;
 import com.sepr.game.Sprites.Fleet;
 import com.sepr.game.Sprites.Ship;
 import com.sepr.game.Tools.BoxPhysics;
-import com.sepr.game.Tools.WorldContactListener;
 
-import java.util.ArrayList;
-
-import static com.badlogic.gdx.math.MathUtils.cos;
-import static com.badlogic.gdx.math.MathUtils.sin;
 
 
 public class PlayScreen implements Screen {
@@ -51,7 +42,7 @@ public class PlayScreen implements Screen {
 
     //Box2D variables
     private World world;
-    //private Box2DDebugRenderer b2dr;
+
 
     public static final int V_WIDTH = 3200;
     public static final int V_HEIGHT = 1800;
@@ -74,7 +65,6 @@ public class PlayScreen implements Screen {
         gamecam.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
         world  = new World(new Vector2(0, 0), true); // Can apply gravity / wind speed forces
-        //b2dr = new Box2DDebugRenderer();
 
         new BoxPhysics(this);
 
@@ -169,8 +159,6 @@ public class PlayScreen implements Screen {
         gamecam.update();
         ship.update(dt);
 
-        //System.out.println(ship.shipBody.getAngle());
-
         fleet.update(dt, this, viewport);
         hud.update(dt, this);
         renderer.setView(gamecam);
@@ -187,8 +175,6 @@ public class PlayScreen implements Screen {
         //render game map
         renderer.render();
 
-        //render Box2D debug lines
-        //b2dr.render(world, gamecam.combined);
 
         //Render sprites
         game.batch.setProjectionMatrix(gamecam.combined);
@@ -242,7 +228,6 @@ public class PlayScreen implements Screen {
         map.dispose();
         world.dispose();
         ship.dispose();
-        //b2dr.dispose();
         hud.dispose();
         fleet.dispose();
 

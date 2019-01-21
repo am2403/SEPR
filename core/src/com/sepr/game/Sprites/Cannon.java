@@ -7,9 +7,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
-
 import static com.badlogic.gdx.math.MathUtils.cos;
-import static com.badlogic.gdx.math.MathUtils.degreesToRadians;
 import static com.badlogic.gdx.math.MathUtils.sin;
 
 public class Cannon extends Sprite {
@@ -22,7 +20,6 @@ public class Cannon extends Sprite {
     private CircleShape cannonShape;
 
     private float forceX, forceY;
-
 
 
     public Cannon(PlayScreen screen) {
@@ -69,7 +66,7 @@ public class Cannon extends Sprite {
 
     // Creates a Box2D object for the ship and the ship's cannon, then attaches the cannon to the ship with a ResoluteJoint
     public void defineCannon() {
-        //Generic variables, can be applied to ship and cannon/
+        //Generic variables, can be applied to ship and cannon
         bdef = new BodyDef();
         fdef = new FixtureDef();
 

@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import com.sepr.game.Main;
-import com.sepr.game.Screens.PlayScreen;
+
 
 
 public class GameOverScreen implements Screen {

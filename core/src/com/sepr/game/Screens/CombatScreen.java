@@ -3,31 +3,23 @@ package com.sepr.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
 import com.sepr.game.Scenes.HUD;
-import com.sepr.game.Sprites.Cannon;
 import com.sepr.game.Sprites.CannonBall;
 import com.sepr.game.Sprites.Fleet;
 import com.sepr.game.Sprites.Ship;
 
-import java.util.Random;
 
 import static com.sepr.game.Sprites.Ship.health;
 
@@ -48,7 +40,6 @@ public class CombatScreen implements Screen {
 
     //Box2D variables
     private World world;
-    //private Box2DDebugRenderer b2dr;
 
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -71,7 +62,6 @@ public class CombatScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
 
         world  = new World(new Vector2(0, 0), true); // Can apply gravity / wind speed force
-        //b2dr = new Box2DDebugRenderer();
         ship_combat = new Ship(this);
         fleet_combat = new Fleet(this);
 
@@ -142,11 +132,6 @@ public class CombatScreen implements Screen {
     }
 
 
-
-    public void enterGameOver() {
-        game.setScreen(new GameOverScreen(game));
-    }
-
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
@@ -195,17 +180,12 @@ public class CombatScreen implements Screen {
             }
         }
 
-    public TiledMap getMap(){
-        return map;
-    }
+
 
     public World getWorld(){
         return world;
     }
 
-    public Viewport getViewport(){
-        return viewport;
-    }
 
     public void checkShipBoundary() {
         // this checks the right boundary for the ship

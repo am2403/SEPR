@@ -1,18 +1,13 @@
 package com.sepr.game.Sprites;
 
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.CombatScreen;
-import com.sepr.game.Screens.PlayScreen;
 
-import java.util.ArrayList;
 
 import static com.badlogic.gdx.math.MathUtils.cos;
 import static com.badlogic.gdx.math.MathUtils.sin;
@@ -28,7 +23,6 @@ public class CannonBall extends Sprite {
     public static Fixture fixture;
 
     public float x, y, angle;
-    private float magnitude = 2f;
 
     Vector2 force;
 

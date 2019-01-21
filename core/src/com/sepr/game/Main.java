@@ -17,7 +17,6 @@ public class Main extends Game {
 
 	//Used to identify collision. Powers of 2 used to simplify shifting operations
 
-	public static final short DEFAULT_BIT = 1;
 	public static final short LAND_BIT = 2;
 	public static final short DOCK_BIT = 4;
 
@@ -28,7 +27,6 @@ public class Main extends Game {
 		this.setScreen(new PlayScreen(this));
 
 	}
-
 
 	@Override
 	public void render () {

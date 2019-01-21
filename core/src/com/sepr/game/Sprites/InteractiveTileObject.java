@@ -42,7 +42,6 @@ public abstract class InteractiveTileObject {
         body.setUserData(this);
     }
 
-    public abstract void shipContact();
 
     // Sets a value to the object being detected
     public void setCategoryFilter(short filterBit){

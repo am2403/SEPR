@@ -20,8 +20,5 @@ public class Dock extends InteractiveTileObject {
         setCategoryFilter(Main.DOCK_BIT);
     }
 
-    @Override
-    public void shipContact() {
-        Gdx.app.log("dock", "collision");
-    }
+
 }

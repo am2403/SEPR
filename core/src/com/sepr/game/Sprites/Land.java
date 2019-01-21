@@ -5,7 +5,7 @@ Will be used more when we change the screen when the ship docks.
 
 package com.sepr.game.Sprites;
 
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.math.Rectangle;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.PlayScreen;
@@ -20,8 +20,5 @@ public class Land extends InteractiveTileObject {
         setCategoryFilter(Main.LAND_BIT);
     }
 
-    @Override
-    public void shipContact() {
-        Gdx.app.log("land", "collision");
-    }
+
 }
