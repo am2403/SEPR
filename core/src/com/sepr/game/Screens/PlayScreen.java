@@ -127,6 +127,27 @@ public class PlayScreen implements Screen {
                 ship.rotateCounterClockwise();
                 ship.cannon.rotateCounterClockwise();
             }
+
+            if(Gdx.input.isKeyPressed(Input.Keys.NUM_0)){
+                map = mapLoader.load("Map/map.tmx");
+                renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
+            }
+
+            if(Gdx.input.isKeyPressed(Input.Keys.NUM_1)){
+                map = mapLoader.load("Map/CollegeDerwent.tmx");
+                renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
+            }
+
+            if(Gdx.input.isKeyPressed(Input.Keys.NUM_2)){
+                map = mapLoader.load("Map/CollegeAlcuin.tmx");
+                renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
+            }
+
+            if(Gdx.input.isKeyPressed(Input.Keys.NUM_3)){
+                map = mapLoader.load("Map/CollegeHalifax.tmx");
+                renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
+            }
+
             else ship.stopShip();
 
             if(Gdx.input.isKeyPressed(Input.Keys.C)){
