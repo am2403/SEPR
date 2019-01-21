@@ -38,6 +38,8 @@ public class Ship extends Sprite {
     private float maxSpeed = 4f;
     private float forceX, forceY;
 
+    public static int health = 100;
+
     private float magnitude = 2f;
 
     private PlayScreen playScreen;
@@ -206,6 +208,13 @@ public class Ship extends Sprite {
     }
 
 
+    public static int getHealth() {
+        return health;
+    }
+
+    public static void setHealth(int new_health) {
+        health = new_health;
+    }
 
     public void dispose(){
         shipTexture.dispose();
