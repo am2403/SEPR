@@ -43,7 +43,7 @@ public class PlayScreen implements Screen {
 
     //Ship and fleet
     public Ship ship;
-    private Fleet fleet;
+    public Fleet fleet;
 
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -113,8 +113,6 @@ public class PlayScreen implements Screen {
         }
     }
 
-
-
     //This is called once every 60 seconds (world.step..)
     public void update(float dt){
         handleInput(dt);
@@ -130,7 +128,7 @@ public class PlayScreen implements Screen {
         //System.out.println(ship.shipBody.getAngle());
 
         fleet.update(dt, this, viewport);
-        hud.update(dt);
+        hud.update(dt, this);
         renderer.setView(gamecam);
     }
 

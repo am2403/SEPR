@@ -25,9 +25,9 @@ public class Fleet extends Sprite {
     public static int getFleetHealth() {
         return fleetHealth;
     }
-    public static void setFleetHealth(int fleetHealth) {
-        Fleet.fleetHealth = fleetHealth;
-    }
+
+    public static void setFleetHealth(int new_fleetHealth) { fleetHealth = new_fleetHealth; }
+
     public static int fleetHealth = 100;
 
     public Fleet(PlayScreen screen){
