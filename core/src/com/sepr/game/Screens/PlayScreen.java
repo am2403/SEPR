@@ -106,6 +106,9 @@ public class PlayScreen implements Screen {
             if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
                 ship.shoot();
             }
+            if(Gdx.input.isKeyPressed(Input.Keys.C)){
+                game.setScreen(new CombatScreen(game));
+            }
 
         }
     }
