@@ -7,6 +7,7 @@ package com.sepr.game.Tools;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
@@ -16,10 +17,22 @@ import java.util.ArrayList;
 
 public class WorldContactListener implements ContactListener {
     public PlayScreen playScreen;
-    public Main game = new Main();
+    public CombatScreen combatScreen;
+    //public Main game = new Main();
+
+    public Array<Body> bodiesToRemove;
+
+
+
 
     public WorldContactListener(PlayScreen playScreen){
         this.playScreen = playScreen;
+        bodiesToRemove = new Array<Body>();
+    }
+
+    public WorldContactListener(CombatScreen combatScreen){
+        this.combatScreen = combatScreen;
+        bodiesToRemove = new Array<Body>();
     }
 
     @Override
@@ -46,13 +59,25 @@ public class WorldContactListener implements ContactListener {
             System.out.println("Cannonball hit fleet");
             //game.setScreen(new CombatScreen(game));
 
+            bodiesToRemove.add(f2.getBody());
+            //playScreen.
             ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
-            for (CannonBall cannonBall: playScreen.ship.cannonBalls){
+            for (CannonBall cannonBall: combatScreen.ship_combat.cannonBalls){
                 if(cannonBall == o2){
                     cannonBallsToRemove.add(cannonBall);
                 }
             }
-            playScreen.ship.cannonBalls.removeAll(cannonBallsToRemove);
+            this.combatScreen.fleet_combat.setFleetHealth(this.combatScreen.fleet_combat.getFleetHealth()-10);
+            System.out.println("fleet health"+this.combatScreen.fleet_combat.getFleetHealth());
+        }
+
+        if (o2.getClass() == Ship.class && o1.getClass() == Fleet.class) {
+            System.out.print("beep");
+            playScreen.game.setScreen(new CombatScreen(playScreen.game, playScreen));
+        }
+        if (o1.getClass() == Ship.class && o2.getClass() == Fleet.class) {
+            System.out.print("beep");
+            playScreen.game.setScreen(new CombatScreen(playScreen.game, playScreen));
         }
 
     }
@@ -72,6 +97,10 @@ public class WorldContactListener implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
+    }
+
+    public Array<Body> getBodiesToRemove(){
+        return bodiesToRemove;
     }
 
 }

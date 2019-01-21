@@ -21,23 +21,26 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
+import com.sepr.game.Scenes.HUD;
 import com.sepr.game.Sprites.Cannon;
+import com.sepr.game.Sprites.CannonBall;
 import com.sepr.game.Sprites.Fleet;
 import com.sepr.game.Sprites.Ship;
+import com.sepr.game.Tools.WorldContactListener;
 
 
-public class CombatScreen extends ScreenAdapter {
+public class CombatScreen implements Screen {
 
     Viewport viewport;
+    private HUD hud;
     public static OrthographicCamera gamecam;
     private Stage stage;
     private Main game;
     private SpriteBatch batch;
 
     // ship and fleet
-    private Ship ship_combat;
-    private Fleet fleet_combat;
-    private Cannon cannon_combat;
+    public Ship ship_combat;
+    public Fleet fleet_combat;
 
     //Box2D variables
     private World world;
@@ -46,48 +49,32 @@ public class CombatScreen extends ScreenAdapter {
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
+    private PlayScreen playScreen;
 
     public static final int V_WIDTH = 1600;
     public static final int V_HEIGHT = 900;
 
-    public CombatScreen(Main game){
-
+    public CombatScreen(Main game, PlayScreen playScreen){
+        this.playScreen = playScreen;
         this.game = game;
-
+        batch = new SpriteBatch();
         gamecam = new OrthographicCamera();
         viewport = new StretchViewport(V_WIDTH / Main.PPM ,V_HEIGHT / Main.PPM, gamecam); //Maintains aspect ratio as window is resized
-        stage = new Stage(viewport, game.batch);
+        stage = new Stage(viewport, batch);
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("Combat Map/combat.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
-
-
-
 
         world  = new World(new Vector2(0, 0), true); // Can apply gravity / wind speed force
         b2dr = new Box2DDebugRenderer();
         ship_combat = new Ship(this);
         fleet_combat = new Fleet(this);
 
+
         gamecam.position.set(ship_combat.shipBody.getWorldCenter().x, ship_combat.shipBody.getWorldCenter().y, 0);
 
-        //ship_combat.shipBody.setTransform(viewport.getWorldWidth()/2f, viewport.getWorldHeight()/2f, 0);
-
-//        // centres the camera in middle of map
-//        TiledMapTileLayer layer0 = (TiledMapTileLayer) map.getLayers().get(0);
-//        Vector3 center = new Vector3(layer0.getWidth() * layer0.getTileWidth() / 2, layer0.getHeight() * layer0.getTileHeight() / 2, 0);
-//        gamecam.position.set(center);
-
-
-
-
-        //ship_combat.shipBody.setTransform(V_WIDTH/2f, V_HEIGHT/2f, 0);
-
-        //ship_combat.setScale(200, 100);
-
-
-
+        hud = new HUD(game.batch);
     }
 
 
@@ -107,8 +94,12 @@ public class CombatScreen extends ScreenAdapter {
         ship_combat.update(dt);
         fleet_combat.update(dt, this, viewport);
 
+        hud.update(dt, this);
+
         checkShipBoundary();
         checkFleetBoundary();
+
+        checkHealthOfFleet();
 
         renderer.setView(gamecam);
     }
@@ -116,25 +107,28 @@ public class CombatScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         update(delta);
-
         Gdx.gl.glClearColor(0, 0, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         gamecam.update();
-        //renderer.setView(gamecam);
         renderer.render();
 
         b2dr.render(world, gamecam.combined);
 
-        game.batch.setProjectionMatrix(gamecam.combined);
-        game.batch.begin();
+        batch.setProjectionMatrix(gamecam.combined);
+        batch.begin();
 
-        ship_combat.draw(game.batch);
-        fleet_combat.draw(game.batch);
+        ship_combat.draw(batch);
+        ship_combat.cannon.draw(batch);
 
-        game.batch.end();
+        for (CannonBall cannonBall: ship_combat .cannonBalls){
+            cannonBall.draw(batch);
+        }
 
+        fleet_combat.draw(batch);
 
+        batch.end();
+        hud.stage.draw();
     }
 
     @Override
@@ -161,7 +155,6 @@ public class CombatScreen extends ScreenAdapter {
     public void handleInput(float dt) {
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                System.out.println("my name jeff");
                 ship_combat.moveUp();
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
@@ -171,6 +164,12 @@ public class CombatScreen extends ScreenAdapter {
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 ship_combat.rotateCounterClockwise();
                 ship_combat.cannon.rotateCounterClockwise();
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+                //every time we press space we get the ship angle
+                //then we pass the ship angle through shoot
+                //then we work
+                ship_combat.shoot();
             }
             else ship_combat.stopShip();
             }
@@ -189,7 +188,6 @@ public class CombatScreen extends ScreenAdapter {
     }
 
     public void checkShipBoundary() {
-        System.out.println("yeeto"+gamecam.position);
         // this checks the right boundary for the ship
         if (ship_combat.shipBody.getPosition().x > (gamecam.position.x + (gamecam.viewportWidth / 2) - (ship_combat.getWidth()/2))) {
             ship_combat.shipBody.setTransform((gamecam.position.x + (gamecam.viewportWidth / 2)) - (ship_combat.getWidth()/2), ship_combat.shipBody.getPosition().y, ship_combat.shipBody.getAngle());
@@ -203,13 +201,12 @@ public class CombatScreen extends ScreenAdapter {
             ship_combat.shipBody.setTransform( ship_combat.shipBody.getPosition().x,(gamecam.position.y + (gamecam.viewportHeight / 2)) - (ship_combat.getHeight()/2), ship_combat.shipBody.getAngle());
         }
 
-        if (ship_combat.shipBody.getPosition().y < (gamecam.position.y - (gamecam.viewportHeight / 2) + (ship_combat.getHeight()/2))) {
+        if (ship_combat.shipBody.getPosition().y < (gamecam.position.y           - (gamecam.viewportHeight / 2) + (ship_combat.getHeight()/2))) {
             ship_combat.shipBody.setTransform( ship_combat.shipBody.getPosition().x,(gamecam.position.y - (gamecam.viewportHeight / 2)) + (ship_combat.getHeight()/2), ship_combat.shipBody.getAngle());
         }
     }
 
     public void checkFleetBoundary() {
-        System.out.println("yeeto"+gamecam.position);
         // this checks the right boundary for the ship
         if (fleet_combat.body.getPosition().x > (gamecam.position.x + (gamecam.viewportWidth / 2) - (fleet_combat.getWidth()/2))) {
             fleet_combat.body.setTransform((gamecam.position.x + (gamecam.viewportWidth / 2)) - (fleet_combat.getWidth()/2), fleet_combat.body.getPosition().y, fleet_combat.body.getAngle());
@@ -225,6 +222,19 @@ public class CombatScreen extends ScreenAdapter {
 
         if (fleet_combat.body.getPosition().y < (gamecam.position.y - (gamecam.viewportHeight / 2) + (ship_combat.getHeight()/2))) {
             fleet_combat.body.setTransform( fleet_combat.body.getPosition().x,(gamecam.position.y - (gamecam.viewportHeight / 2)) + (fleet_combat.getHeight()/2), fleet_combat.body.getAngle());
+        }
+    }
+
+    private void checkHealthOfFleet() {
+        if (fleet_combat.getFleetHealth() <= 0f) {
+
+            //playScreen.fleet.body.
+            //playScreen.ship.cl.bodiesToRemove.add(playScreen.fleet.body);
+            playScreen.fleet.body.setTransform(0,0,0);
+            playScreen.fleet.setPosition(0, 0);
+            //playScreen.fleet.dispose();
+
+            game.setScreen(playScreen);
         }
     }
 

@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
@@ -35,14 +36,14 @@ import static com.badlogic.gdx.math.MathUtils.sin;
 
 public class PlayScreen implements Screen {
 
-    private Main game;
+    public Main game;
     public static OrthographicCamera gamecam;
     private Viewport viewport;
     private HUD hud;
 
     //Ship and fleet
     public Ship ship;
-    private Fleet fleet;
+    public Fleet fleet;
 
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -54,7 +55,8 @@ public class PlayScreen implements Screen {
 
     public static final int V_WIDTH = 3200;
     public static final int V_HEIGHT = 1800;
-    
+
+
 
     public PlayScreen(Main game){
         this.game = game;
@@ -77,12 +79,30 @@ public class PlayScreen implements Screen {
 
         ship = new Ship(this);
         fleet = new Fleet(this);
+    }
 
+    public PlayScreen(Main game, boolean fleetAlive, float x_coord, float y_coord){
+        this.game = game;
 
-        //Listens for Box2D Object collisions
-        world.setContactListener(new WorldContactListener(this));
+        //Create a camera and fix the viewport
+        gamecam = new OrthographicCamera();
+        viewport = new StretchViewport(V_WIDTH / Main.PPM ,V_HEIGHT / Main.PPM, gamecam); //Maintains aspect ratio as window is resized
+        hud = new HUD(game.batch);
 
+        //load the Tiled map
+        mapLoader = new TmxMapLoader();
+        map = mapLoader.load("Map/map.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
+        gamecam.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
+        world  = new World(new Vector2(0, 0), true); // Can apply gravity / wind speed forces
+        b2dr = new Box2DDebugRenderer();
+
+        new BoxPhysics(this);
+
+        ship = new Ship(this);
+        ship.setPosition(x_coord, y_coord);
+        if (fleetAlive) {fleet = new Fleet(this);}
     }
 
     @Override
@@ -106,22 +126,16 @@ public class PlayScreen implements Screen {
             }
             else ship.stopShip();
 
-            if (Gdx.input.isKeyPressed(Input.Keys.C)){
-                game.setScreen(new CombatScreen(game));
-            }
-            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-                ship.shoot();
+            if(Gdx.input.isKeyPressed(Input.Keys.C)){
+                game.setScreen(new CombatScreen(game, this));
             }
 
         }
     }
 
-
-
     //This is called once every 60 seconds (world.step..)
     public void update(float dt){
         handleInput(dt);
-
         world.step(1/60f, 6, 2);
 
         //Updates the camera coordinates so that it remains fixed on the ship
@@ -131,8 +145,10 @@ public class PlayScreen implements Screen {
         gamecam.update();
         ship.update(dt);
 
-        //fleet.update(dt, this, viewport);
-        hud.update(dt);
+        //System.out.println(ship.shipBody.getAngle());
+
+        fleet.update(dt, this, viewport);
+        hud.update(dt, this);
         renderer.setView(gamecam);
     }
 
@@ -167,8 +183,6 @@ public class PlayScreen implements Screen {
         //Renders the fixed HUD
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-
-
     }
 
     @Override
@@ -209,4 +223,6 @@ public class PlayScreen implements Screen {
         fleet.dispose();
 
     }
+
+
 }

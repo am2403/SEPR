@@ -16,9 +16,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.badlogic.gdx.utils.Array;
 import com.sepr.game.Main;
 import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
+import com.sepr.game.Tools.WorldContactListener;
 
 import java.util.ArrayList;
 
@@ -36,6 +38,8 @@ public class Ship extends Sprite {
     private float maxSpeed = 4f;
     private float forceX, forceY;
 
+    public static int health = 100;
+
     private float magnitude = 2f;
 
     private PlayScreen playScreen;
@@ -49,6 +53,8 @@ public class Ship extends Sprite {
     float shootTimer;
 
     public ArrayList<CannonBall> cannonBalls;
+
+    public WorldContactListener cl;
 
 
     public Ship(PlayScreen screen) {
@@ -69,6 +75,10 @@ public class Ship extends Sprite {
         shootTimer = 0;
 
         cannonBalls = new ArrayList<CannonBall>();
+
+        //Listens for Box2D Object collisions
+        cl = new WorldContactListener(screen);
+        world.setContactListener(cl);
     }
 
     public Ship(CombatScreen screen) {
@@ -89,6 +99,10 @@ public class Ship extends Sprite {
         shootTimer = 0;
 
         cannonBalls = new ArrayList<CannonBall>();
+
+        //Listens for Box2D Object collisions
+        cl = new WorldContactListener(screen);
+        world.setContactListener(cl);
     }
 
 
@@ -118,12 +132,22 @@ public class Ship extends Sprite {
         //if the cannonBall goes past the world width it gets removed from the game
         ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
         for (CannonBall cannonBall : cannonBalls) {
-            cannonBall.update(dt);
+            cannonBall.update(dt, shipBody.getAngle());
             if (cannonBall.cannonBallBody.getWorldCenter().x > Gdx.graphics.getWidth() || cannonBall.cannonBallBody.getWorldCenter().x < 0) {
                 cannonBallsToRemove.add(cannonBall);
             }
         }
         cannonBalls.removeAll(cannonBallsToRemove);
+
+
+
+        //removes the cannonBall bodies when it collides with fleet
+//        Array<Body> bodies = cl.getBodiesToRemove();
+//        for(int i = 0; i < bodies.size; i++){
+//            Body b = bodies.get(i);
+//            world.destroyBody(b);
+//        }
+//        bodies.clear();
     }
 
     // Creates a Box2D object for the ship and the ship's cannon, then attaches the cannon to the ship with a ResoluteJoint
@@ -173,20 +197,28 @@ public class Ship extends Sprite {
 
 
     public void shoot(){
+        //shoot timer is used to stop the user from spamming space bar to shoot the cannon
         shootTimer += Gdx.graphics.getDeltaTime();
-
         if(shootTimer >= SHOOT_WAIT_TIME){
             shootTimer = 0; //resets the shoot timer
 
-            cannonBalls.add(new CannonBall(playScreen, cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
+            cannonBalls.add(new CannonBall(combatScreen, cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
+
 
             //since a force is applied to the ship when we shoot our bullet, we apply an equal force in the
             //opposite direction, stopping the ship from continuously moving backwards (acting a bit like recoil)
-            shipBody.applyLinearImpulse(new Vector2(cos(cannon.cannonBody.getAngle()), sin(cannon.cannonBody.getAngle())), shipBody.getWorldCenter(), true);
+            //shipBody.applyLinearImpulse(new Vector2(cos(cannon.cannonBody.getAngle()), sin(cannon.cannonBody.getAngle())), shipBody.getWorldCenter(), true);
         }
     }
 
 
+    public static int getHealth() {
+        return health;
+    }
+
+    public static void setHealth(int new_health) {
+        health = new_health;
+    }
 
     public void dispose(){
         shipTexture.dispose();
