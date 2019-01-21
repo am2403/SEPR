@@ -36,6 +36,7 @@ public class HUD implements Disposable {
     public static final int V_WIDTH = 700;
     public static final int V_HEIGHT = 900;
     private Image img;
+    private Table table;
 
 
     private Label countdownLabel, scoreLabel, fleetHealthLabel, xLabel, yLabel, shipHealthLabel;
@@ -52,7 +53,7 @@ public class HUD implements Disposable {
         viewport = new FitViewport(V_WIDTH, V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
 
-        Table table = new Table();
+        table = new Table();
         table.bottom();
         table.setFillParent(true);
 
@@ -86,10 +87,12 @@ public class HUD implements Disposable {
 
     //updates the x and y coordinates and edits the labels
     public void update(float dt, PlayScreen playScreen){
+
         fleetHealth = playScreen.fleet.getFleetHealth();
         shipHealth = playScreen.ship.getHealth();
         updateFleetHealth(fleetHealth);
         updateShipHealth(shipHealth);
+        table.addActor(img);
     }
 
     public void update(float dt, CombatScreen combatScreen){
@@ -97,6 +100,7 @@ public class HUD implements Disposable {
         shipHealth = combatScreen.ship_combat.getHealth();
         updateFleetHealth(fleetHealth);
         updateShipHealth(shipHealth);
+        table.removeActor(img);
     }
 
     private void updateFleetHealth(int fleetHealth) {
