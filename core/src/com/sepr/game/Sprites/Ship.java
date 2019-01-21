@@ -54,7 +54,7 @@ public class Ship extends Sprite {
 
     public ArrayList<CannonBall> cannonBalls;
 
-    WorldContactListener cl;
+    public WorldContactListener cl;
 
 
     public Ship(PlayScreen screen) {

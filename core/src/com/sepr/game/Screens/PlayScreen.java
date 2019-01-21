@@ -126,8 +126,6 @@ public class PlayScreen implements Screen {
             }
             else ship.stopShip();
 
-
-
             if(Gdx.input.isKeyPressed(Input.Keys.C)){
                 game.setScreen(new CombatScreen(game, this));
             }
@@ -162,8 +160,6 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-
         //render game map
         renderer.render();
 
@@ -187,9 +183,6 @@ public class PlayScreen implements Screen {
         //Renders the fixed HUD
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-
-
-
     }
 
     @Override

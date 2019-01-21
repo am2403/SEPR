@@ -20,7 +20,7 @@ public class WorldContactListener implements ContactListener {
     public CombatScreen combatScreen;
     //public Main game = new Main();
 
-    private Array<Body> bodiesToRemove;
+    public Array<Body> bodiesToRemove;
 
 
 

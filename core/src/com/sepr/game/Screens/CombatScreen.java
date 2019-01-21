@@ -26,6 +26,7 @@ import com.sepr.game.Sprites.Cannon;
 import com.sepr.game.Sprites.CannonBall;
 import com.sepr.game.Sprites.Fleet;
 import com.sepr.game.Sprites.Ship;
+import com.sepr.game.Tools.WorldContactListener;
 
 
 public class CombatScreen implements Screen {
@@ -226,7 +227,13 @@ public class CombatScreen implements Screen {
 
     private void checkHealthOfFleet() {
         if (fleet_combat.getFleetHealth() <= 0f) {
-            playScreen.fleet.dispose();
+
+            //playScreen.fleet.body.
+            //playScreen.ship.cl.bodiesToRemove.add(playScreen.fleet.body);
+            playScreen.fleet.body.setTransform(0,0,0);
+            playScreen.fleet.setPosition(0, 0);
+            //playScreen.fleet.dispose();
+
             game.setScreen(playScreen);
         }
     }
