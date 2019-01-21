@@ -4,16 +4,21 @@ Heads Up Display... Fixes information at the bottom of the screen, e.g. score
 
 package com.sepr.game.Scenes;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
@@ -29,6 +34,8 @@ public class HUD implements Disposable {
 
     public static final int V_WIDTH = 700;
     public static final int V_HEIGHT = 900;
+    private Image img;
+
 
     private Label countdownLabel, scoreLabel, fleetHealthLabel, xLabel, yLabel, shipHealthLabel;
 
@@ -37,12 +44,18 @@ public class HUD implements Disposable {
         shipHealth = Ship.getHealth();
         score = 0;
 
+        img = new Image(new Texture(Gdx.files.local("MainMap.png")));
+
+
+
         viewport = new FitViewport(V_WIDTH, V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
 
         Table table = new Table();
         table.bottom();
         table.setFillParent(true);
+
+
 
         scoreLabel = new Label(String.format("Score: " + "%03d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         fleetHealthLabel = new Label(String.format("Fleet health: " + "%03d", fleetHealth), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -54,11 +67,15 @@ public class HUD implements Disposable {
 
 
         //Add our labels to the table, spacing them out equally with expandX and padding them by 10px
+
+
         table.add(xLabel).expandX().padBottom(2);
         table.add(yLabel).expandX().padBottom(2);
         table.add(scoreLabel).expandX().padBottom(2);
         table.add(fleetHealthLabel).expandX().padBottom(2);
         table.add(shipHealthLabel).expandX().padBottom(2);
+        table.add(img).height(250).width(125).center();
+
 
 
         //Add table to the stage
