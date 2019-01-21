@@ -15,7 +15,6 @@ public class Main extends Game {
 
 	public static final float PPM = 100;
 
-
 	//Used to identify collision. Powers of 2 used to simplify shifting operations
 
 	public static final short DEFAULT_BIT = 1;

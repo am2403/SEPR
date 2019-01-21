@@ -46,6 +46,8 @@ public class HUD implements Disposable {
         shipHealth = Ship.getHealth();
         score = 0;
 
+
+
         img = new Image(new Texture(Gdx.files.local("MainMap.png")));
 
 
@@ -83,6 +85,8 @@ public class HUD implements Disposable {
         //Add table to the stage
         stage.addActor(table);
 
+
+
     }
 
     //updates the x and y coordinates and edits the labels
@@ -92,7 +96,11 @@ public class HUD implements Disposable {
         shipHealth = playScreen.ship.getHealth();
         updateFleetHealth(fleetHealth);
         updateShipHealth(shipHealth);
+        updateScore(score);
         table.addActor(img);
+        if(playScreen.fleet.getFleetHealth() < 10){
+            score = 100;
+        }
     }
 
     public void update(float dt, CombatScreen combatScreen){
@@ -101,6 +109,7 @@ public class HUD implements Disposable {
         updateFleetHealth(fleetHealth);
         updateShipHealth(shipHealth);
         table.removeActor(img);
+
     }
 /*
     //updates the x and y coordinates and edits the labels
@@ -117,6 +126,9 @@ public class HUD implements Disposable {
     }
     private void updateShipHealth(int shipHealth) {
         shipHealthLabel.setText(String.format("Player health: " + "%03d", shipHealth));
+    }
+    private void updateScore(int score) {
+        scoreLabel.setText(String.format("Score: " + "%03d", score));
     }
 
     @Override
