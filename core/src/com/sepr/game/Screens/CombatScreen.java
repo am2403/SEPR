@@ -38,8 +38,8 @@ public class CombatScreen implements Screen {
     private SpriteBatch batch;
 
     // ship and fleet
-    private Ship ship_combat;
-    private Fleet fleet_combat;
+    public Ship ship_combat;
+    public Fleet fleet_combat;
 
     //Box2D variables
     private World world;
@@ -91,8 +91,12 @@ public class CombatScreen implements Screen {
         ship_combat.update(dt);
         fleet_combat.update(dt, this, viewport);
 
+        hud.update(dt, this);
+
         checkShipBoundary();
         checkFleetBoundary();
+
+        checkHealthOfFleet();
 
         renderer.setView(gamecam);
     }
@@ -215,6 +219,12 @@ public class CombatScreen implements Screen {
 
         if (fleet_combat.body.getPosition().y < (gamecam.position.y - (gamecam.viewportHeight / 2) + (ship_combat.getHeight()/2))) {
             fleet_combat.body.setTransform( fleet_combat.body.getPosition().x,(gamecam.position.y - (gamecam.viewportHeight / 2)) + (fleet_combat.getHeight()/2), fleet_combat.body.getAngle());
+        }
+    }
+
+    private void checkHealthOfFleet() {
+        if (fleet_combat.getFleetHealth() <= 0f) {
+            game.setScreen(new PlayScreen(game));
         }
     }
 
