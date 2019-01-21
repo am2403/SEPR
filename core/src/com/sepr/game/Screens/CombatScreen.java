@@ -107,11 +107,11 @@ public class CombatScreen implements Screen {
         batch.begin();
 
         ship_combat.draw(batch);
+        ship_combat.cannon.draw(batch);
+
         fleet_combat.draw(batch);
 
         batch.end();
-
-
     }
 
     @Override
@@ -147,6 +147,9 @@ public class CombatScreen implements Screen {
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 ship_combat.rotateCounterClockwise();
                 ship_combat.cannon.rotateCounterClockwise();
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+                //shoot
             }
             else ship_combat.stopShip();
             }

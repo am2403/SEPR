@@ -198,12 +198,12 @@ public class Ship extends Sprite {
         if(shootTimer >= SHOOT_WAIT_TIME){
             shootTimer = 0; //resets the shoot timer
 
-            cannonBalls.add(new CannonBall(playScreen, 69, 77, shipBody.getAngle()));
+            cannonBalls.add(new CannonBall(playScreen, shipBody.getWorldCenter().x, shipBody.getWorldCenter().y, shipBody.getAngle()));
 
 
             //since a force is applied to the ship when we shoot our bullet, we apply an equal force in the
             //opposite direction, stopping the ship from continuously moving backwards (acting a bit like recoil)
-            shipBody.applyLinearImpulse(new Vector2(cos(cannon.cannonBody.getAngle()), sin(cannon.cannonBody.getAngle())), shipBody.getWorldCenter(), true);
+            //shipBody.applyLinearImpulse(new Vector2(cos(cannon.cannonBody.getAngle()), sin(cannon.cannonBody.getAngle())), shipBody.getWorldCenter(), true);
         }
     }
 
