@@ -51,7 +51,7 @@ public class PlayScreen implements Screen {
 
     //Box2D variables
     private World world;
-    private Box2DDebugRenderer b2dr;
+    //private Box2DDebugRenderer b2dr;
 
     public static final int V_WIDTH = 3200;
     public static final int V_HEIGHT = 1800;
@@ -74,7 +74,7 @@ public class PlayScreen implements Screen {
         gamecam.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
         world  = new World(new Vector2(0, 0), true); // Can apply gravity / wind speed forces
-        b2dr = new Box2DDebugRenderer();
+        //b2dr = new Box2DDebugRenderer();
 
         new BoxPhysics(this);
 
@@ -99,7 +99,7 @@ public class PlayScreen implements Screen {
         gamecam.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
         world  = new World(new Vector2(0, 0), true); // Can apply gravity / wind speed forces
-        b2dr = new Box2DDebugRenderer();
+        //b2dr = new Box2DDebugRenderer();
 
         new BoxPhysics(this);
 
@@ -188,7 +188,7 @@ public class PlayScreen implements Screen {
         renderer.render();
 
         //render Box2D debug lines
-        b2dr.render(world, gamecam.combined);
+        //b2dr.render(world, gamecam.combined);
 
         //Render sprites
         game.batch.setProjectionMatrix(gamecam.combined);
@@ -242,7 +242,7 @@ public class PlayScreen implements Screen {
         map.dispose();
         world.dispose();
         ship.dispose();
-        b2dr.dispose();
+        //b2dr.dispose();
         hud.dispose();
         fleet.dispose();
 

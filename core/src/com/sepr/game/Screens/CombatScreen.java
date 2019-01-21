@@ -48,7 +48,7 @@ public class CombatScreen implements Screen {
 
     //Box2D variables
     private World world;
-    private Box2DDebugRenderer b2dr;
+    //private Box2DDebugRenderer b2dr;
 
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -71,7 +71,7 @@ public class CombatScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
 
         world  = new World(new Vector2(0, 0), true); // Can apply gravity / wind speed force
-        b2dr = new Box2DDebugRenderer();
+        //b2dr = new Box2DDebugRenderer();
         ship_combat = new Ship(this);
         fleet_combat = new Fleet(this);
 
@@ -123,7 +123,7 @@ public class CombatScreen implements Screen {
         gamecam.update();
         renderer.render();
 
-        b2dr.render(world, gamecam.combined);
+        //b2dr.render(world, gamecam.combined);
 
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
