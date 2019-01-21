@@ -24,17 +24,25 @@ public class Cannon extends Sprite {
     private float forceX, forceY;
 
 
+
     public Cannon(PlayScreen screen) {
         this.world = screen.getWorld();
+        //defines all the parameters for the cannon's body and fixtures
         defineCannon();
+
+        //sets the cannon texture as a sprite
         cannonTexture = new Texture("cannon.png");
         cannon = new Sprite(cannonTexture);
+
+        //sets the bounds for the cannon body
         setBounds(0, 0, 40 / Main.PPM, 40 / Main.PPM);
         setRegion(cannon);
 
+        //accessed by the contact listener to identify if we have collided with the cannon
         cannonBody.setUserData(this);
     }
 
+    //same as the canon constructor but this constructor is used in the combat screen
     public Cannon(CombatScreen screen) {
         this.world = screen.getWorld();
         defineCannon();
@@ -47,8 +55,13 @@ public class Cannon extends Sprite {
     }
 
     public void update(float dt) {
-        setPosition(cannonBody.getPosition().x - getWidth() / 2, cannonBody.getPosition().y- getHeight() / 2); //puts the ship body onto the middle of the screen
-        setRotation(cannonBody.getAngle() * MathUtils.radiansToDegrees); //converts the angles to radians and rotates the ship body WILL NEED TO INPUT THE DELTA SPEED ON ROTATION
+        //sets the cannon sprite in the same position as the cannon body fixture. So every time we update the position
+        //of the body fixture, the sprite location is also changed.
+        setPosition(cannonBody.getPosition().x - getWidth() / 2, cannonBody.getPosition().y- getHeight() / 2);
+
+        //converts the angles to radians and rotates the ship body WILL NEED TO INPUT THE DELTA SPEED ON ROTATION
+        setRotation(cannonBody.getAngle() * MathUtils.radiansToDegrees);
+
         setOriginCenter();
         forceX = cos(cannonBody.getAngle()); //upon rotation this will be our new x coordinate for our ship body
         forceY = sin(cannonBody.getAngle()); //upon rotation this will be our new y coordinate for our ship body

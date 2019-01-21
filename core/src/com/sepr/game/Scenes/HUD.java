@@ -102,6 +102,15 @@ public class HUD implements Disposable {
         updateShipHealth(shipHealth);
         table.removeActor(img);
     }
+/*
+    //updates the x and y coordinates and edits the labels
+    public void update(float dt, CombatScreen combatScreen){
+        fleetHealth = combatScreen.fleet_combat.getFleetHealth();
+        shipHealth = combatScreen.ship_combat.getHealth();
+        updateFleetHealth(fleetHealth);
+        updateShipHealth(shipHealth);
+    }
+*/
 
     private void updateFleetHealth(int fleetHealth) {
         fleetHealthLabel.setText(String.format("Fleet health: " + "%03d", fleetHealth));
