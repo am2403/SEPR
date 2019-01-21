@@ -108,6 +108,11 @@ public class Ship extends Sprite {
         shootTimer = 0;
 
         cannonBalls = new ArrayList<CannonBall>();
+
+        //Listens for Box2D Object collisions
+        cl = new WorldContactListener(screen);
+        world.setContactListener(cl);
+
         rand = new Random();
     }
 

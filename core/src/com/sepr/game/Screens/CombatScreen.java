@@ -58,9 +58,6 @@ public class CombatScreen implements Screen {
     public static final int V_HEIGHT = 900;
 
 
-
-
-
     public CombatScreen(Main game, PlayScreen playScreen){
         this.game = game;
         batch = new SpriteBatch();
@@ -77,8 +74,6 @@ public class CombatScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
         ship_combat = new Ship(this);
         fleet_combat = new Fleet(this);
-
-
 
         gamecam.position.set(ship_combat.shipBody.getWorldCenter().x, ship_combat.shipBody.getWorldCenter().y, 0);
 
@@ -101,7 +96,7 @@ public class CombatScreen implements Screen {
         // sprite updates below
         ship_combat.update(dt);
         fleet_combat.update(dt, this, viewport);
-
+        hud.update(dt, this);
 
         //hud.update(dt, this);
         checkShipBoundary();
@@ -113,6 +108,8 @@ public class CombatScreen implements Screen {
         if(health < 0){
             game.setScreen(new GameOverScreen(game));
         }
+
+        checkHealthOfFleet();
     }
 
     @Override
@@ -245,6 +242,21 @@ public class CombatScreen implements Screen {
             fleet_combat.body.setTransform( fleet_combat.body.getPosition().x,(gamecam.position.y - (gamecam.viewportHeight / 2)) + (fleet_combat.getHeight()/2), fleet_combat.body.getAngle());
         }
     }
+
+
+    private void checkHealthOfFleet() {
+        if (fleet_combat.getFleetHealth() <= 0f) {
+
+            //playScreen.fleet.body.
+            //playScreen.ship.cl.bodiesToRemove.add(playScreen.fleet.body);
+            playScreen.fleet.body.setTransform(0,0,0);
+            playScreen.fleet.setPosition(0, 0);
+            //playScreen.fleet.dispose();
+
+            game.setScreen(playScreen);
+        }
+    }
+
 
     @Override
     public void dispose() {
