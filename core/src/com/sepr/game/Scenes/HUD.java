@@ -7,6 +7,7 @@ package com.sepr.game.Scenes;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -25,20 +26,18 @@ public class HUD implements Disposable {
     public Stage stage;
     private Viewport viewport; //New viewport to ensure that hud remains fixed
     private int score, fleetHealth, shipHealth;
-    private float xLocation, yLocation; //coordinates of the ship
 
     public static final int V_WIDTH = 700;
     public static final int V_HEIGHT = 900;
 
-    private Label countdownLabel, scoreLabel, fleetHealthLabel, worldLabel, xLabel, yLabel, shipHealthLabel;
-
+    private Label countdownLabel, scoreLabel, fleetHealthLabel, xLabel, yLabel, shipHealthLabel;
 
     public HUD(SpriteBatch sb){
         fleetHealth = Fleet.getFleetHealth(); //needs a getFleetHealth for the code marks.. not this kind of access
         shipHealth = Ship.getHealth();
         score = 0;
 
-        viewport = new FitViewport(V_WIDTH, V_WIDTH, new OrthographicCamera());
+        viewport = new FitViewport(V_WIDTH, V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
 
         Table table = new Table();
@@ -47,7 +46,7 @@ public class HUD implements Disposable {
 
         scoreLabel = new Label(String.format("Score: " + "%03d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         fleetHealthLabel = new Label(String.format("Fleet health: " + "%03d", fleetHealth), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        worldLabel = new Label("WORLD VIEW", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        //worldLabel = new Label("WORLD VIEW", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         //xLabel = new Label(String.format("X: " + "%01f", xLocation), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         //yLabel = new Label(String.format("Y: " + "%01f", yLocation), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
@@ -68,15 +67,19 @@ public class HUD implements Disposable {
     }
 
     //updates the x and y coordinates and edits the labels
-    public void update(float dt){
-        xLocation = Math.round(PlayScreen.gamecam.position.x);
-        yLocation = Math.round(PlayScreen.gamecam.position.y);
-        //xLabel.setText(String.format("X: " + "%01f", xLocation));
-        //yLabel.setText(String.format("Y: " + "%01f", yLocation));
-        fleetHealth = Fleet.getFleetHealth();
-        shipHealth = Ship.getHealth();
+    public void update(float dt, PlayScreen playScreen){
+        fleetHealth = playScreen.fleet.getFleetHealth();
+        shipHealth = playScreen.ship.getHealth();
+        updateFleetHealth(fleetHealth);
+        updateShipHealth(shipHealth);
     }
 
+    private void updateFleetHealth(int fleetHealth) {
+        fleetHealthLabel.setText(String.format("Fleet health: " + "%03d", fleetHealth));
+    }
+    private void updateShipHealth(int shipHealth) {
+        shipHealthLabel.setText(String.format("Player health: " + "%03d", shipHealth));
+    }
 
     @Override
     public void dispose() {

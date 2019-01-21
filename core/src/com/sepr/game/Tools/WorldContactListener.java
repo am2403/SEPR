@@ -51,14 +51,15 @@ public class WorldContactListener implements ContactListener {
             //game.setScreen(new CombatScreen(game));
 
             bodiesToRemove.add(f2.getBody());
-
+            //playScreen.
             ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
             for (CannonBall cannonBall: playScreen.ship.cannonBalls){
                 if(cannonBall == o2){
                     cannonBallsToRemove.add(cannonBall);
                 }
             }
-            playScreen.ship.cannonBalls.removeAll(cannonBallsToRemove);
+            playScreen.fleet.setFleetHealth(playScreen.fleet.getFleetHealth()-10);
+            System.out.println("fleet health"+playScreen.fleet.getFleetHealth());
         }
 
         if (o2.getClass() == Ship.class && o1.getClass() == Fleet.class) {
