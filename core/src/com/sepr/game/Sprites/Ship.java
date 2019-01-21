@@ -128,7 +128,7 @@ public class Ship extends Sprite {
         //if the cannonBall goes past the world width it gets removed from the game
         ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
         for (CannonBall cannonBall : cannonBalls) {
-            cannonBall.update(dt);
+            cannonBall.update(dt, shipBody.getAngle());
             if (cannonBall.cannonBallBody.getWorldCenter().x > Gdx.graphics.getWidth() || cannonBall.cannonBallBody.getWorldCenter().x < 0) {
                 cannonBallsToRemove.add(cannonBall);
             }
@@ -198,7 +198,7 @@ public class Ship extends Sprite {
         if(shootTimer >= SHOOT_WAIT_TIME){
             shootTimer = 0; //resets the shoot timer
 
-            cannonBalls.add(new CannonBall(playScreen, shipBody.getWorldCenter().x, shipBody.getWorldCenter().y, shipBody.getAngle()));
+            cannonBalls.add(new CannonBall(combatScreen, cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
 
 
             //since a force is applied to the ship when we shoot our bullet, we apply an equal force in the

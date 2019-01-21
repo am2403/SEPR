@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sepr.game.Main;
+import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class CannonBall extends Sprite {
 
 
 
-    public CannonBall(PlayScreen screen, float x, float y, float cannonAngle) {
+    public CannonBall(CombatScreen screen, float x, float y, float cannonAngle) {
         this.world = screen.getWorld();
 
         this.x = x;
@@ -47,8 +48,7 @@ public class CannonBall extends Sprite {
         setBounds(x, y, 10 / Main.PPM, 10 / Main.PPM);
         setRegion(cannonBall);
 
-        //applies the force of the cannonball in the direction the cannon is facing
-        force = new Vector2(cos(angle), sin(angle));
+
 
         cannonBallBody.setUserData(this);
     }
@@ -75,20 +75,19 @@ public class CannonBall extends Sprite {
         fixture = cannonBallBody.createFixture(fdef);
     }
 
-    public void shoot() {
+    public void shoot(float angl) {
         Vector2 pos = cannonBallBody.getWorldCenter();
+        //applies the force of the cannonball in the direction the cannon is facing
+        force = new Vector2(cos(angl), sin(angl));
         cannonBallBody.applyLinearImpulse(force, pos, true);
 
     }
 
-    public void update(float dt){
+    public void update(float dt, float angl){
         //sets the debug renderer line and the sprite into the same position
         setPosition((cannonBallBody.getPosition().x - getWidth() / 2) , (cannonBallBody.getPosition().y- getHeight() / 2 )); //sets position of the sprites to the middle of the outline
-        shoot();
+        shoot(angl);
     }
-
-
-
 
 
 

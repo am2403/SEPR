@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
 import com.sepr.game.Scenes.HUD;
 import com.sepr.game.Sprites.Cannon;
+import com.sepr.game.Sprites.CannonBall;
 import com.sepr.game.Sprites.Fleet;
 import com.sepr.game.Sprites.Ship;
 
@@ -39,7 +40,6 @@ public class CombatScreen implements Screen {
     // ship and fleet
     private Ship ship_combat;
     private Fleet fleet_combat;
-    private Cannon cannon_combat;
 
     //Box2D variables
     private World world;
@@ -67,6 +67,7 @@ public class CombatScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
         ship_combat = new Ship(this);
         fleet_combat = new Fleet(this);
+
 
         gamecam.position.set(ship_combat.shipBody.getWorldCenter().x, ship_combat.shipBody.getWorldCenter().y, 0);
 
@@ -112,6 +113,10 @@ public class CombatScreen implements Screen {
 
         ship_combat.draw(batch);
         ship_combat.cannon.draw(batch);
+
+        for (CannonBall cannonBall: ship_combat .cannonBalls){
+            cannonBall.draw(batch);
+        }
 
         fleet_combat.draw(batch);
 
