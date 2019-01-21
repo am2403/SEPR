@@ -133,6 +133,9 @@ public class Ship extends Sprite {
         }
         cannonBalls.removeAll(cannonBallsToRemove);
 
+
+
+        //removes the cannonBall bodies when it collides with fleet
         Array<Body> bodies = cl.getBodiesToRemove();
         for(int i = 0; i < bodies.size; i++){
             Body b = bodies.get(i);
@@ -188,12 +191,13 @@ public class Ship extends Sprite {
 
 
     public void shoot(){
+        //shoot timer is used to stop the user from spamming space bar to shoot the cannon
         shootTimer += Gdx.graphics.getDeltaTime();
-
         if(shootTimer >= SHOOT_WAIT_TIME){
             shootTimer = 0; //resets the shoot timer
 
-            cannonBalls.add(new CannonBall(playScreen, cannon.cannonBody.getWorldCenter().x, cannon.cannonBody.getWorldCenter().y, cannon.cannonBody.getAngle()));
+            cannonBalls.add(new CannonBall(playScreen, 69, 77, shipBody.getAngle()));
+
 
             //since a force is applied to the ship when we shoot our bullet, we apply an equal force in the
             //opposite direction, stopping the ship from continuously moving backwards (acting a bit like recoil)
