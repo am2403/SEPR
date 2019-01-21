@@ -70,11 +70,11 @@ public class WorldContactListener implements ContactListener {
 
         if (o2.getClass() == Ship.class && o1.getClass() == Fleet.class) {
             System.out.print("beep");
-            playScreen.game.setScreen(new CombatScreen(playScreen.game));
+            playScreen.game.setScreen(new CombatScreen(playScreen.game, playScreen));
         }
         if (o1.getClass() == Ship.class && o2.getClass() == Fleet.class) {
             System.out.print("beep");
-            playScreen.game.setScreen(new CombatScreen(playScreen.game));
+            playScreen.game.setScreen(new CombatScreen(playScreen.game, playScreen));
         }
 
     }

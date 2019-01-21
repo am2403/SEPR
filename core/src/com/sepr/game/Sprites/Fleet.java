@@ -99,7 +99,7 @@ public class Fleet extends Sprite {
     }
 
     public void dispose(){
-        world.dispose();
+        //world.dispose();
         fleetTexture.dispose();
     }
 

@@ -48,11 +48,13 @@ public class CombatScreen implements Screen {
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
+    private PlayScreen playScreen;
 
     public static final int V_WIDTH = 1600;
     public static final int V_HEIGHT = 900;
 
-    public CombatScreen(Main game){
+    public CombatScreen(Main game, PlayScreen playScreen){
+        this.playScreen = playScreen;
         this.game = game;
         batch = new SpriteBatch();
         gamecam = new OrthographicCamera();
@@ -198,7 +200,7 @@ public class CombatScreen implements Screen {
             ship_combat.shipBody.setTransform( ship_combat.shipBody.getPosition().x,(gamecam.position.y + (gamecam.viewportHeight / 2)) - (ship_combat.getHeight()/2), ship_combat.shipBody.getAngle());
         }
 
-        if (ship_combat.shipBody.getPosition().y < (gamecam.position.y - (gamecam.viewportHeight / 2) + (ship_combat.getHeight()/2))) {
+        if (ship_combat.shipBody.getPosition().y < (gamecam.position.y           - (gamecam.viewportHeight / 2) + (ship_combat.getHeight()/2))) {
             ship_combat.shipBody.setTransform( ship_combat.shipBody.getPosition().x,(gamecam.position.y - (gamecam.viewportHeight / 2)) + (ship_combat.getHeight()/2), ship_combat.shipBody.getAngle());
         }
     }
@@ -224,7 +226,8 @@ public class CombatScreen implements Screen {
 
     private void checkHealthOfFleet() {
         if (fleet_combat.getFleetHealth() <= 0f) {
-            game.setScreen(new PlayScreen(game));
+            playScreen.fleet.dispose();
+            game.setScreen(playScreen);
         }
     }
 

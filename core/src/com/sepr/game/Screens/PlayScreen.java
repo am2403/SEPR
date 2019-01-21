@@ -81,6 +81,30 @@ public class PlayScreen implements Screen {
         fleet = new Fleet(this);
     }
 
+    public PlayScreen(Main game, boolean fleetAlive, float x_coord, float y_coord){
+        this.game = game;
+
+        //Create a camera and fix the viewport
+        gamecam = new OrthographicCamera();
+        viewport = new StretchViewport(V_WIDTH / Main.PPM ,V_HEIGHT / Main.PPM, gamecam); //Maintains aspect ratio as window is resized
+        hud = new HUD(game.batch);
+
+        //load the Tiled map
+        mapLoader = new TmxMapLoader();
+        map = mapLoader.load("Map/map.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map, 1/Main.PPM);
+        gamecam.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
+
+        world  = new World(new Vector2(0, 0), true); // Can apply gravity / wind speed forces
+        b2dr = new Box2DDebugRenderer();
+
+        new BoxPhysics(this);
+
+        ship = new Ship(this);
+        ship.setPosition(x_coord, y_coord);
+        if (fleetAlive) {fleet = new Fleet(this);}
+    }
+
     @Override
     public void show() {
 
@@ -105,7 +129,7 @@ public class PlayScreen implements Screen {
 
 
             if(Gdx.input.isKeyPressed(Input.Keys.C)){
-                game.setScreen(new CombatScreen(game));
+                game.setScreen(new CombatScreen(game, this));
             }
 
         }
@@ -194,10 +218,6 @@ public class PlayScreen implements Screen {
     @Override
     public void hide() {
 
-    }
-
-    public void enterCombat() {
-        game.setScreen(new CombatScreen(game));
     }
 
     @Override
