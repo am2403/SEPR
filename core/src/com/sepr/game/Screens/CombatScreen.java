@@ -26,7 +26,7 @@ import com.sepr.game.Sprites.Fleet;
 import com.sepr.game.Sprites.Ship;
 
 
-public class CombatScreen extends ScreenAdapter {
+public class CombatScreen implements Screen {
 
     Viewport viewport;
     public static OrthographicCamera gamecam;
@@ -52,10 +52,10 @@ public class CombatScreen extends ScreenAdapter {
 
     public CombatScreen(Main game){
         this.game = game;
-
+        batch = new SpriteBatch();
         gamecam = new OrthographicCamera();
         viewport = new StretchViewport(V_WIDTH / Main.PPM ,V_HEIGHT / Main.PPM, gamecam); //Maintains aspect ratio as window is resized
-        stage = new Stage(viewport, game.batch);
+        stage = new Stage(viewport, batch);
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("Combat Map/combat.tmx");
@@ -95,7 +95,6 @@ public class CombatScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         update(delta);
-
         Gdx.gl.glClearColor(0, 0, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -104,13 +103,13 @@ public class CombatScreen extends ScreenAdapter {
 
         b2dr.render(world, gamecam.combined);
 
-        game.batch.setProjectionMatrix(gamecam.combined);
-        game.batch.begin();
+        batch.setProjectionMatrix(gamecam.combined);
+        batch.begin();
 
-        ship_combat.draw(game.batch);
-        fleet_combat.draw(game.batch);
+        ship_combat.draw(batch);
+        fleet_combat.draw(batch);
 
-        game.batch.end();
+        batch.end();
 
 
     }

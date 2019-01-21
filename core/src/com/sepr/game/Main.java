@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sepr.game.Screens.PlayScreen;
 
 public class Main extends Game {
-
     //Sets the virtual game size and Box2D scale (Pixels Per Metre)
 
 

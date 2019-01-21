@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class WorldContactListener implements ContactListener {
     public PlayScreen playScreen;
-    public Main game = new Main();
+    //public Main game = new Main();
 
     private Array<Body> bodiesToRemove;
 
@@ -59,6 +59,15 @@ public class WorldContactListener implements ContactListener {
                 }
             }
             playScreen.ship.cannonBalls.removeAll(cannonBallsToRemove);
+        }
+
+        if (o2.getClass() == Ship.class && o1.getClass() == Fleet.class) {
+            System.out.print("beep");
+            playScreen.game.setScreen(new CombatScreen(playScreen.game));
+        }
+        if (o1.getClass() == Ship.class && o2.getClass() == Fleet.class) {
+            System.out.print("beep");
+            playScreen.game.setScreen(new CombatScreen(playScreen.game));
         }
 
     }

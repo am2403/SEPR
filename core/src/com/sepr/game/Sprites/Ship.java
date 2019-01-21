@@ -136,12 +136,12 @@ public class Ship extends Sprite {
 
 
         //removes the cannonBall bodies when it collides with fleet
-        Array<Body> bodies = cl.getBodiesToRemove();
-        for(int i = 0; i < bodies.size; i++){
-            Body b = bodies.get(i);
-            world.destroyBody(b);
-        }
-        bodies.clear();
+//        Array<Body> bodies = cl.getBodiesToRemove();
+//        for(int i = 0; i < bodies.size; i++){
+//            Body b = bodies.get(i);
+//            world.destroyBody(b);
+//        }
+//        bodies.clear();
     }
 
     // Creates a Box2D object for the ship and the ship's cannon, then attaches the cannon to the ship with a ResoluteJoint

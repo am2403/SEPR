@@ -36,7 +36,7 @@ import static com.badlogic.gdx.math.MathUtils.sin;
 
 public class PlayScreen implements Screen {
 
-    private Main game;
+    public Main game;
     public static OrthographicCamera gamecam;
     private Viewport viewport;
     private HUD hud;
@@ -124,13 +124,7 @@ public class PlayScreen implements Screen {
         gamecam.update();
         ship.update(dt);
 
-//        if ((fleet.body.getPosition().x-10) <= ship.shipBody.getPosition().x || ship.shipBody.getPosition().x <= (fleet.body.getPosition().x+10)) {
-//            if ((fleet.body.getPosition().y-10) <= ship.shipBody.getPosition().y || ship.shipBody.getPosition().y <= (fleet.body.getPosition().y+10)) {
-//                enterCombat();
-//            }
-//        }
-
-        System.out.println(ship.shipBody.getAngle());
+        //System.out.println(ship.shipBody.getAngle());
 
         fleet.update(dt, this, viewport);
         hud.update(dt);
