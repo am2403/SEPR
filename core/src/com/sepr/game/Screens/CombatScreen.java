@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sepr.game.Main;
+import com.sepr.game.Scenes.HUD;
 import com.sepr.game.Sprites.Cannon;
 import com.sepr.game.Sprites.Fleet;
 import com.sepr.game.Sprites.Ship;
@@ -29,6 +30,7 @@ import com.sepr.game.Sprites.Ship;
 public class CombatScreen implements Screen {
 
     Viewport viewport;
+    private HUD hud;
     public static OrthographicCamera gamecam;
     private Stage stage;
     private Main game;
@@ -67,6 +69,8 @@ public class CombatScreen implements Screen {
         fleet_combat = new Fleet(this);
 
         gamecam.position.set(ship_combat.shipBody.getWorldCenter().x, ship_combat.shipBody.getWorldCenter().y, 0);
+
+        hud = new HUD(game.batch);
     }
 
 
@@ -112,6 +116,7 @@ public class CombatScreen implements Screen {
         fleet_combat.draw(batch);
 
         batch.end();
+        hud.stage.draw();
     }
 
     @Override
@@ -149,7 +154,10 @@ public class CombatScreen implements Screen {
                 ship_combat.cannon.rotateCounterClockwise();
             }
             if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-                //shoot
+                //every time we press space we get the ship angle
+                //then we pass the ship angle through shoot
+                //then we work
+                ship_combat.shoot();
             }
             else ship_combat.stopShip();
             }
