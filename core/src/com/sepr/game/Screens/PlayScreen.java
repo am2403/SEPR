@@ -115,10 +115,7 @@ public class PlayScreen implements Screen {
     //This is called once every 60 seconds (world.step..)
     public void update(float dt){
         handleInput(dt);
-
         world.step(1/60f, 6, 2);
-
-
 
         //Updates the camera coordinates so that it remains fixed on the ship
         gamecam.position.x = ship.shipBody.getPosition().x;
@@ -127,15 +124,15 @@ public class PlayScreen implements Screen {
         gamecam.update();
         ship.update(dt);
 
-        if ((fleet.body.getPosition().x-10) <= ship.shipBody.getPosition().x || ship.shipBody.getPosition().x <= (fleet.body.getPosition().x+10)) {
-            if ((fleet.body.getPosition().y-10) <= ship.shipBody.getPosition().y || ship.shipBody.getPosition().y <= (fleet.body.getPosition().y+10)) {
-                enterCombat();
-            }
-        }
+//        if ((fleet.body.getPosition().x-10) <= ship.shipBody.getPosition().x || ship.shipBody.getPosition().x <= (fleet.body.getPosition().x+10)) {
+//            if ((fleet.body.getPosition().y-10) <= ship.shipBody.getPosition().y || ship.shipBody.getPosition().y <= (fleet.body.getPosition().y+10)) {
+//                enterCombat();
+//            }
+//        }
 
         System.out.println(ship.shipBody.getAngle());
 
-        //fleet.update(dt, this, viewport);
+        fleet.update(dt, this, viewport);
         hud.update(dt);
         renderer.setView(gamecam);
     }
