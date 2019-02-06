@@ -26,7 +26,7 @@ public class HUD implements Disposable {
 
     public Stage stage;
     private Viewport viewport; //New viewport to ensure that hud remains fixed
-    private int score, fleetHealth, shipHealth;
+    public int score, fleetHealth, shipHealth;
 
     public static final int V_WIDTH = 700;
     public static final int V_HEIGHT = 900;
@@ -96,7 +96,7 @@ public class HUD implements Disposable {
     private void updateShipHealth(int shipHealth) {
         shipHealthLabel.setText(String.format("Player health: " + "%03d", shipHealth));
     }
-    private void updateScore(int score) {
+    public void updateScore(int score) {
         scoreLabel.setText(String.format("Score: " + "%03d", score));
     }
 

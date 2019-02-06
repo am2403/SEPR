@@ -30,7 +30,7 @@ public class PlayScreen implements Screen {
     public Main game;
     public static OrthographicCamera gamecam;
     private Viewport viewport;
-    private HUD hud;
+    public HUD hud;
 
     //Ship and fleet
     public Ship ship;
@@ -142,6 +142,9 @@ public class PlayScreen implements Screen {
 
             if(Gdx.input.isKeyPressed(Input.Keys.C)){
                 game.setScreen(new CombatScreen(game, this));
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.B)){
+                game.setScreen(new UpgradeScreen(game, this));
             }
 
         }

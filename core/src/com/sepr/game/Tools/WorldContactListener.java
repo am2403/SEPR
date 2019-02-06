@@ -4,9 +4,11 @@ This class listens for BOX2D object collisions
 
 package com.sepr.game.Tools;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.sepr.game.Scenes.HUD;
 import com.sepr.game.Screens.CombatScreen;
 import com.sepr.game.Screens.PlayScreen;
 import com.sepr.game.Sprites.*;
@@ -18,14 +20,22 @@ public class WorldContactListener implements ContactListener {
     public CombatScreen combatScreen;
     public Array<Body> bodiesToRemove;
 
+    public int cannonBallDamage;
+
     public WorldContactListener(PlayScreen playScreen){
         this.playScreen = playScreen;
         bodiesToRemove = new Array<Body>();
+
+        cannonBallDamage = 10;
     }
 
     public WorldContactListener(CombatScreen combatScreen){
         this.combatScreen = combatScreen;
         bodiesToRemove = new Array<Body>();
+    }
+
+    public void setCannonBallDamage(int cannonBallDamage) {
+        this.cannonBallDamage = cannonBallDamage;
     }
 
     @Override
@@ -53,13 +63,15 @@ public class WorldContactListener implements ContactListener {
 
             bodiesToRemove.add(f2.getBody());
             //playScreen.
+
+            //for every cannonball that hits the ship will reduce the fleet by 10
             ArrayList<CannonBall> cannonBallsToRemove = new ArrayList<CannonBall>();
             for (CannonBall cannonBall: combatScreen.ship_combat.cannonBalls){
                 if(cannonBall == o2){
                     cannonBallsToRemove.add(cannonBall);
                 }
             }
-            this.combatScreen.fleet_combat.setFleetHealth(this.combatScreen.fleet_combat.getFleetHealth()-10);
+            this.combatScreen.fleet_combat.setFleetHealth(this.combatScreen.fleet_combat.getFleetHealth()- cannonBallDamage);
             System.out.println("fleet health"+this.combatScreen.fleet_combat.getFleetHealth());
         }
 
